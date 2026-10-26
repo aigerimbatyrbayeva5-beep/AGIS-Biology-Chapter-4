@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>4.1 Water · Chapter 4</title>
+<link rel="stylesheet" href="../../Assets/engine/fonts.css">
+<link rel="stylesheet" href="../../Assets/engine/prezi.css">
+<link rel="stylesheet" href="../../Assets/engine/benchmark.css">
+<style>
+:root{
+  --bg:#03263a; --ink:#f2fcff; --ink-soft:#b9e9f5; --ink-mute:#7fc0d3;
+  --a1:#2ee6f6; --a2:#7ef0c4; --a3:#ff7f61; --a4:#5ea8ff; --a5:#ffe08a; --on-a:#032536;
+  --panel:rgba(120,220,245,.10); --panel-strong:rgba(120,220,245,.18); --panel-line:rgba(150,236,255,.26);
+  --frame-bg:linear-gradient(155deg,rgba(9,78,108,.9),rgba(3,38,60,.93));
+  --hud-bg:rgba(2,26,40,.78);
+}
+.logo-plate{position:absolute;display:flex;align-items:center;gap:22px;background:#fff;border-radius:26px;padding:10px 22px;
+  box-shadow:0 18px 40px -18px rgba(0,0,0,.5)}
+.logo-plate img{display:block;height:64px;width:auto}
+.logo-plate img.myp{height:62px}
+.objective{display:flex;gap:16px;align-items:flex-start;font:700 27px/1.32 var(--font);color:var(--ink)}
+.objective .tag{flex:none;font:900 18px/1 var(--font);letter-spacing:.12em;text-transform:uppercase;background:var(--a5);color:#3a2a00;padding:9px 14px;border-radius:12px;margin-top:2px}
+.concept{border-radius:30px;padding:24px 26px;background:var(--panel);border:2px solid var(--panel-line)}
+.concept .lab{font:900 17px/1 var(--font);letter-spacing:.14em;text-transform:uppercase;color:var(--a1)}
+.concept .nm{font:600 38px/1.1 var(--display);margin-top:10px}
+.concept .sf{font:700 23px/1.32 var(--font);color:var(--ink-soft);margin-top:10px}
+.soi{border-radius:34px;padding:26px 34px;background:linear-gradient(120deg,rgba(46,230,246,.2),rgba(126,240,196,.14));border:2px solid rgba(126,240,196,.5)}
+.iq{display:grid;grid-template-columns:200px 1fr;gap:18px;align-items:start;padding:18px 0;border-bottom:2px solid var(--panel-line)}
+.iq:last-child{border-bottom:0}
+.iq .k{font:900 18px/1 var(--font);letter-spacing:.12em;padding:10px 12px;border-radius:12px;text-align:center}
+.iq .f{font:700 26px/1.3 var(--font)}
+.iq .s{font:600 21px/1.3 var(--font);color:var(--ink-soft);margin-top:6px}
+.fact{border-radius:28px;padding:20px 24px;background:rgba(255,127,97,.14);border:2px solid rgba(255,127,97,.5)}
+.fact .lab{font:900 16px/1 var(--font);letter-spacing:.14em;text-transform:uppercase;color:var(--a3)}
+.label{position:absolute;font:800 24px/1.2 var(--font);color:var(--ink);white-space:nowrap}
+.label small{display:block;font:700 19px/1.2 var(--font);color:var(--ink-soft)}
+.tally{width:100%;border-collapse:separate;border-spacing:0 8px}
+.tally th{font:900 17px/1.2 var(--font);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);text-align:left;padding:0 10px}
+.tally td{padding:0 6px}
+.tally td:first-child{font:800 22px/1 var(--font);color:var(--a1);width:120px;padding-left:10px}
+.tally input{width:100%;height:46px;border-radius:14px;border:2px solid var(--panel-line);background:rgba(255,255,255,.08);color:var(--ink);
+  font:800 24px/1 var(--font);text-align:center;outline:none}
+.tally input:focus{border-color:var(--a5);background:rgba(255,255,255,.14)}
+.stat{border-radius:22px;padding:14px 18px;background:var(--panel);border:2px solid var(--panel-line);text-align:center}
+.stat .v{font:600 44px/1 var(--display);color:var(--a5)}
+.stat .l{font:800 16px/1.2 var(--font);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-top:6px}
+.sit{display:grid;grid-template-columns:64px 1fr 330px;gap:16px;align-items:center;padding:4px 0}
+.sit .ic{width:64px;height:64px}
+.sit .tx{font:700 23px/1.28 var(--font)}
+.sit .slot{min-height:60px;padding:5px}
+.chip{font-size:21px;padding:10px 18px;background:#eafcff;color:#05324a}
+.mol-move{animation:jiggle 2.6s ease-in-out infinite}
+@keyframes jiggle{0%,100%{transform:translate(0,0)}25%{transform:translate(3px,-4px)}50%{transform:translate(-2px,3px)}75%{transform:translate(4px,2px)}}
+@keyframes rise{0%{transform:translateY(0);opacity:0}10%{opacity:.8}100%{transform:translateY(-900px);opacity:0}}
+@keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+@keyframes waveX{from{transform:translateX(0)}to{transform:translateX(-240px)}}
+@keyframes flowUp{to{stroke-dashoffset:-120}}
+@keyframes dropFall{0%{transform:translateY(0);opacity:0}15%{opacity:1}70%{transform:translateY(150px);opacity:1}80%,100%{transform:translateY(160px);opacity:0}}
+@keyframes ripple{0%{transform:scale(.4);opacity:.8}100%{transform:scale(1.6);opacity:0}}
+@keyframes rays{0%,100%{opacity:.05}50%{opacity:.11}}
+@keyframes steam{0%{transform:translateY(0) scale(.8);opacity:0}30%{opacity:.7}100%{transform:translateY(-120px) scale(1.3);opacity:0}}
+@keyframes heatIn{0%{stroke-dashoffset:60;opacity:0}30%{opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+@keyframes swim{0%{transform:translateX(0)}50%{transform:translateX(60px)}100%{transform:translateX(0)}}
+</style>
+</head>
+<body>
+<!-- shared SVG paint library -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="gO" cx=".38" cy=".32" r=".75"><stop offset="0" stop-color="#ffb3a3"/><stop offset=".45" stop-color="#f0533a"/><stop offset="1" stop-color="#9b1d10"/></radialGradient>
+    <radialGradient id="gH" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#e3edf4"/><stop offset="1" stop-color="#93a9b8"/></radialGradient>
+    <radialGradient id="gDrop" cx=".36" cy=".3" r=".85"><stop offset="0" stop-color="#f2feff"/><stop offset=".35" stop-color="#8fe6f6"/><stop offset=".8" stop-color="#1aa7d1"/><stop offset="1" stop-color="#0a6f9c"/></radialGradient>
+    <linearGradient id="gWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3fd0ea"/><stop offset="1" stop-color="#0b6f99"/></linearGradient>
+    <linearGradient id="gWaterDeep" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1690b6"/><stop offset="1" stop-color="#063a58"/></linearGradient>
+    <linearGradient id="gIce" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#d6f4fb"/><stop offset="1" stop-color="#93d7ec"/></linearGradient>
+    <linearGradient id="gIceSide" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b4e7f5"/><stop offset="1" stop-color="#6cc2de"/></linearGradient>
+    <linearGradient id="gCoin" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8a6a1c"/><stop offset=".25" stop-color="#f3d27a"/><stop offset=".5" stop-color="#fff0b8"/><stop offset=".75" stop-color="#d9ac45"/><stop offset="1" stop-color="#7d5d12"/></linearGradient>
+    <linearGradient id="gCoinTop" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe9a3"/><stop offset="1" stop-color="#c8922c"/></linearGradient>
+    <linearGradient id="gStrider" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3b2a1a"/><stop offset=".5" stop-color="#8a6a43"/><stop offset="1" stop-color="#3b2a1a"/></linearGradient>
+    <linearGradient id="gLeaf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8ef0a0"/><stop offset="1" stop-color="#1f9a5a"/></linearGradient>
+    <linearGradient id="gSoil" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5a35"/><stop offset="1" stop-color="#4a2e19"/></linearGradient>
+    <linearGradient id="gSkin" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffd0b5"/><stop offset="1" stop-color="#f0a983"/></linearGradient>
+    <radialGradient id="gDimple" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#0b4f6c" stop-opacity=".0"/><stop offset=".6" stop-color="#0b4f6c" stop-opacity=".25"/><stop offset=".85" stop-color="#ffffff" stop-opacity=".55"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gSun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff4c2"/><stop offset=".25" stop-color="#ffc77a"/><stop offset=".6" stop-color="#ff7f61" stop-opacity=".35"/><stop offset="1" stop-color="#ff7f61" stop-opacity="0"/></radialGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#00131f" flood-opacity=".45"/></filter>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <symbol id="h2o" viewBox="-44 -44 88 88"><image href="../../Assets/art/3d/shared/mol_h2o.webp" x="-44" y="-36" width="88" height="68"/></symbol>
+    <!-- human outline as ONE path so it can be used inside clipPath (viewBox -150 -300 300 630) -->
+    <path id="humanPath" d="M-50-238a50 50 0 1 0 100 0a50 50 0 1 0-100 0ZM-16-200H16L18-178C34-176 58-172 74-160C96-148 100-126 104-100L114 10C116 40 118 66 122 92C124 106 104 108 100 94L86-6C84-30 80-60 76-80C72-40 66-8 64 30C70 60 72 80 70 110L64 300C66 312 78 316 78 324L30 324C26 300 24 240 20 160L12 110H-12L-20 160C-24 240-26 300-30 324L-78 324C-78 316-66 312-64 300L-70 110C-72 80-70 60-64 30C-66-8-72-40-76-80C-80-60-84-30-86-6L-100 94C-104 108-124 106-122 92C-118 66-116 40-114 10L-104-100C-100-126-96-148-74-160C-58-172-34-176-18-178Z"/>
+  </defs>
+</svg>
+
+<div class="prezi" data-lesson="4.1" data-journey data-rho="1.25">
+<div class="viewport"><div class="world">
+
+<!-- ================= WORLD ART: a lake cross-section ================= -->
+<svg class="world-art" style="left:-7600px;top:-4800px;width:15200px;height:9600px" viewBox="-7600 -4800 15200 9600" aria-hidden="true">
+  <defs>
+    <linearGradient id="wSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#021e30"/><stop offset=".55" stop-color="#0a5576"/><stop offset="1" stop-color="#2bb1c8"/></linearGradient>
+    <linearGradient id="wLake" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#138cb0"/><stop offset=".25" stop-color="#0a6487"/><stop offset=".6" stop-color="#063f5c"/><stop offset="1" stop-color="#021827"/></linearGradient>
+    <linearGradient id="wRay" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bff6ff"/><stop offset="1" stop-color="#bff6ff" stop-opacity="0"/></linearGradient>
+    <linearGradient id="wSand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f6f73"/><stop offset="1" stop-color="#103240"/></linearGradient>
+  </defs>
+  <rect x="-7600" y="-4800" width="15200" height="3800" fill="url(#wSky)"/>
+  <circle cx="5200" cy="-1250" r="1500" fill="url(#gSun)" opacity=".85"/>
+  <circle cx="5200" cy="-1250" r="230" fill="#fff1c4" opacity=".9"/>
+  <g fill="#ffffff" opacity=".09">
+    <ellipse cx="-1800" cy="-3100" rx="900" ry="120"/><ellipse cx="-1300" cy="-3180" rx="500" ry="110"/>
+    <ellipse cx="1400" cy="-2600" rx="1100" ry="130"/><ellipse cx="2000" cy="-2690" rx="520" ry="120"/>
+    <ellipse cx="-5200" cy="-2200" rx="700" ry="90"/>
+  </g>
+  <path d="M-7600-1000L-6400-1260L-5600-1150L-4700-1420L-3600-1180L-2500-1330L-1500-1120L-300-1290L900-1110L2100-1360L3300-1140L4300-1240L5600-1080L7600-1180V-1000Z" fill="#0b4c66" opacity=".75"/>
+  <path d="M-7600-1000L-6000-1130L-4600-1060L-3200-1190L-1800-1050L-400-1150L1100-1040L2600-1170L4100-1050L5800-1120L7600-1040V-1000Z" fill="#0d6884" opacity=".8"/>
+  <!-- lake -->
+  <rect x="-7600" y="-1000" width="15200" height="5800" fill="url(#wLake)"/>
+  <g class="anim"><g style="animation:waveX 9s linear infinite">
+    <path d="M-7800-1000q60-26 120 0t120 0t120 0t120 0V-960H-7800Z" fill="none"/>
+  </g></g>
+  <path d="M-7600-1000H7600" stroke="#b8f4ff" stroke-width="10" opacity=".55"/>
+  <path d="M-7600-990H7600" stroke="#ffffff" stroke-width="3" opacity=".35"/>
+  <g class="anim" fill="url(#wRay)">
+    <polygon points="-5200,-990 -4900,-990 -4200,1800 -5000,1800" style="animation:rays 7s ease-in-out infinite"/>
+    <polygon points="-1200,-990 -900,-990 -300,2100 -1100,2100" style="animation:rays 9s ease-in-out infinite 1s"/>
+    <polygon points="2300,-990 2650,-990 3300,1900 2400,1900" style="animation:rays 8s ease-in-out infinite 2s"/>
+  </g>
+  <!-- floating ice (right) -->
+  <g>
+    <path d="M4900-1090L7600-1090V-760L5200-760Z" fill="url(#gIce)" opacity=".95"/>
+    <path d="M4900-1090L5200-760" stroke="#ffffff" stroke-width="6" opacity=".7"/>
+  </g>
+  <!-- left shore -->
+  <path d="M-7600-1180C-7000-1200-6500-1120-6200-1000C-5900-880-5700-300-5600 400L-5550 4800H-7600Z" fill="#2c5b3a"/>
+  <path d="M-7600-1180C-7000-1200-6500-1120-6200-1000L-6150-960C-6500-1060-7000-1130-7600-1120Z" fill="#7fd08a"/>
+  <path d="M-6200-1000C-5900-880-5700-300-5600 400L-5550 4800H-6000C-6050 3000-6100 800-6350-900Z" fill="#1d3f2b" opacity=".6"/>
+  <g stroke="#8ee39b" stroke-width="16" stroke-linecap="round" fill="none" opacity=".9">
+    <path d="M-6900-1170q-30-300 40-560"/><path d="M-6800-1170q20-260-60-480"/><path d="M-6650-1150q-10-360 80-640"/><path d="M-6500-1120q40-240-30-420"/>
+  </g>
+  <!-- lake floor -->
+  <path d="M-7600 3500C-5600 3300-3800 3650-1800 3450S2300 3300 4300 3500S6600 3380 7600 3450V4800H-7600Z" fill="url(#wSand)"/>
+  <g fill="#1b5160">
+    <ellipse cx="-3300" cy="3520" rx="160" ry="70"/><ellipse cx="-3080" cy="3540" rx="90" ry="50"/>
+    <ellipse cx="900" cy="3420" rx="200" ry="80"/><ellipse cx="1180" cy="3450" rx="110" ry="55"/><ellipse cx="4600" cy="3500" rx="170" ry="70"/>
+  </g>
+  <g class="anim" stroke="#3fae86" stroke-width="22" fill="none" stroke-linecap="round">
+    <path d="M-2600 3460q-90-300 0-600t0-600" style="transform-origin:-2600px 3460px;animation:sway 6s ease-in-out infinite"/>
+    <path d="M-2450 3470q80-260 0-520t0-480" style="transform-origin:-2450px 3470px;animation:sway 7s ease-in-out infinite .6s"/>
+    <path d="M2600 3420q-80-260 0-560t0-500" style="transform-origin:2600px 3420px;animation:sway 6.5s ease-in-out infinite .3s"/>
+    <path d="M5600 3460q90-300 0-640" style="transform-origin:5600px 3460px;animation:sway 7.5s ease-in-out infinite 1s"/>
+  </g>
+  <!-- fish silhouettes between scenes -->
+  <g fill="#0e7ea3" opacity=".75" class="anim">
+    <g style="animation:swim 12s ease-in-out infinite"><path d="M-5400 1550c120-90 300-90 400 0c-100 90-280 90-400 0zm400 0l110-80v160z"/></g>
+    <g style="animation:swim 14s ease-in-out infinite 2s"><path d="M5200 1500c100-70 250-70 330 0c-80 70-230 70-330 0zm330 0l90-66v132z"/></g>
+    <g style="animation:swim 10s ease-in-out infinite 1s"><path d="M-200 2950c140-100 340-100 460 0c-120 100-320 100-460 0zm460 0l120-90v180z"/></g>
+  </g>
+  <g class="anim" fill="none" stroke="#c9f7ff" stroke-width="6" opacity=".5">
+    <circle cx="-5000" cy="3000" r="22" style="animation:rise 14s linear infinite"/>
+    <circle cx="-4950" cy="3200" r="14" style="animation:rise 16s linear infinite 3s"/>
+    <circle cx="5400" cy="2900" r="20" style="animation:rise 15s linear infinite 1s"/>
+    <circle cx="200" cy="3300" r="16" style="animation:rise 13s linear infinite 5s"/>
+  </g>
+</svg>
+
+<!-- ================= 1. TITLE / OVERVIEW ================= -->
+<section class="step" id="welcome" data-x="0" data-y="0" data-s="7" data-overview data-noclick data-phase="title" data-title="Welcome · lesson map">
+  <div class="scene">
+    <div class="abs" style="left:66px;top:50px;width:1000px">
+      <div class="row" style="gap:14px;align-items:center">
+        <span class="pill">Chapter 4 · Water and Organic Compounds</span>
+        <span class="pill ghost">Lesson 4.1 · Grade 7 · MYP Year 3</span>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:26px;margin-top:6px">
+        <h1 class="h1" style="font-size:124px">Water</h1><span class="ru" style="font-size:42px">Вода</span>
+      </div>
+      <div class="objective" style="margin-top:2px"><span class="tag">You will</span><span>explain the properties of water and its importance for living organisms.</span></div>
+    </div>
+    <div class="logo-plate" style="right:58px;top:36px">
+      <img src="../../Assets/logos/AGIS_logo.png" alt="Astana Garden International School logo">
+      <img class="myp" src="../../Assets/logos/IB_MYP_logo.png" alt="IB Middle Years Programme logo">
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Opening (0:00).</b> This is the lesson map: every scene sits somewhere in the lake. Press <b>→</b> or <b>Space</b> to fly into the first scene. Press <b>Home</b> or <b>O</b> any time to return here.</p>
+    <p>Textbook: Biology Grade 7, Chapter 4, pp. 54–57. Objective is quoted from the “You will” box, p. 56.</p>
+    <div class="warn">Before the lesson: prepare Lab 2 trays (coin, dropper, cup of water, paper towel) for each pair. Print the Lab 2 worksheet and vocabulary sheet.</div>
+  </aside>
+</section>
+
+<!-- ================= 2. UNIT: CONCEPTS + SOI ================= -->
+<section class="step" id="unit" data-x="2650" data-y="-1800" data-s=".95" data-phase="engage" data-title="Our unit inquiry">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Engage</span><span class="t">UNIT INQUIRY · CHAPTER 4</span></div>
+    <div class="scene-title"><div class="h2">Our unit: substances that support life</div><div class="ru">Наш раздел: вещества, которые поддерживают жизнь</div></div>
+    <div class="abs" style="left:64px;right:64px;top:262px;display:grid;grid-template-columns:1fr 1.15fr 1.25fr;gap:22px">
+      <div class="concept" data-build="1"><div class="lab">Key concept</div><div class="nm">Systems</div><div class="sf">“Parts that work together as one whole.”</div><div class="ru small" style="margin-top:8px">Системы</div></div>
+      <div class="concept" data-build="1"><div class="lab">Related concepts</div><div class="nm">Function · Interaction</div><div class="sf">“The job of a part.” /<br>“How things affect one another.”</div><div class="ru small" style="margin-top:8px">Функция · Взаимодействие</div></div>
+      <div class="concept" data-build="1"><div class="lab">Global context</div><div class="nm" style="font-size:32px">Globalization and sustainability</div><div class="sf">“How people can use water and plant resources responsibly.”</div></div>
+    </div>
+    <div class="soi abs" style="left:64px;right:64px;top:574px" data-build="2">
+      <div class="kicker" style="color:var(--a2)">Statement of inquiry</div>
+      <div style="font:700 31px/1.34 var(--font);margin-top:10px">Interactions among substances within living systems support essential functions, and understanding these relationships can guide responsible use of natural resources.</div>
+    </div>
+    <div class="abs mute" style="left:66px;bottom:92px;font:700 18px/1.2 var(--font)">Unit Planner draft: the statement of inquiry, global context exploration and tasks are proposed and need department approval.</div>
+  </div>
+  <aside class="notes">
+    <p><b>Engage (≈1 min).</b> Read the key concept and the student-friendly meanings together. Students repeat “system — parts that work together”.</p>
+    <p>Say: “In this unit, water, chemical elements and food molecules are parts of living systems. Today we start with water.”</p>
+    <div class="warn">The wording is copied exactly from the Chapter 4 Unit Planner. The planner marks the global-context exploration, the SoI and the assessment tasks as proposed (department approval required).</div>
+  </aside>
+</section>
+
+<!-- ================= 3. UNIT: INQUIRY QUESTIONS + CRITERIA ================= -->
+<section class="step" id="questions" data-x="4450" data-y="-1800" data-s=".95" data-phase="engage" data-title="Inquiry questions">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Engage</span><span class="t">UNIT INQUIRY · CHAPTER 4</span></div>
+    <div class="scene-title"><div class="h2">Questions we will explore</div><div class="ru">Вопросы, которые мы будем исследовать</div></div>
+    <div class="abs" style="left:64px;right:64px;top:244px">
+      <div class="iq"><div class="k" style="background:var(--a1);color:var(--on-a)">FACTUAL</div><div><div class="f">Which properties and substances help water, human bodies and plants function?</div><div class="s">Simple English: What does water do? What substances do we need?</div></div></div>
+      <div class="iq"><div class="k" style="background:var(--a2);color:#053a2a">CONCEPTUAL</div><div><div class="f">How do interactions among substances affect the functioning of living organisms?</div><div class="s">Simple English: How do substances work together or affect living things?</div></div></div>
+      <div class="iq"><div class="k" style="background:var(--a3);color:#3d1206">DEBATABLE</div><div><div class="f">To what extent can people meet living organisms’ needs while using water and fertilizers responsibly?</div><div class="s">Simple English: Can we use resources responsibly and still meet living things’ needs?</div></div></div>
+    </div>
+    <div class="abs" style="left:64px;right:64px;bottom:96px;display:flex;gap:14px;align-items:center;font:700 20px/1.3 var(--font);color:var(--ink-soft)">
+      <span class="pill" style="background:var(--a5);color:#3a2a00;flex:none">Criteria</span>
+      <span>Proposed for summative assessment: <b style="color:var(--ink)">A Knowing and understanding</b> and <b style="color:var(--ink)">C Processing and evaluating</b> (department approval required). B and D are practised formatively.</span>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Engage (≈1 min).</b> Point to the Factual question: “Today we answer: what does water do?” Leave the Debatable question visible as the lesson’s final discussion link (Apply scene).</p>
+    <p>Lesson 4.1 is formative. It practises Criterion A (describe and apply scientific knowledge) and data recording for Criterion C (Lab 2 results).</p>
+    <div class="warn">Do not tell students this lesson is summatively assessed. The planner proposes two separate assessment periods (Lessons 5–6) after the four teaching lessons.</div>
+  </aside>
+</section>
+
+<!-- ================= 4. BIG QUESTION ================= -->
+<section class="step" id="bigq" data-x="4300" data-y="-450" data-s="1" data-phase="engage" data-title="Big question: walking on water">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Engage</span><span class="t">THINK · PAIR · SHARE</span></div>
+    <svg class="abs anim" style="left:0;top:0" width="1600" height="900" viewBox="0 0 1600 900" aria-label="Water striders standing on the surface of water">
+      <defs>
+        <radialGradient id="bqPond" cx=".6" cy=".55" r=".75"><stop offset="0" stop-color="#9fd8e6"/><stop offset=".6" stop-color="#5aa9c4"/><stop offset="1" stop-color="#2c7593"/></radialGradient>
+        <clipPath id="bqClip"><rect x="760" y="90" width="780" height="720" rx="48"/></clipPath>
+      </defs>
+      <g clip-path="url(#bqClip)">
+        <!-- pond seen from above: 3D render of the benchmark strider scene (Render_Source/strider_scene.js, top view) -->
+        <image href="../../Assets/art/3d/4.1/pond_strider_top.jpg" x="760" y="90" width="780" height="720" preserveAspectRatio="xMidYMid slice"/>
+          <ellipse cx="0" cy="0" rx="96" ry="17" fill="url(#gStrider)"/><ellipse cx="-104" cy="0" rx="18" ry="12" fill="#3b2a1a"/>
+        </g>
+      </g>
+      <rect x="760" y="90" width="780" height="720" rx="48" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="3"/>
+      <rect x="905" y="752" width="490" height="44" rx="22" fill="rgba(3,38,60,.72)"/><text x="1150" y="781" text-anchor="middle" fill="#ffffff" font-family="Nunito" font-weight="800" font-size="21">Water striders on a pond · textbook Figure 4.1.1</text>
+    </svg>
+    <div class="abs" style="left:64px;top:150px;width:650px">
+      <div class="kicker">Big question</div>
+      <div class="h2" style="font-size:54px;margin-top:14px">How can some small animals walk on the surface of water?</div>
+      <div class="ru" style="margin-top:14px">Как некоторые мелкие животные могут ходить по поверхности воды?</div>
+      <div class="frame-box" style="margin-top:34px" data-build="1">I think they can walk on water because <i>…</i></div>
+      <div class="qa" data-build="1" style="margin-top:14px">
+        <button class="reveal-btn">&#128065; Reveal answer</button>
+        <div class="answer">Water has <b>surface tension</b>: the surface of water resists an external force. Today we find out why.</div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Engage (0:00–4:00). Participation 1 — Think–Pair–Share.</b> 30 s think, 1 min pair, 1 min share. Students use the sentence frame (press → to show it).</p>
+    <div class="exp"><b>Expected ideas:</b> “They are light.” “Their legs are long.” “The water surface holds them.” Accept all; do not correct yet. Reveal the textbook idea only after sharing.</div>
+    <p>Textbook question, p. 56. Image idea from Figure 4.1.1 (surface tension).</p>
+  </aside>
+</section>
+
+<!-- ================= 5. VOCABULARY 1 ================= -->
+<section class="step" id="vocab1" data-x="2150" data-y="-450" data-s="1" data-phase="vocab" data-title="Vocabulary 1">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Vocabulary</span><span class="t">ENGLISH · РУССКИЙ · 1 of 2</span></div>
+    <div class="scene-title"><div class="h2">Words for water’s properties</div></div>
+    <div class="vocab c3" style="top:232px">
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><path d="M30 34h60l-8 66H38z" fill="rgba(255,255,255,.12)" stroke="#bff6ff" stroke-width="4"/><path d="M34 60h52l-5 38H39z" fill="url(#gWater)"/><g fill="#fff"><rect x="50" y="22" width="16" height="16" rx="3" opacity=".9"/><circle cx="52" cy="76" r="4" opacity=".6"/><circle cx="66" cy="84" r="3" opacity=".5"/></g></svg>
+        <div class="en">solvent</div><div class="rus">растворитель</div><div class="def">a liquid in which solids dissolve</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><path d="M28 30h64l-8 70H36z" fill="rgba(255,255,255,.12)" stroke="#bff6ff" stroke-width="4"/><path d="M32 54h56l-6 44H38z" fill="url(#gWater)"/><path d="M46 20l8 18M70 20l-6 18" stroke="#ffe08a" stroke-width="5" stroke-linecap="round"/><g fill="#ffe08a"><circle cx="50" cy="70" r="3"/><circle cx="62" cy="80" r="3"/><circle cx="72" cy="66" r="3"/></g></svg>
+        <div class="en">dissolve</div><div class="rus">растворяться</div><div class="def">a solid mixes into a liquid and we cannot see it</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><path d="M8 70q26 0 32-10q6-10 12 0q8 12 16 0q6-10 12 0q6 10 32 10" fill="none" stroke="#bff6ff" stroke-width="4"/><rect x="8" y="72" width="104" height="34" rx="6" fill="url(#gWater)" opacity=".8"/><ellipse cx="60" cy="44" rx="26" ry="7" fill="#8a6a43"/><path d="M40 46L46 60M80 46L74 60M60 50v10" stroke="#3a2a19" stroke-width="3"/></svg>
+        <div class="en">surface tension</div><div class="rus">поверхностное натяжение</div><div class="def">the surface of a liquid resists an outside force</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><g stroke="#ffe08a" stroke-width="3" stroke-dasharray="4 4"><path d="M38 44L82 44M38 44L60 82M82 44L60 82"/></g><use href="#h2o" x="14" y="20" width="48" height="48"/><use href="#h2o" x="58" y="20" width="48" height="48"/><use href="#h2o" x="36" y="58" width="48" height="48"/></svg>
+        <div class="en">cohesion</div><div class="rus">когезия (сцепление)</div><div class="def">water molecules stick to each other</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><rect x="80" y="10" width="22" height="100" rx="4" fill="#cfeef7" opacity=".85"/><g stroke="#ffe08a" stroke-width="3" stroke-dasharray="4 4"><path d="M58 36L80 36M58 80L80 80"/></g><use href="#h2o" x="22" y="12" width="48" height="48"/><use href="#h2o" x="22" y="56" width="48" height="48"/></svg>
+        <div class="en">adhesion</div><div class="rus">адгезия (прилипание)</div><div class="def">water molecules stick to other molecules</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><use href="#h2o" x="16" y="16" width="88" height="88"/><text x="60" y="114" text-anchor="middle" fill="#bff6ff" font-family="Nunito" font-weight="900" font-size="16">H₂O</text></svg>
+        <div class="en">molecule</div><div class="rus">молекула</div><div class="def">a very small particle; a water molecule is H₂O</div></div>
+    </div>
+    <div class="abs" style="left:64px;bottom:96px;font:700 23px/1.3 var(--font);color:var(--ink-soft)">Say it: <b style="color:var(--a5)">“Cohesion means water sticks to water.”</b> · <b style="color:var(--a5)">“Adhesion means water sticks to other things.”</b></div>
+  </div>
+  <aside class="notes">
+    <p><b>Vocabulary (4:00–6:30).</b> Choral repetition: teacher says each English word, class repeats twice. Point to the picture, then the Russian word.</p>
+    <p><b>Participation 2:</b> “Show me with your hands”: two fists together = cohesion; fist on desk = adhesion.</p>
+    <p>Russian terms follow the textbook Terminology box (p. 57): cohesion — когезия, adhesion — прилипание, surface tension — поверхностное натяжение. The planner also lists “сцепление” for cohesion.</p>
+    <p>Students keep the Vocabulary sheet open on their desks during the lesson.</p>
+  </aside>
+</section>
+
+<!-- ================= 6. VOCABULARY 2 ================= -->
+<section class="step" id="vocab2" data-x="0" data-y="-450" data-s="1" data-phase="vocab" data-title="Vocabulary 2">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Vocabulary</span><span class="t">ENGLISH · РУССКИЙ · 2 of 2</span></div>
+    <div class="scene-title"><div class="h2">Words for heat and states of water</div></div>
+    <div class="vocab c3" style="top:232px">
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><rect x="50" y="12" width="20" height="74" rx="10" fill="#e8fbff"/><rect x="55" y="40" width="10" height="50" rx="5" fill="#ff7f61"/><circle cx="60" cy="96" r="16" fill="#ff7f61"/><path d="M84 30q10 10 0 20t0 20" stroke="#ffe08a" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
+        <div class="en" style="font-size:31px">specific heat capacity</div><div class="rus">удельная теплоёмкость</div><div class="def">energy needed to warm 1 g of a substance by 1 °C</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><rect x="14" y="30" width="40" height="40" rx="6" fill="none" stroke="#bff6ff" stroke-width="3"/><g fill="#bff6ff"><circle cx="24" cy="40" r="4"/><circle cx="44" cy="44" r="4"/><circle cx="30" cy="60" r="4"/></g><rect x="66" y="30" width="40" height="40" rx="6" fill="none" stroke="#ffe08a" stroke-width="3"/><g fill="#ffe08a"><circle cx="74" cy="38" r="4"/><circle cx="84" cy="38" r="4"/><circle cx="94" cy="38" r="4"/><circle cx="74" cy="50" r="4"/><circle cx="84" cy="50" r="4"/><circle cx="94" cy="50" r="4"/><circle cx="74" cy="62" r="4"/><circle cx="84" cy="62" r="4"/><circle cx="94" cy="62" r="4"/></g><text x="34" y="96" text-anchor="middle" fill="#bff6ff" font-family="Nunito" font-weight="900" font-size="15">less</text><text x="86" y="96" text-anchor="middle" fill="#ffe08a" font-family="Nunito" font-weight="900" font-size="15">more</text></svg>
+        <div class="en">density</div><div class="rus">плотность</div><div class="def">how much mass is packed into a space</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><g transform="translate(20 22)"><path d="M10 20L40 6L70 20L40 34Z" fill="url(#gIce)"/><path d="M10 20V48L40 62V34Z" fill="url(#gIceSide)"/><path d="M70 20V48L40 62V34Z" fill="#a9def0"/></g><ellipse cx="60" cy="96" rx="44" ry="10" fill="url(#gWater)"/></svg>
+        <div class="en">melting</div><div class="rus">плавление</div><div class="def">solid ice turns into liquid water (0 °C)</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><path d="M22 60h76l-8 40H30z" fill="#9fb3c2"/><path d="M26 60h68" stroke="#e8fbff" stroke-width="4"/><g fill="#bff6ff"><circle cx="44" cy="50" r="6"/><circle cx="62" cy="40" r="8"/><circle cx="80" cy="50" r="5"/><circle cx="54" cy="26" r="5"/></g><path d="M40 108q6-6 12 0t12 0t12 0" stroke="#ff7f61" stroke-width="4" fill="none"/></svg>
+        <div class="en">boiling</div><div class="rus">кипение</div><div class="def">liquid water turns into water vapour (100 °C)</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><g fill="#e8fbff" opacity=".9"><circle cx="44" cy="46" r="18"/><circle cx="66" cy="38" r="22"/><circle cx="84" cy="52" r="16"/><rect x="40" y="46" width="52" height="20" rx="10"/></g><g stroke="#bff6ff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"><path d="M46 100q-8-10 0-20t0-14"/><path d="M66 104q-8-10 0-20t0-16"/><path d="M86 100q-8-10 0-20"/></g></svg>
+        <div class="en">water vapour</div><div class="rus">водяной пар</div><div class="def">water as a gas</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><g transform="translate(6 40) scale(.5)"><path d="M10 20L40 6L70 20L40 34Z" fill="url(#gIce)"/><path d="M10 20V48L40 62V34Z" fill="url(#gIceSide)"/><path d="M70 20V48L40 62V34Z" fill="#a9def0"/></g><path d="M60 46c0 0-14 16-14 26a14 14 0 0 0 28 0c0-10-14-26-14-26z" fill="url(#gDrop)"/><g fill="#e8fbff"><circle cx="96" cy="58" r="8"/><circle cx="106" cy="50" r="9"/><circle cx="104" cy="64" r="7"/></g><text x="60" y="108" text-anchor="middle" fill="#bff6ff" font-family="Nunito" font-weight="900" font-size="13">solid · liquid · gas</text></svg>
+        <div class="en">states of water</div><div class="rus">состояния воды</div><div class="def">solid (ice), liquid (water), gas (vapour)</div></div>
+    </div>
+    <div class="abs" style="left:64px;bottom:96px;font:700 23px/1.3 var(--font);color:var(--ink-soft)">Quick check: point to the card when the teacher says the <b style="color:var(--a5)">Russian</b> word.</div>
+  </div>
+  <aside class="notes">
+    <p><b>Vocabulary (6:30–9:00). Participation 3:</b> teacher says a Russian word; students point to / say the English card. Then reverse.</p>
+    <p>Definitions are simplified from the textbook Key terms box (p. 56): <i>specific heat capacity — the amount of energy required to raise the temperature of one gram of a substance by one degree Celsius.</i></p>
+    <p>Russian terms: density — плотность, melting — плавление, boiling — кипение, heat capacity — теплоёмкость (textbook Terminology, p. 57).</p>
+  </aside>
+</section>
+
+<!-- ================= 7. WATER FOR LIFE ================= -->
+<section class="step" id="life" data-x="-2150" data-y="-450" data-s="1" data-phase="explore" data-title="Water for life">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">TEXTBOOK p. 56</span></div>
+    <div class="scene-title"><div class="h2">Water for life</div><div class="ru">Вода для жизни</div></div>
+    <!-- human two-thirds water -->
+    <svg class="abs anim" style="left:60px;top:236px" width="300" height="600" viewBox="-150 -300 300 630" aria-label="Human figure, two-thirds filled with water">
+      <image href="../../Assets/art/3d/shared/body_water.webp" x="-150" y="-300" width="300" height="630"/>
+      <path d="M118-76h28M118 324h28M132-76v400" stroke="#ffe08a" stroke-width="4"/>
+    </svg>
+    <div class="abs" style="left:360px;top:250px;width:150px;text-align:left">
+      <div style="font:600 64px/1 var(--display);color:var(--a5)">2/3</div>
+      <div style="font:800 21px/1.25 var(--font);color:var(--ink-soft);margin-top:6px">of the human organism is water</div>
+    </div>
+    <div class="abs col" style="left:560px;top:250px;width:560px;gap:16px">
+      <div class="panel" style="padding:22px 26px" data-build="1"><div class="h4" style="color:var(--a1)">Water is a solvent</div><div class="body small" style="margin-top:6px">Water is the solvent in biochemical reactions.</div></div>
+      <div class="panel" style="padding:22px 26px" data-build="2"><div class="h4" style="color:var(--a2)">Water transports</div><div class="body small" style="margin-top:6px">Water transports nutrients and helps reactions inside the cell to complete.</div></div>
+      <div class="panel" style="padding:22px 26px" data-build="3"><div class="h4" style="color:var(--a3)">All organisms need water</div><div class="body small" style="margin-top:6px">People cannot survive a long time without water. Other organisms need water too.</div></div>
+    </div>
+    <!-- droplet portal -->
+    <svg class="abs anim" style="left:1170px;top:200px" width="400" height="520" viewBox="0 0 400 520" aria-label="A water droplet — zoom inside">
+      <image href="../../Assets/art/3d/4.1/drop.webp" x="31" y="23" width="403" height="463"/>
+      <circle cx="200" cy="330" r="118" fill="none" stroke="#ffffff" stroke-width="3" stroke-dasharray="6 10" opacity=".75"/>
+    </svg>
+    <div class="abs" style="left:1196px;top:740px;width:350px;text-align:center;font:800 22px/1.25 var(--font);color:var(--a5)">Next: zoom inside the drop &#8600;</div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (9:00–11:00).</b> Press → three times to reveal the three functions. Students read each line aloud after you.</p>
+    <p>Quick check (thumbs up / down): “Only humans need water.” <b>Expected: thumbs down</b> — other organisms also need water (p. 56).</p>
+    <p>Then press → to fly <b>into the droplet</b>.</p>
+    <p>Optional extension (textbook Research time, p. 57): groups make a poster of the amount of water in a plant, an aquatic animal and a terrestrial animal — homework.</p>
+  </aside>
+</section>
+
+<!-- ================= 8. INSIDE THE DROPLET (nested) ================= -->
+<section class="step" id="droplet" data-x="-1580" data-y="-370" data-s=".14" data-nested data-phase="explore" data-title="Inside a drop: cohesion and adhesion">
+  <div class="scene" style="border-radius:60px;overflow:hidden;background:radial-gradient(circle at 40% 35%,#1bb5dc 0%,#0b6f99 60%,#06496a 100%)">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">INSIDE A DROP OF WATER</span></div>
+    <div class="scene-title"><div class="h2">Water molecules stick together</div><div class="ru">Молекулы воды притягиваются</div></div>
+    <!-- cohesion cluster -->
+    <svg class="abs anim" style="left:40px;top:220px" width="760" height="560" viewBox="0 0 760 560" aria-label="Cohesion: water molecules attract each other">
+      <g stroke="#ffe08a" stroke-width="5" stroke-dasharray="6 9" opacity=".9">
+        <path d="M210 190L380 150M380 150L540 230M210 190L280 360M280 360L470 380M540 230L470 380M380 150L470 380"/>
+      </g>
+      <g class="mol-move"><use href="#h2o" x="140" y="120" width="140" height="140"/></g>
+      <g class="mol-move" style="animation-delay:-.6s"><use href="#h2o" x="310" y="80" width="140" height="140"/></g>
+      <g class="mol-move" style="animation-delay:-1.2s"><use href="#h2o" x="470" y="160" width="140" height="140"/></g>
+      <g class="mol-move" style="animation-delay:-1.8s"><use href="#h2o" x="210" y="290" width="140" height="140"/></g>
+      <g class="mol-move" style="animation-delay:-.9s"><use href="#h2o" x="400" y="310" width="140" height="140"/></g>
+      <text x="380" y="530" text-anchor="middle" fill="#ffe08a" font-family="Fredoka, Nunito" font-weight="600" font-size="38">Cohesion: water + water</text>
+    </svg>
+    <!-- adhesion -->
+    <svg class="abs anim" style="left:840px;top:220px" width="700" height="560" viewBox="0 0 700 560" aria-label="Adhesion: water molecules attract another surface">
+      <rect x="520" y="40" width="110" height="440" rx="18" fill="#d9f3fa" opacity=".9"/>
+      <g fill="#a8cbd6"><circle cx="560" cy="90" r="16"/><circle cx="592" cy="150" r="16"/><circle cx="560" cy="210" r="16"/><circle cx="592" cy="270" r="16"/><circle cx="560" cy="330" r="16"/><circle cx="592" cy="390" r="16"/><circle cx="560" cy="450" r="16"/></g>
+      <text x="575" y="30" text-anchor="middle" fill="#e8fbff" font-family="Nunito" font-weight="800" font-size="22">other surface</text>
+      <g stroke="#7ef0c4" stroke-width="5" stroke-dasharray="6 9"><path d="M420 140L520 140M420 300L520 300M420 440L520 440"/></g>
+      <g class="mol-move"><use href="#h2o" x="300" y="80" width="130" height="130"/></g>
+      <g class="mol-move" style="animation-delay:-1s"><use href="#h2o" x="300" y="240" width="130" height="130"/></g>
+      <g class="mol-move" style="animation-delay:-2s"><use href="#h2o" x="300" y="380" width="120" height="120"/></g>
+      <g class="mol-move" style="animation-delay:-1.5s"><use href="#h2o" x="140" y="170" width="120" height="120"/></g>
+      <text x="300" y="530" text-anchor="middle" fill="#7ef0c4" font-family="Fredoka, Nunito" font-weight="600" font-size="38">Adhesion: water + other molecules</text>
+    </svg>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (11:00–12:30).</b> The camera has zoomed inside a drop. Each red–white model is one water molecule (H₂O: oxygen red, hydrogen white).</p>
+    <p>Say: “<b>Cohesion</b> — water molecules interact with each other. <b>Adhesion</b> — water interacts with other molecules.” (Textbook wording, p. 56.)</p>
+    <div class="warn">The dashed lines only show attraction. Do not introduce hydrogen bonds here — they are beyond the textbook scope.</div>
+  </aside>
+</section>
+
+<!-- ================= 9. SURFACE TENSION ================= -->
+<section class="step" id="tension" data-x="-4300" data-y="-450" data-s="1" data-phase="explore" data-title="Surface tension">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">FIGURE 4.1.1</span></div>
+    <div class="scene-title"><div class="h2">Surface tension</div><div class="ru">Поверхностное натяжение</div></div>
+    <!-- 3D render (Render_Source/strider_scene.js): pond water cut open at the front; arrows are placed from the render camera -->
+    <div class="bx-window" style="left:40px;top:226px;width:950px;height:582px" role="img" aria-label="Cut-away 3D view: a water strider stands on pond water. Its feet press small dips into the surface. The cut face shows the dips from the side.">
+      <img class="bx-layer" src="../../Assets/art/benchmark/strider/strider_base.jpg" alt="">
+      <img class="bx-layer bx-press anim" src="../../Assets/art/benchmark/strider/strider_press.jpg" alt="">
+      <canvas class="bx-layer bx-seq bx-hidden bx-fade" width="1188" height="728"></canvas>
+      <svg class="bx-overlay" viewBox="0 0 950 582" aria-hidden="true">
+        <defs>
+          <linearGradient id="bxWeight" gradientUnits="userSpaceOnUse" x1="0" y1="30" x2="0" y2="140"><stop offset="0" stop-color="#ffc2b0"/><stop offset="1" stop-color="#ff6a4d"/></linearGradient>
+          <linearGradient id="bxResist" gradientUnits="userSpaceOnUse" x1="0" y1="464" x2="0" y2="350"><stop offset="0" stop-color="#7ef0c4" stop-opacity=".35"/><stop offset="1" stop-color="#a6ffdc"/></linearGradient>
+          <clipPath id="bxLens"><circle cx="856" cy="106" r="80"/></clipPath>
+          <linearGradient id="bxLensWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a8c84"/><stop offset="1" stop-color="#0a3a40"/></linearGradient>
+        </defs>
+        <g data-build="1">
+          <g data-part="weight" class="bx-glow bx-fade">
+            <path class="shaft bx-arrow bx-draw" d="M484 30V124" stroke="url(#bxWeight)" stroke-width="8" style="--len:110"/>
+            <path class="head" d="M470 122L484 146L498 122Z" fill="#ff6a4d"/>
+          </g>
+          <g data-part="resist" class="bx-glow bx-fade">
+            <path class="bx-arrow bx-draw" d="M183.1 456V368" stroke="url(#bxResist)" stroke-width="8" style="--len:100"/>
+            <path d="M169.1 370L183.1 345L197.1 370Z" fill="#a6ffdc"/>
+            <path class="bx-arrow bx-draw" d="M840.7 464V377" stroke="url(#bxResist)" stroke-width="8" style="--len:100"/>
+            <path d="M826.7 379L840.7 354L854.7 379Z" fill="#a6ffdc"/>
+          </g>
+        </g>
+        <!-- magnified surface: molecules hold together (cohesion) -->
+        <g data-build="2"><g data-part="lens" class="bx-fade">
+          <path class="bx-arrow bx-draw" d="M848 188L841 326" stroke="#ffe08a" stroke-width="2.5" stroke-dasharray="2 7" style="--len:140"/>
+          <circle cx="841" cy="334" r="7" fill="none" stroke="#ffe08a" stroke-width="2.5"/>
+          <g clip-path="url(#bxLens)">
+            <rect x="770" y="20" width="172" height="172" fill="#08202c"/>
+            <path d="M770 84H800Q826 84 840 104Q856 124 872 104Q886 84 912 84H942V192H770Z" fill="url(#bxLensWater)"/>
+            <path d="M770 84H800Q826 84 840 104Q856 124 872 104Q886 84 912 84H942" fill="none" stroke="#c9fbff" stroke-width="2.5"/>
+            <g stroke="#ffe08a" stroke-width="2.5" stroke-dasharray="3 4"><path d="M792 90H808M823 97L832 106M848 118H864M880 106L889 97M904 90H920"/></g>
+            <use href="#h2o" x="770" y="73" width="30" height="30"/><use href="#h2o" x="800" y="76" width="30" height="30"/>
+            <use href="#h2o" x="826" y="94" width="30" height="30"/><use href="#h2o" x="856" y="94" width="30" height="30"/>
+            <use href="#h2o" x="882" y="76" width="30" height="30"/><use href="#h2o" x="912" y="73" width="30" height="30"/>
+            <text x="856" y="166" text-anchor="middle" fill="#ffe08a" font-family="Nunito" font-weight="900" font-size="20">cohesion</text>
+          </g>
+          <circle cx="856" cy="106" r="80" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2.5"/>
+        </g></g>
+      </svg>
+      <div class="bx-labels" data-build="1">
+        <div class="bx-tag lg bx-fade" data-part="weightLabel" data-label style="left:180px;top:28px"><i style="background:#ff7f61;box-shadow:0 0 10px #ff7f61"></i>weight (pushes down)</div>
+        <div class="bx-tag lg bx-fade" data-part="resistLabel" data-label style="left:262px;top:482px"><i style="background:#7ef0c4;box-shadow:0 0 10px #7ef0c4"></i>the water surface resists (pushes back)</div>
+      </div>
+      <div class="bx-tag" data-label style="left:16px;top:544px"><small>Cut-away view</small>the front of the water is cut open</div>
+    </div>
+    <div class="abs col" style="left:1020px;top:232px;width:520px;gap:16px">
+      <div class="panel" style="padding:20px 24px"><div class="kicker" style="font-size:18px">Key term</div><div class="body" style="font-size:22px;margin-top:6px"><b>Surface tension</b> — a property of the surface of a liquid that allows it to resist an external force.</div>
+        <div class="body" style="font-size:22px;margin-top:10px;padding-top:10px;border-top:2px solid var(--panel-line)" data-build="2">Molecules at the surface hold together (<b class="hl5">cohesion</b>). The surface acts like a thin skin, so a light animal does not sink.</div></div>
+      <div class="qa" data-build="2"><div class="qcard" style="padding:18px 22px"><div class="qn">Quick check</div><div class="q" style="font-size:24px">What would happen if the strider were much heavier?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:21px">The surface could not resist such a big force. The strider would sink.</div></div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (12:30–14:00).</b> Return to the big question. Press → to show the forces, → again for the explanation and quick check.</p>
+    <p>Key term wording is from the textbook (p. 56). “Thin skin” is a comparison, not a real skin — say “like a skin”.</p>
+    <div class="exp"><b>Quick check — expected:</b> it would sink; the surface can only resist a small force.</div>
+    <p><b>3D view.</b> The front of the water is cut away, so students see the dips from the side. Revealing the answer (button or <b>A</b>) plays a 3-second demo: the strider gets heavier, the dips get deeper, the surface gives way and the strider sinks. Hide the answer (<b>A</b>) or press <b>R</b> to bring the strider back.</p>
+  </aside>
+</section>
+
+<!-- ================= 10. WATER IN PLANTS ================= -->
+<section class="step" id="plants" data-x="-3900" data-y="850" data-s="1.05" data-phase="explore" data-title="Water moves up plants">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">COHESION + ADHESION IN PLANTS</span></div>
+    <div class="scene-title"><div class="h2">How water climbs a plant</div><div class="ru">Как вода поднимается по растению</div></div>
+    <svg class="abs anim" style="left:60px;top:236px" width="634" height="576" viewBox="0 0 760 690" aria-label="Plant: water moves from soil through roots and stem to the leaves">
+      <image href="../../Assets/art/3d/4.4/plant_map.webp" x="40" y="-38" width="777" height="722"/>
+      <path d="M380 460V140" stroke="#5fd6f0" stroke-width="10" stroke-dasharray="14 16" stroke-linecap="round" style="animation:flowUp 1.6s linear infinite"/>
+      <g fill="#ffffff" font-family="Nunito" font-weight="800" font-size="24">
+        <text x="560" y="455" fill="#ffe08a">soil water</text>
+        <text x="420" y="400">stem</text>
+        <text x="450" y="190">leaves</text>
+        <text x="40" y="560">roots</text>
+      </g>
+      <!-- zoom ring to inset -->
+      <circle cx="380" cy="330" r="30" fill="none" stroke="#ffe08a" stroke-width="4"/>
+      <path d="M408 320L760 160" stroke="#ffe08a" stroke-width="3" stroke-dasharray="6 8"/>
+    </svg>
+    <!-- inset: tube -->
+    <div class="abs" style="left:780px;top:226px;width:760px" data-build="1">
+      <svg width="740" height="330" viewBox="0 0 740 330" class="anim" aria-label="Inside the stem tube: water molecules hold each other and stick to the tube wall">
+        <rect x="10" y="10" width="720" height="310" rx="30" fill="rgba(255,255,255,.06)" stroke="#ffe08a" stroke-width="3"/>
+        <rect x="60" y="40" width="40" height="250" rx="12" fill="#3fbf72"/><rect x="300" y="40" width="40" height="250" rx="12" fill="#3fbf72"/>
+        <g style="animation:swim 3s ease-in-out infinite;transform:rotate(-90deg)"></g>
+        <g class="mol-move"><use href="#h2o" x="130" y="40" width="70" height="70"/></g>
+        <g class="mol-move" style="animation-delay:-.5s"><use href="#h2o" x="200" y="100" width="70" height="70"/></g>
+        <g class="mol-move" style="animation-delay:-1s"><use href="#h2o" x="130" y="160" width="70" height="70"/></g>
+        <g class="mol-move" style="animation-delay:-1.5s"><use href="#h2o" x="200" y="220" width="70" height="70"/></g>
+        <g stroke="#ffe08a" stroke-width="4" stroke-dasharray="5 6"><path d="M180 90L215 120M230 150L190 180M180 210L215 240"/></g>
+        <g stroke="#7ef0c4" stroke-width="4" stroke-dasharray="5 6"><path d="M100 75H140M100 195H140M260 135H300M260 255H300"/></g>
+        <path d="M40 300V30" stroke="#5fd6f0" stroke-width="6" stroke-linecap="round"/><path d="M28 46L40 22L52 46Z" fill="#5fd6f0"/>
+        <text x="380" y="110" fill="#ffe08a" font-family="Nunito" font-weight="900" font-size="26">Cohesion</text>
+        <text x="380" y="140" fill="#e8fbff" font-family="Nunito" font-weight="700" font-size="21">water molecules pull each other up</text>
+        <text x="380" y="210" fill="#7ef0c4" font-family="Nunito" font-weight="900" font-size="26">Adhesion</text>
+        <text x="380" y="240" fill="#e8fbff" font-family="Nunito" font-weight="700" font-size="21">water sticks to the tube wall</text>
+      </svg>
+    </div>
+    <div class="abs panel" style="left:780px;top:588px;width:760px;padding:20px 26px" data-build="2">
+      <div class="body small">Because of <b class="hl5">cohesion</b> and <b class="hl2">adhesion</b>, water molecules move upwards in plants easily — from the soil, through the roots and stem, to the leaves.</div>
+      <div class="ru small" style="margin-top:6px">Вода поднимается от почвы к листьям.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (14:00–15:30).</b> Trace the path with your finger: soil → roots → stem → leaves. Press → for the zoomed tube, → again for the summary sentence.</p>
+    <p>Textbook (p. 56): “By these two features water molecules move upwards in the plants easily.”</p>
+    <p>Ask: “Which property pulls molecules up together? Which property holds water to the wall?” <b>Expected:</b> cohesion; adhesion.</p>
+  </aside>
+</section>
+
+<!-- ================= 11. STATES OF WATER ================= -->
+<section class="step" id="states" data-x="-1300" data-y="850" data-s="1.05" data-phase="explore" data-title="States of water">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">FIGURE 4.1.3</span></div>
+    <div class="scene-title"><div class="h2">Solid, liquid and gas</div><div class="ru">Твёрдое, жидкое, газообразное</div></div>
+    <svg class="abs anim" style="left:40px;top:236px" width="1520" height="560" viewBox="0 0 1520 560" aria-label="States of water: ice melts at 0 degrees, water boils at 100 degrees and turns into water vapour">
+      <!-- ice -->
+      <image href="../../Assets/art/3d/4.1/ice.webp" x="119" y="167" width="322" height="270"/>
+      <!-- liquid -->
+      <image href="../../Assets/art/3d/4.1/puddle.webp" x="568" y="323" width="382" height="114"/>
+      <!-- gas -->
+      <g transform="translate(1110 120)">
+        <image href="../../Assets/art/3d/4.1/cloud.webp" x="19" y="50" width="301" height="158"/>
+        <g class="anim" stroke="#bff6ff" stroke-width="7" fill="none" stroke-linecap="round">
+          <path d="M120 330q-20-30 0-60t0-50" style="animation:steam 3s ease-out infinite"/>
+          <path d="M180 340q-20-30 0-60t0-50" style="animation:steam 3s ease-out infinite 1s"/>
+          <path d="M240 330q-20-30 0-60t0-50" style="animation:steam 3s ease-out infinite 2s"/>
+        </g>
+        <image href="../../Assets/art/3d/4.1/puddle.webp" x="39" y="340" width="281" height="84"/>
+      </g>
+      <!-- labels -->
+      <g font-family="Fredoka, Nunito" font-weight="600" font-size="40" fill="#ffffff" text-anchor="middle">
+        <text x="250" y="40">Solid</text><text x="760" y="40">Liquid</text><text x="1290" y="40">Gas</text>
+      </g>
+      <g font-family="Nunito" font-weight="800" font-size="24" fill="#b9e9f5" text-anchor="middle">
+        <text x="250" y="76">ice · лёд</text><text x="760" y="76">water · вода</text><text x="1290" y="76">water vapour · пар</text>
+      </g>
+      <!-- top arrows (heating) -->
+      <g data-build="1">
+        <path d="M380 190Q520 110 640 240" fill="none" stroke="#ff7f61" stroke-width="8" stroke-linecap="round"/><path d="M622 236L650 262L656 222Z" fill="#ff7f61"/>
+        <text x="500" y="128" text-anchor="middle" fill="#ff7f61" font-family="Nunito" font-weight="900" font-size="28">Melting · 0 °C</text>
+        <path d="M900 240Q1010 110 1110 200" fill="none" stroke="#ff7f61" stroke-width="8" stroke-linecap="round"/><path d="M1094 186L1124 210L1124 172Z" fill="#ff7f61"/>
+        <text x="1000" y="128" text-anchor="middle" fill="#ff7f61" font-family="Nunito" font-weight="900" font-size="28">Boiling · 100 °C</text>
+      </g>
+      <!-- bottom arrows (cooling) -->
+      <g data-build="2">
+        <path d="M1160 470Q1050 520 950 440" fill="none" stroke="#5ea8ff" stroke-width="8" stroke-linecap="round"/><path d="M968 444L940 428L944 466Z" fill="#5ea8ff"/>
+        <path d="M630 440Q490 530 360 440" fill="none" stroke="#5ea8ff" stroke-width="8" stroke-linecap="round"/><path d="M378 440L350 422L354 460Z" fill="#5ea8ff"/>
+        <text x="1050" y="545" text-anchor="middle" fill="#5ea8ff" font-family="Nunito" font-weight="900" font-size="25">cooling · 100 °C</text>
+        <text x="495" y="545" text-anchor="middle" fill="#5ea8ff" font-family="Nunito" font-weight="900" font-size="25">cooling · 0 °C</text>
+      </g>
+    </svg>
+    <div class="abs" style="left:860px;top:96px;width:680px" data-build="3">
+      <div class="frame-box" style="font-size:24px">Ice melts at <i>0 °C</i> and turns into water. Water boils at <i>100 °C</i> and turns into water vapour.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (15:30–16:30).</b> This recreates textbook Figure 4.1.3. → shows heating arrows, → cooling arrows, → summary.</p>
+    <p>Ask: “At what temperature does ice melt? Water boil?” <b>Expected:</b> 0 °C; 100 °C.</p>
+    <p>The bottom arrows are unlabeled in the textbook; “cooling” is used here as a simple description.</p>
+  </aside>
+</section>
+
+<!-- ================= 12. HEAT CAPACITY ================= -->
+<section class="step" id="heat" data-x="1300" data-y="850" data-s="1.05" data-phase="explore" data-title="Heat capacity and body temperature">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">TEXTBOOK p. 56</span></div>
+    <div class="scene-title"><div class="h2">Water keeps temperature steady</div><div class="ru">Вода поддерживает постоянную температуру</div></div>
+    <svg class="abs anim" style="left:60px;top:236px" width="650" height="576" viewBox="0 0 700 620" aria-label="Heat from the sun is absorbed by water in the body; body temperature stays constant">
+      <circle cx="110" cy="110" r="70" fill="#ffd27a"/><circle cx="110" cy="110" r="110" fill="url(#gSun)"/>
+      <g stroke="#ff7f61" stroke-width="8" stroke-linecap="round" fill="none" stroke-dasharray="60" class="anim">
+        <path d="M200 160L300 230" style="animation:heatIn 2.2s ease-in infinite"/><path d="M190 230L290 300" style="animation:heatIn 2.2s ease-in infinite .5s"/><path d="M170 300L270 360" style="animation:heatIn 2.2s ease-in infinite 1s"/>
+      </g>
+      <g transform="translate(400 300) scale(.88)">
+        <image href="../../Assets/art/3d/shared/body_water.webp" x="-150" y="-300" width="300" height="630"/>
+      </g>
+      <!-- thermometer -->
+      <g transform="translate(600 140)">
+        <image href="../../Assets/art/3d/4.1/thermometer.webp" x="-30" y="-8" width="84" height="371"/>
+        <path d="M30 130h26" stroke="#ffe08a" stroke-width="5"/>
+        <text x="0" y="400" text-anchor="middle" fill="#ffe08a" font-family="Nunito" font-weight="900" font-size="22">constant</text>
+      </g>
+    </svg>
+    <div class="abs col" style="left:800px;top:232px;width:740px;gap:14px">
+      <div class="panel" style="padding:18px 24px"><div class="kicker" style="font-size:18px">Key term</div><div class="body small" style="margin-top:6px"><b>Specific heat capacity</b> — the amount of energy required to raise the temperature of one gram of a substance by one degree Celsius.</div></div>
+      <div class="panel" style="padding:18px 24px" data-build="1"><div class="body small">Water has a <b class="hl5">high heat capacity</b>. Water absorbs heat and keeps the body’s temperature constant. So water <b>regulates body temperature</b>.</div></div>
+      <div class="qa" data-build="2"><div class="qcard" style="padding:16px 22px"><div class="qn">Pair talk</div><div class="q" style="font-size:24px">Why is it important that our body has a lot of water?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">Water absorbs heat, so body temperature stays constant. Water is also the solvent for reactions in cells.</div></div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (16:30–17:15).</b> Key term wording from p. 56. Simplify: “Water needs a lot of energy to get warmer, so it changes temperature slowly.”</p>
+    <p>Pair talk 30 s. <b>Expected:</b> water absorbs heat; keeps body temperature constant; solvent for reactions.</p>
+  </aside>
+</section>
+
+<!-- ================= 13. ICE FLOATS ================= -->
+<section class="step" id="ice" data-x="3900" data-y="850" data-s="1.05" data-phase="explore" data-title="Ice floats: life under the ice">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">PREDICT · OBSERVE · EXPLAIN</span></div>
+    <div class="scene-title"><div class="h2">Why do lakes freeze only on top?</div><div class="ru">Почему озёра замерзают только сверху?</div></div>
+    <!-- 3D render (Render_Source/lake_scene.js): winter lake cut open at the front; fish, snow and particles are live layers -->
+    <div class="bx-window" style="left:48px;top:236px;width:866px;height:576px" role="img" aria-label="Cut-away 3D view of a frozen lake: snow and a thick ice sheet float on top, liquid water is below, and fish swim under the ice.">
+      <img class="bx-layer" src="../../Assets/art/benchmark/lake/lake_base.jpg" alt="">
+      <canvas class="bx-layer bx-fx" width="1299" height="864"></canvas>
+      <svg class="bx-overlay" viewBox="0 0 866 576" aria-hidden="true">
+        <g data-build="2" class="bx-glow">
+          <path class="bx-arrow bx-draw" d="M836 178H848V250H836" stroke="#ffffff" stroke-width="3" style="--len:100"/>
+          <path class="bx-arrow bx-draw" d="M836 256H848V534H836" stroke="#8fe9ff" stroke-width="3" style="--len:310"/>
+        </g>
+      </svg>
+      <div class="bx-labels" data-build="2">
+        <div class="bx-tag lg" data-label style="right:30px;top:192px"><i style="background:#ffffff;box-shadow:0 0 10px #bff6ff"></i>ice floats on top</div>
+        <div class="bx-tag lg" data-label style="right:30px;top:432px"><i style="background:#8fe9ff;box-shadow:0 0 10px #8fe9ff"></i>liquid water below</div>
+      </div>
+      <div class="bx-labels" data-build="3">
+        <div class="bx-tag lg" data-label style="right:30px;top:486px"><svg width="14" height="26" viewBox="0 0 14 26" aria-hidden="true"><rect x="4.5" y="1.5" width="5" height="16" rx="2.5" fill="none" stroke="#ffe08a" stroke-width="2"/><circle cx="7" cy="20" r="4.5" fill="#ffe08a"/><rect x="6" y="8" width="2" height="10" fill="#ffe08a"/></svg>water under ice ≈ <b style="color:#ffe08a">4 °C</b></div>
+      </div>
+      <div class="bx-tag" data-label style="left:16px;top:14px"><small>Cut-away view</small>a frozen lake in winter</div>
+    </div>
+    <div class="abs col" style="left:950px;top:236px;width:590px;gap:12px">
+      <div class="qa qcard" style="padding:16px 22px" data-build="1"><div class="qn">Predict</div><div class="q" style="font-size:24px">Will an ice cube <b>sink</b> or <b>float</b> in a glass of water?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">It floats: ice is less dense than water.</div></div>
+      <div class="panel" style="padding:16px 22px" data-build="2"><div class="body small">The <b class="hl">density of ice is less</b> than that of water, so ice floats. Freezing starts on the <b>surface</b> of lakes, not on the bottom.</div></div>
+      <div class="panel" style="padding:16px 22px" data-build="3"><div class="body small">Under the ice the water is about <b class="hl5">4 °C</b>. At 4 °C water has its highest density. This helps <b class="hl2">aquatic organisms survive the winter</b>.</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (17:15–18:00). Predict–Observe–Explain.</b> Students vote with hands: sink or float? Then reveal. Optional: drop a real ice cube into a clear cup.</p>
+    <p>Sources: p. 56 (“The density of ice is less than that of water…”) and chapter opener p. 55 (“water temperature under the ice is about 4 °C. At 4 °C, the density of water is highest.”).</p>
+    <div class="warn">Misconception (Unit Planner): “ice sinks”. Check every student’s vote.</div>
+    <p><b>3D view.</b> Press → for the labels: the ice layer and the liquid water below (2nd step), then “≈ 4 °C” together with its explanation (3rd step). Point to the fish: they live in the liquid water all winter.</p>
+  </aside>
+</section>
+
+<!-- ================= 14. LAB WORK No. 2 ================= -->
+<section class="step" id="lab" data-x="4300" data-y="2200" data-s="1" data-phase="activity" data-title="Laboratory work No. 2">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a3);color:#3d1206">Main activity</span><span class="t">LABORATORY WORK No. 2 · PAIRS</span></div>
+    <div class="scene-title"><div class="h2">Drops on a coin</div><div class="ru">Капли на монете</div></div>
+    <svg class="abs anim" style="left:40px;top:226px" width="520" height="590" viewBox="0 0 560 640" aria-label="A dropper adds drops of water to a coin; the water makes a dome">
+      <g transform="translate(280 30)"><image href="../../Assets/art/3d/4.1/dropper_water.webp" x="-16" y="-6" width="56" height="222"/></g>
+      <g class="anim"><path d="M280 250c0 0-12 16-12 24a12 12 0 0 0 24 0c0-8-12-24-12-24z" fill="url(#gDrop)" style="animation:dropFall 1.6s ease-in infinite"/></g>
+      <g transform="translate(280 470)">
+        <image href="../../Assets/art/3d/4.1/coin_dome.webp" x="-214" y="-157" width="435" height="242"/>
+        <g class="anim"><ellipse cx="0" cy="-66" rx="50" ry="10" fill="none" stroke="#ffffff" stroke-width="3" style="transform-origin:0 -66px;animation:ripple 1.6s ease-out infinite .9s"/></g>
+      </g>
+      <text x="280" y="612" text-anchor="middle" fill="#b9e9f5" font-family="Nunito" font-weight="800" font-size="24">Figure 4.1.2 Adhesion and cohesion</text>
+    </svg>
+    <div class="abs" style="left:600px;top:226px;width:940px;display:grid;grid-template-columns:1.1fr 1fr;gap:18px">
+      <div class="panel" style="padding:18px 24px">
+        <div class="h4" style="color:var(--a1);font-size:26px">Materials</div>
+        <div class="body" style="font-size:23px;margin-top:4px">glass of water · dropper · coin · paper towel</div>
+        <div class="h4" style="color:var(--a5);font-size:26px;margin-top:12px">Pre-lab questions</div>
+        <div class="body" style="font-size:23px;margin-top:4px">1. What is cohesion?<br>2. What other properties does water have?</div>
+      </div>
+      <div class="panel" style="padding:18px 24px">
+        <div class="h4" style="color:var(--a3);font-size:26px">Predict first</div>
+        <div class="body" style="font-size:23px;margin-top:4px">How many drops will stay on the coin before water spills?</div>
+        <div class="frame-box" style="margin-top:12px;font-size:22px">I predict <i>___</i> drops because <i>…</i></div>
+        <div style="margin-top:12px;font:800 19px/1.3 var(--font);color:var(--a5)">&#9888; Safety: keep water away from sockets and devices · wipe spills at once · wash hands after the lab.</div>
+      </div>
+      <div class="panel" style="grid-column:1 / span 2;padding:18px 26px">
+        <div class="h4" style="font-size:26px">Procedure</div>
+        <ol class="steps-list" style="margin-top:10px;gap:10px">
+          <li style="font-size:24px">Place the coin on a flat surface. Dry it with the towel.</li>
+          <li style="font-size:24px">Slowly drip water onto the coin — <b>one drop at a time</b>.</li>
+          <li style="font-size:24px">Count the drops. Write the number when the coin is <b>full</b>.</li>
+          <li style="font-size:24px">Keep dripping. Write the number when water <b>spills</b>.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Main activity (18:00–30:00). Pairs.</b> 1 min: pre-lab questions orally. 1 min: teacher models holding the dropper vertically and squeezing gently — one drop at a time. 1 min: students write a prediction on the Lab 2 worksheet. 6 min: experiment (repeat if time — record each trial). 3 min: results and post-lab questions (next two scenes).</p>
+    <p>Roles: Student A drips, Student B counts aloud and records; swap for trial 2.</p>
+    <div class="warn">Record <b>actual</b> observations only — no invented numbers. Results vary with coin size, dropper and how gently drops are added; this is useful for later discussion of method.</div>
+    <p>ATL — Research (information literacy): accurate recording of counts. ATL — Thinking: connect the dome to cohesion and surface tension.</p>
+  </aside>
+</section>
+
+<!-- ================= 15. CLASS RESULTS ================= -->
+<section class="step" id="results" data-x="2150" data-y="2200" data-s="1" data-phase="activity" data-title="Class results">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a3);color:#3d1206">Main activity</span><span class="t">RESULTS · TYPE REAL CLASS DATA</span></div>
+    <div class="scene-title"><div class="h2">Our class results</div><div class="ru">Результаты нашего класса</div></div>
+    <div class="abs" style="left:64px;top:214px;width:820px" data-interactive>
+      <table class="tally" id="tally">
+        <thead><tr><th>Pair</th><th>Drops: coin is full</th><th>Drops: water spills</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="abs col" style="left:930px;top:226px;width:610px;gap:14px">
+      <div class="row" style="gap:12px">
+        <div class="stat" style="flex:1"><div class="v" id="tMean">–</div><div class="l">Mean · spills</div></div>
+        <div class="stat" style="flex:1"><div class="v" id="tMin">–</div><div class="l">Lowest</div></div>
+        <div class="stat" style="flex:1"><div class="v" id="tMax">–</div><div class="l">Highest</div></div>
+      </div>
+      <div class="qa qcard" style="padding:18px 22px"><div class="qn">Discuss</div><div class="q" style="font-size:24px">Why are the numbers of different pairs not the same?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">Different coins, droppers and drop sizes; some pairs dripped faster or counted differently.</div></div>
+      <div class="frame-box" style="font-size:22px">Our results show <i>___</i>. The numbers are different because <i>___</i>.</div>
+      <div class="row" style="align-items:center;gap:14px"><button class="btn ghost" id="tClear">Clear table</button><span style="font:700 18px/1.3 var(--font);color:var(--ink-mute)">Type real class data only.</span></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Main activity — results (≈26:00–28:00).</b> Click a box and type each pair’s real numbers (Tab moves to the next box). Mean, lowest and highest (for “spills”) update automatically. Data stays after a page refresh; press <b>Clear table</b> (or R) to empty it.</p>
+    <div class="exp"><b>Discuss — expected:</b> different coins, droppers, drop sizes, speed of dripping, counting errors. This prepares Criterion C thinking (validity of the method).</div>
+    <p>Use the mean only as a class summary; it is a simple transformation of real data.</p>
+  </aside>
+</section>
+
+<!-- ================= 16. POST-LAB QUESTIONS ================= -->
+<section class="step" id="postlab" data-x="0" data-y="2200" data-s="1" data-phase="activity" data-title="Post-lab questions">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a3);color:#3d1206">Main activity</span><span class="t">POST-LAB QUESTIONS · TEXTBOOK p. 57</span></div>
+    <div class="scene-title"><div class="h2">What does our coin show?</div><div class="ru">Что показала наша монета?</div></div>
+    <div class="qgrid" style="top:230px">
+      <div class="qa qcard" style="height:560px"><div class="qn">Question 1</div><div class="q">Why did the water on the coin not spill?</div><div class="frame-box" style="margin-top:16px;font-size:21px">The water did not spill because <i>…</i></div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">Water molecules stick together (cohesion), so the surface holds like a skin (surface tension). Water also sticks to the coin (adhesion).</div></div>
+      <div class="qa qcard" style="height:560px"><div class="qn">Question 2</div><div class="q">In which processes is this property used? How does it help living organisms?</div><div class="frame-box" style="margin-top:16px;font-size:21px">It helps <i>…</i> to <i>…</i></div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">Water moves up plants from the soil to the leaves. Small animals such as water striders stand on the water surface.</div></div>
+      <div class="qa qcard" style="height:560px"><div class="qn">Question 3</div><div class="q">What would happen if water molecules could not stick to each other?</div><div class="frame-box" style="margin-top:16px;font-size:21px">If <i>…</i>, then <i>…</i></div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">No dome: water would spill after very few drops. Water could not move up plants easily, and striders would sink.</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Main activity — post-lab (28:00–30:00).</b> Students write answers on the Lab 2 worksheet first (sentence frames shown). Then reveal one answer at a time and let students self-correct in a different colour.</p>
+    <div class="exp"><b>Expected answers</b> are under each reveal button and in the 4.1 Answer Key.</div>
+  </aside>
+</section>
+
+<!-- ================= 17. APPLY ================= -->
+<section class="step" id="apply" data-x="-2150" data-y="2200" data-s="1" data-phase="apply" data-title="Apply: which property helps?">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a2);color:#053a2a">Apply</span><span class="t">DRAG A PROPERTY TO EACH SITUATION</span></div>
+    <div class="scene-title"><div class="h2">Which property helps?</div><div class="ru">Какое свойство помогает?</div></div>
+    <div class="match-zone abs" style="left:64px;top:236px;width:1040px">
+      <div class="pool" style="margin-bottom:14px;gap:10px">
+        <span class="chip" data-k="tension">surface tension</span>
+        <span class="chip" data-k="coh">cohesion + adhesion</span>
+        <span class="chip" data-k="ice">ice is less dense</span>
+        <span class="chip" data-k="heat">high heat capacity</span>
+        <span class="chip" data-k="solv">water is a solvent</span>
+      </div>
+      <div class="sit"><svg class="ic" viewBox="0 0 76 76"><rect width="76" height="76" rx="20" fill="rgba(255,255,255,.1)"/><path d="M8 50q15-6 30 0t30 0" stroke="#bff6ff" stroke-width="3" fill="none"/><ellipse cx="38" cy="38" rx="16" ry="5" fill="#8a6a43"/><path d="M24 40L16 50M52 40L60 50" stroke="#3a2a19" stroke-width="3"/></svg><div class="tx">A water strider stands on a pond.</div><div class="slot" data-k="tension" data-max="1"></div></div>
+      <div class="sit"><svg class="ic" viewBox="0 0 76 76"><rect width="76" height="76" rx="20" fill="rgba(255,255,255,.1)"/><path d="M38 66V22" stroke="#3fbf72" stroke-width="6"/><path d="M38 30C26 18 16 22 12 28C20 34 30 34 38 30ZM38 40C50 28 60 32 64 38C56 44 46 44 38 40Z" fill="#7ee08f"/><path d="M38 64V30" stroke="#5fd6f0" stroke-width="3" stroke-dasharray="4 4"/></svg><div class="tx">Water moves from the roots up to the leaves.</div><div class="slot" data-k="coh" data-max="1"></div></div>
+      <div class="sit"><svg class="ic" viewBox="0 0 76 76"><rect width="76" height="76" rx="20" fill="rgba(255,255,255,.1)"/><rect x="8" y="20" width="60" height="10" rx="3" fill="#e8fbff"/><path d="M24 50c8-7 22-7 30 0c-8 7-22 7-30 0zm30 0l9-6v12z" fill="#ff9f6e"/></svg><div class="tx">Fish survive under a frozen lake in winter.</div><div class="slot" data-k="ice" data-max="1"></div></div>
+      <div class="sit"><svg class="ic" viewBox="0 0 76 76"><rect width="76" height="76" rx="20" fill="rgba(255,255,255,.1)"/><circle cx="24" cy="24" r="10" fill="#ffd27a"/><rect x="46" y="14" width="10" height="40" rx="5" fill="#e8fbff"/><circle cx="51" cy="56" r="8" fill="#ff7f61"/><rect x="48" y="34" width="6" height="20" fill="#ff7f61"/></svg><div class="tx">Body temperature stays constant on a hot day.</div><div class="slot" data-k="heat" data-max="1"></div></div>
+      <div class="sit"><svg class="ic" viewBox="0 0 76 76"><rect width="76" height="76" rx="20" fill="rgba(255,255,255,.1)"/><circle cx="38" cy="38" r="24" fill="none" stroke="#7ef0c4" stroke-width="3"/><circle cx="38" cy="38" r="8" fill="#7ef0c4"/><g fill="#ffe08a"><circle cx="26" cy="28" r="3"/><circle cx="50" cy="30" r="3"/><circle cx="48" cy="50" r="3"/></g></svg><div class="tx">Nutrients are carried; reactions happen in cells.</div><div class="slot" data-k="solv" data-max="1"></div></div>
+      <div class="row" style="margin-top:10px;align-items:center"><button class="btn" data-check>Check</button><button class="btn ghost" data-reset>Reset</button><span class="score"></span></div>
+    </div>
+    <div class="abs col" style="left:1140px;top:236px;width:400px;gap:14px">
+      <div class="fact"><div class="lab">Fact · textbook p. 57</div><div style="font:700 24px/1.3 var(--font);margin-top:8px">785 million people have no access to an improved water source.</div></div>
+      <div class="qcard" style="padding:18px 22px;border-color:rgba(255,127,97,.6)"><div class="qn" style="color:var(--a3)">Debatable · discuss</div><div class="q" style="font-size:22px">Can we use water responsibly and still meet living things’ needs? Give one idea for our school.</div></div>
+      <div class="frame-box" style="font-size:21px">Water is important for <i>…</i> because <i>…</i>. We can <i>…</i></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Apply (30:00–37:00).</b> 3 min: volunteers drag one property each (or click a property, then click a box). Press <b>Check</b> — green = correct, red = try again.</p>
+    <div class="exp"><b>Answers:</b> strider — surface tension · roots to leaves — cohesion + adhesion · fish under ice — ice is less dense · body temperature — high heat capacity · nutrients and reactions — water is a solvent.</div>
+    <p>4 min: Debatable question (link to SoI and the global context, globalization and sustainability). Pairs give one idea using the frame. <b>Possible ideas:</b> turn off taps, reuse water for plants, report leaks. Accept reasoned ideas — this is formative discussion, not a summative task.</p>
+    <p>SoI link: “Interactions among water molecules give water important functions” (Unit Planner, Lesson 1).</p>
+  </aside>
+</section>
+
+<!-- ================= 18. EXIT TICKET ================= -->
+<section class="step" id="exit" data-x="-4300" data-y="2200" data-s="1" data-phase="exit" data-title="Exit ticket">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a5);color:#3a2a00">Exit ticket</span><span class="t">WORK ALONE · 3 MINUTES</span></div>
+    <div class="scene-title"><div class="h2">Exit ticket</div><div class="ru">Билет на выход: ответь сам</div></div>
+    <div class="qgrid" style="top:230px">
+      <div class="qa qcard" style="height:560px"><div class="qn">1 · Recall</div><div class="q">What is <b>surface tension</b>?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">A property of the surface of a liquid that allows it to resist an external force.</div></div>
+      <div class="qa qcard" style="height:560px"><div class="qn">2 · Understanding</div><div class="q">Explain why ice floating on a lake helps fish survive the winter.</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">Ice is less dense, so it floats and the lake freezes only on top. The water under the ice stays liquid (about 4 °C), so fish can live there.</div></div>
+      <div class="qa qcard" style="height:560px"><div class="qn">3 · Application</div><div class="q">A tall tree needs water in its top leaves. Use <b>cohesion</b> and <b>adhesion</b> to explain how the water gets there.</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">Water molecules stick to each other (cohesion) and to the walls of the stem tubes (adhesion). So water moves up from the soil, through the roots and stem, to the leaves.</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Exit ticket (37:00–40:00).</b> Students answer on the printed exit-ticket slip, alone. Collect at the door.</p>
+    <p>Sort answers into <b>secure / developing / needs reteaching</b> (Unit Planner). Revisit misunderstood terms at the start of Lesson 4.2.</p>
+    <div class="exp"><b>Success criteria:</b> Q1 uses “surface”, “resist” and “force”. Q2 links less dense → floats → liquid water underneath → survival. Q3 uses both terms correctly and gives the direction soil → roots → stem → leaves.</div>
+  </aside>
+</section>
+
+</div></div>
+</div>
+
+<script src="../../Assets/engine/prezi.js"></script>
+<script src="../../Assets/engine/benchmark.js"></script>
+<script>
+/* ---------- Lab 2 class tally (real data typed by the teacher; saved locally) ---------- */
+(function () {
+  var KEY = 'ch4-4.1-tally', body = document.querySelector('#tally tbody'), N = 8;
+  var data = [];
+  try { data = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { data = []; }
+  for (var i = 0; i < N; i++) {
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td>Pair ' + (i + 1) + '</td><td><input inputmode="numeric" aria-label="Pair ' + (i + 1) + ' drops when full"></td><td><input inputmode="numeric" aria-label="Pair ' + (i + 1) + ' drops when spilled"></td>';
+    body.appendChild(tr);
+  }
+  var inputs = [].slice.call(body.querySelectorAll('input'));
+  inputs.forEach(function (inp, j) { inp.value = data[j] || ''; inp.addEventListener('input', update); });
+  function update() {
+    var vals = inputs.map(function (x) { return x.value.replace(/[^0-9]/g, ''); });
+    inputs.forEach(function (x, j) { if (x.value !== vals[j]) x.value = vals[j]; });
+    try { localStorage.setItem(KEY, JSON.stringify(vals)); } catch (e) {}
+    var sp = vals.filter(function (v, j) { return j % 2 === 1 && v !== ''; }).map(Number);
+    document.getElementById('tMean').textContent = sp.length ? (sp.reduce(function (a, b) { return a + b; }, 0) / sp.length).toFixed(1) : '–';
+    document.getElementById('tMin').textContent = sp.length ? Math.min.apply(null, sp) : '–';
+    document.getElementById('tMax').textContent = sp.length ? Math.max.apply(null, sp) : '–';
+  }
+  function clear() { inputs.forEach(function (x) { x.value = ''; }); update(); }
+  document.getElementById('tClear').addEventListener('click', clear);
+  Prezi.onReset('results', clear);
+  update();
+})();
+</script>
+<script src="../../site/js/back-to-chapter.js"></script>
+</body>
+</html>

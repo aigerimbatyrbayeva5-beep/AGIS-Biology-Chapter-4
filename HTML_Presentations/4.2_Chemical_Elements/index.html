@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>4.2 Chemical Elements · Chapter 4</title>
+<link rel="stylesheet" href="../../Assets/engine/fonts.css">
+<link rel="stylesheet" href="../../Assets/engine/prezi.css">
+<link rel="stylesheet" href="../../Assets/engine/benchmark.css">
+<style>
+:root{
+  --bg:#110a2c; --ink:#f8f5ff; --ink-soft:#d6ccff; --ink-mute:#9f92d8;
+  --a1:#38e8d2; --a2:#b794ff; --a3:#ffb38a; --a4:#5aa2ff; --a5:#ffd9a0; --on-a:#0d0730;
+  --panel:rgba(190,170,255,.10); --panel-strong:rgba(190,170,255,.17); --panel-line:rgba(200,185,255,.26);
+  --frame-bg:linear-gradient(155deg,rgba(50,28,118,.9),rgba(20,11,54,.94));
+  --frame-line:rgba(190,170,255,.3);
+  --hud-bg:rgba(16,8,44,.8);
+}
+.organ-bg{position:absolute;inset:0;border-radius:60px;overflow:hidden}
+.bar-row{display:grid;grid-template-columns:200px 70px 1fr 90px;align-items:center;gap:14px;height:44px}
+.bar-row .n{font:800 22px/1 var(--font)}
+.bar-row .s{font:900 22px/1 var(--font);color:var(--a1);text-align:center;background:var(--panel-strong);border-radius:10px;padding:7px 0}
+.bar-row .track{height:24px;border-radius:12px;background:rgba(255,255,255,.06);position:relative}
+.bar-row .fill{position:absolute;left:0;top:0;bottom:0;border-radius:12px;min-width:5px;background:linear-gradient(90deg,var(--a2),var(--a1));transform-origin:left;transition:transform 1.1s var(--ease)}
+.bar-row .v{font:900 22px/1 var(--font);color:var(--a5);text-align:right;font-variant-numeric:tabular-nums}
+.bar-row.main .fill{background:linear-gradient(90deg,#7c4dff,var(--a1))}
+.bar-row.micro .fill{background:var(--a3)}
+.step:not(.active) .bar-row .fill{transform:scaleX(0)}
+.reduced .bar-row .fill{transition:none}
+.bin{border-radius:26px;padding:16px 18px;background:var(--panel);border:2px solid var(--panel-line);min-height:330px}
+.bin .slot{min-height:150px;align-content:flex-start;border:none;padding:4px}
+.chip.el{font-size:24px;padding:10px 16px;min-width:64px;justify-content:center;background:#f3efff;color:#1a0f4a}
+.chip.org{font-size:21px;padding:10px 16px;background:#f3efff;color:#1a0f4a}
+.mrow{display:grid;grid-template-columns:96px 200px 1fr;gap:16px;align-items:center;padding:4px 0}
+.mrow .tile{height:58px;border-radius:16px;background:var(--panel-strong);border:2px solid var(--panel-line);display:grid;place-items:center;font:600 34px/1 var(--display);color:var(--a1)}
+.mrow .nm{font:800 25px/1.1 var(--font)}
+.mrow .slot{min-height:62px;padding:5px}
+.info{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.info div{border-radius:16px;padding:10px 14px;background:var(--panel);border:2px solid var(--panel-line);font:700 19px/1.3 var(--font);color:var(--ink-soft)}
+.info b{color:var(--a1)}
+.big-el{display:flex;align-items:baseline;gap:18px}
+.big-el .sym{font:600 140px/1 var(--display);color:var(--a1);text-shadow:0 0 40px rgba(56,232,210,.45)}
+.big-el .nm{font:600 52px/1 var(--display)}
+.badge{display:inline-block;padding:7px 14px;border-radius:999px;font:900 17px/1 var(--font);letter-spacing:.08em;text-transform:uppercase}
+.badge.macro{background:var(--a2);color:#1a0b45}
+.badge.micro{background:var(--a3);color:#3d1a06}
+@keyframes rbc{from{transform:translateX(-260px)}to{transform:translateX(1100px)}}
+@keyframes impulse{0%{offset-distance:0%;opacity:0}8%{opacity:1}92%{opacity:1}100%{offset-distance:100%;opacity:0}}
+@keyframes twinkle{0%,100%{opacity:.35}50%{opacity:.9}}
+.rbc-flow{animation:rbcLoop 26s linear infinite}
+@keyframes rbcLoop{to{transform:translateX(-2179px)}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <path id="humanPath" d="M-50-238a50 50 0 1 0 100 0a50 50 0 1 0-100 0ZM-16-200H16L18-178C34-176 58-172 74-160C96-148 100-126 104-100L114 10C116 40 118 66 122 92C124 106 104 108 100 94L86-6C84-30 80-60 76-80C72-40 66-8 64 30C70 60 72 80 70 110L64 300C66 312 78 316 78 324L30 324C26 300 24 240 20 160L12 110H-12L-20 160C-24 240-26 300-30 324L-78 324C-78 316-66 312-64 300L-70 110C-72 80-70 60-64 30C-66-8-72-40-76-80C-80-60-84-30-86-6L-100 94C-104 108-124 106-122 92C-118 66-116 40-114 10L-104-100C-100-126-96-148-74-160C-58-172-34-176-18-178Z"/>
+    <radialGradient id="gAtomT" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#e9fffb"/><stop offset=".45" stop-color="#38e8d2"/><stop offset="1" stop-color="#0d7f74"/></radialGradient>
+    <radialGradient id="gAtomP" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#f3ecff"/><stop offset=".45" stop-color="#a77bff"/><stop offset="1" stop-color="#4b23a8"/></radialGradient>
+    <radialGradient id="gAtomO" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#fff1e8"/><stop offset=".45" stop-color="#ffb38a"/><stop offset="1" stop-color="#c8603a"/></radialGradient>
+    <radialGradient id="gAtomR" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#ffd6d6"/><stop offset=".45" stop-color="#ff5d6c"/><stop offset="1" stop-color="#9b1530"/></radialGradient>
+    <radialGradient id="gRBC" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#9b1530"/><stop offset=".45" stop-color="#d42b45"/><stop offset=".8" stop-color="#ff5d6c"/><stop offset="1" stop-color="#c8223e"/></radialGradient>
+    <linearGradient id="gBone" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffaf0"/><stop offset="1" stop-color="#e3d6bd"/></linearGradient>
+    <linearGradient id="gMuscle" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb3a0"/><stop offset="1" stop-color="#d9576a"/></linearGradient>
+    <linearGradient id="gBodyFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5c3bd6" stop-opacity=".55"/><stop offset="1" stop-color="#241166" stop-opacity=".55"/></linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#05010f" flood-opacity=".5"/></filter>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+</svg>
+
+<div class="prezi" data-lesson="4.2" data-journey data-rho="1.3">
+<div class="viewport"><div class="world">
+
+<!-- ================= WORLD ART: inside-the-body nebula + giant body map ================= -->
+<svg class="world-art" style="left:-7600px;top:-4800px;width:15200px;height:9600px" viewBox="-7600 -4800 15200 9600" aria-hidden="true">
+  <defs>
+    <radialGradient id="neb1" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#5b2bd1" stop-opacity=".55"/><stop offset="1" stop-color="#5b2bd1" stop-opacity="0"/></radialGradient>
+    <radialGradient id="neb2" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#14b8a6" stop-opacity=".35"/><stop offset="1" stop-color="#14b8a6" stop-opacity="0"/></radialGradient>
+    <radialGradient id="neb3" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ff8a5c" stop-opacity=".22"/><stop offset="1" stop-color="#ff8a5c" stop-opacity="0"/></radialGradient>
+    <radialGradient id="hot" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".3" stop-color="#38e8d2" stop-opacity=".8"/><stop offset="1" stop-color="#38e8d2" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect x="-7600" y="-4800" width="15200" height="9600" fill="#110a2c"/>
+  <circle cx="2700" cy="900" r="3600" fill="url(#neb1)"/>
+  <circle cx="-3000" cy="-600" r="3400" fill="url(#neb2)"/>
+  <circle cx="-2500" cy="2600" r="3000" fill="url(#neb3)"/>
+  <circle cx="5200" cy="-2600" r="2200" fill="url(#neb2)"/>
+  <!-- star dust -->
+  <g fill="#e9e2ff" class="anim">
+    <circle cx="-6100" cy="-2900" r="10" style="animation:twinkle 4s infinite"/><circle cx="-4200" cy="-3300" r="7" style="animation:twinkle 5s infinite 1s"/><circle cx="-1500" cy="-3500" r="9" style="animation:twinkle 6s infinite .5s"/>
+    <circle cx="1200" cy="-3200" r="8" style="animation:twinkle 4.5s infinite 2s"/><circle cx="4300" cy="-1500" r="10" style="animation:twinkle 5s infinite"/><circle cx="6000" cy="-600" r="8" style="animation:twinkle 6s infinite 1.5s"/>
+    <circle cx="5800" cy="2400" r="9" style="animation:twinkle 5s infinite 1s"/><circle cx="-6000" cy="3300" r="9" style="animation:twinkle 4s infinite .3s"/><circle cx="600" cy="3400" r="8" style="animation:twinkle 6s infinite 2s"/>
+    <circle cx="-5600" cy="1000" r="7" style="animation:twinkle 5s infinite 2.5s"/><circle cx="-200" cy="-1800" r="7" style="animation:twinkle 5s infinite 1.2s"/>
+  </g>
+  <!-- floating element "atoms" -->
+  <g font-family="Fredoka, Nunito" font-weight="600" text-anchor="middle" class="anim">
+    <g style="animation:floaty 7s ease-in-out infinite"><circle cx="4900" cy="2700" r="120" fill="url(#gAtomP)" opacity=".85"/><text x="4900" y="2740" font-size="120" fill="#fff">O</text></g>
+    <g style="animation:floaty 8s ease-in-out infinite 1s"><circle cx="1200" cy="2850" r="90" fill="url(#gAtomT)" opacity=".85"/><text x="1200" y="2882" font-size="90" fill="#06302c">C</text></g>
+    <g style="animation:floaty 6s ease-in-out infinite .5s"><circle cx="5300" cy="-700" r="80" fill="url(#gAtomO)" opacity=".85"/><text x="5300" y="-672" font-size="80" fill="#3d1a06">N</text></g>
+    <g style="animation:floaty 9s ease-in-out infinite 2s"><circle cx="5350" cy="2150" r="70" fill="url(#gAtomT)" opacity=".7"/><text x="5350" y="2174" font-size="70" fill="#06302c">H</text></g>
+    <g style="animation:floaty 7s ease-in-out infinite 1.5s"><circle cx="3900" cy="2900" r="110" fill="url(#gAtomR)" opacity=".75"/><text x="3900" y="2936" font-size="96" fill="#fff">Fe</text></g>
+    <g style="animation:floaty 8s ease-in-out infinite .8s"><circle cx="-6400" cy="-1500" r="90" fill="url(#gAtomO)" opacity=".7"/><text x="-6400" y="-1470" font-size="80" fill="#3d1a06">Ca</text></g>
+    <g style="animation:floaty 6.5s ease-in-out infinite 2.2s"><circle cx="-6300" cy="2200" r="80" fill="url(#gAtomP)" opacity=".7"/><text x="-6300" y="2226" font-size="70" fill="#fff">K</text></g>
+    <g style="animation:floaty 7.5s ease-in-out infinite 1.1s"><circle cx="2100" cy="2980" r="70" fill="url(#gAtomT)" opacity=".7"/><text x="2100" y="3004" font-size="64" fill="#06302c">I</text></g>
+  </g>
+</svg>
+
+<!-- body map: 3D anatomical figure (Render_Source/body_scene.js, MODE 2) in the humanPath frame x4.6 at (2700,875) -->
+<img class="world-img" src="../../Assets/art/3d/shared/body_organs.webp" alt="" style="left:2010px;top:-505px;width:1380px;height:2898px">
+<svg class="world-img" style="left:2010px;top:-505px;width:1380px;height:2898px;overflow:visible" viewBox="-150 -300 300 630" aria-hidden="true">
+  <g opacity=".55">
+    <g fill="none" stroke="#ffd9a0" stroke-width="1.2" opacity=".7">
+      <path d="M0-212V100M0-150L80-130L100-20L112 80M0-150L-80-130L-100-20L-112 80M0 100L30 200L40 300M0 100L-30 200L-40 300"/>
+    </g>
+  </g>
+    <g class="anim">
+      <circle cx="0" cy="-186" r="10" fill="url(#hot)" style="transform-origin:0px -186px;animation:pulse 2.4s infinite"/>
+      <circle cx="-14" cy="-110" r="12" fill="url(#hot)" style="transform-origin:-14px -110px;animation:pulse 2.4s infinite .4s"/>
+      <circle cx="92" cy="-50" r="12" fill="url(#hot)" style="transform-origin:92px -50px;animation:pulse 2.4s infinite .8s"/>
+      <circle cx="40" cy="170" r="12" fill="url(#hot)" style="transform-origin:40px 170px;animation:pulse 2.4s infinite 1.2s"/>
+    </g>
+</svg>
+
+<!-- ================= 1. TITLE / OVERVIEW ================= -->
+<section class="step" id="welcome" data-x="0" data-y="0" data-s="7" data-overview data-noclick data-phase="title" data-title="Welcome · lesson map">
+  <div class="scene">
+    <div class="abs" style="left:66px;top:46px;width:1060px">
+      <div class="row" style="gap:14px;align-items:center">
+        <span class="pill">Chapter 4 · Water and Organic Compounds</span>
+        <span class="pill ghost">Lesson 4.2 · Grade 7 · MYP Year 3</span>
+      </div>
+    </div>
+    <h1 class="h1 abs" style="left:66px;top:96px;font-size:84px;white-space:nowrap">Chemical elements in human body</h1>
+    <div class="abs" style="left:66px;top:196px;width:1470px">
+      <div class="objective"><span class="tag">You will</span><span>describe the role of micro- and macroelements in the life of organisms.</span></div>
+      <div class="meta-row" style="margin-top:12px">
+        <div class="meta"><b>ATL</b> Thinking · critical-thinking skills</div>
+        <div class="meta"><b>Criterion A</b> (formative) · A.i describe · A.ii apply</div>
+        <div class="meta"><b>Inquiry</b> Which substances help human bodies function?</div>
+      </div>
+    </div>
+    <div class="logo-plate" style="right:58px;top:30px">
+      <img src="../../Assets/logos/AGIS_logo.png" alt="Astana Garden International School logo">
+      <img class="myp" src="../../Assets/logos/IB_MYP_logo.png" alt="IB Middle Years Programme logo">
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Opening (0:00).</b> Lesson map: on the left are the learning scenes; on the right is a giant body map — the camera will fly inside it to meet elements in the thyroid, blood, muscles and bones.</p>
+    <p>Objective quoted from the textbook “You will” box, p. 58. Textbook pages 58–59.</p>
+    <p><b>ATL (Unit Planner):</b> Thinking — critical-thinking skills: interpret scientific information and evaluate evidence to draw a reasoned conclusion (here: reason from a function to the likely affected organ).</p>
+    <div class="warn">Print before the lesson: 4.2 vocabulary sheet, element–organ matching worksheet, exit-ticket slips.</div>
+  </aside>
+</section>
+
+<!-- ================= 2. BIG QUESTION ================= -->
+<section class="step" id="bigq" data-x="-4700" data-y="-650" data-s="1" data-phase="engage" data-title="Big question: calcium in childhood">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Engage</span><span class="t">THINK · PAIR · SHARE</span></div>
+    <div class="abs" style="left:64px;top:150px;width:720px">
+      <div class="kicker">Big question</div>
+      <div class="h2" style="font-size:56px;margin-top:14px">Why is it needed to get more calcium in childhood?</div>
+      <div class="ru" style="margin-top:14px">Почему в детстве нужно получать больше кальция?</div>
+      <div class="frame-box" style="margin-top:30px" data-build="1">Children need more calcium because <i>…</i></div>
+      <div class="qa" data-build="1" style="margin-top:14px">
+        <button class="reveal-btn">&#128065; Reveal answer</button>
+        <div class="answer">Calcium (Ca) is found in <b>bones and teeth</b>. In childhood, bones and teeth grow, so the body needs more calcium.</div>
+      </div>
+    </div>
+    <!-- growing child: two figures with bones -->
+    <svg class="abs anim" style="left:840px;top:110px" width="700" height="700" viewBox="0 0 700 700" aria-label="A child and an adult; the bones of a child are still growing">
+      <defs><radialGradient id="bqGlow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#b794ff" stop-opacity=".45"/><stop offset="1" stop-color="#b794ff" stop-opacity="0"/></radialGradient></defs>
+      <circle cx="350" cy="380" r="330" fill="url(#bqGlow)"/>
+      <image href="../../Assets/art/3d/shared/body_skeleton_adult.webp" x="127" y="254" width="186" height="391"/>
+      <image href="../../Assets/art/3d/shared/body_skeleton_child.webp" x="431" y="362" width="138" height="290"/>
+      <g class="anim"><g style="animation:floaty 3s ease-in-out infinite">
+        <path d="M610 380V250" stroke="#38e8d2" stroke-width="8" stroke-linecap="round"/><path d="M592 262L610 230L628 262Z" fill="#38e8d2"/>
+      </g></g>
+      <g font-family="Nunito" font-weight="900" font-size="24" text-anchor="middle">
+        <text x="220" y="690" fill="#d6ccff">adult</text><text x="500" y="690" fill="#38e8d2">child · growing</text>
+      </g>
+      <g transform="translate(560 140)"><circle r="54" fill="url(#gAtomO)" filter="url(#soft)"/><text y="18" text-anchor="middle" font-family="Fredoka, Nunito" font-weight="600" font-size="50" fill="#3d1a06">Ca</text></g>
+    </svg>
+  </div>
+  <aside class="notes">
+    <p><b>Engage (0:00–4:00). Participation 1 — Think–Pair–Share.</b> 30 s think, 1 min pair talk with the frame, 1 min share. Then reveal.</p>
+    <div class="exp"><b>Expected:</b> “bones are growing”, “for strong teeth”, “children grow”. Textbook link (p. 58): calcium is found in bones and teeth and acts in muscle contraction and blood clotting.</div>
+    <p>Textbook question, p. 58.</p>
+  </aside>
+</section>
+
+<!-- ================= 3. VOCABULARY 1 ================= -->
+<section class="step" id="vocab1" data-x="-2850" data-y="-650" data-s="1" data-phase="vocab" data-title="Vocabulary 1">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Vocabulary</span><span class="t">ENGLISH · РУССКИЙ · 1 of 2</span></div>
+    <div class="scene-title"><div class="h2">Words about elements</div></div>
+    <div class="vocab c3" style="top:232px">
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><circle cx="60" cy="60" r="16" fill="url(#gAtomP)"/><g fill="none" stroke="#38e8d2" stroke-width="3"><ellipse cx="60" cy="60" rx="48" ry="18"/><ellipse cx="60" cy="60" rx="48" ry="18" transform="rotate(60 60 60)"/><ellipse cx="60" cy="60" rx="48" ry="18" transform="rotate(-60 60 60)"/></g></svg>
+        <div class="en">element</div><div class="rus">элемент</div><div class="def">a substance that cannot be divided into other substances by chemical reactions</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><circle cx="60" cy="60" r="46" fill="rgba(56,232,210,.15)" stroke="#38e8d2" stroke-width="3"/><circle cx="60" cy="60" r="14" fill="#b794ff"/><g><circle cx="34" cy="44" r="7" fill="url(#gAtomO)"/><circle cx="86" cy="50" r="7" fill="url(#gAtomT)"/><circle cx="44" cy="86" r="7" fill="url(#gAtomR)"/><circle cx="82" cy="84" r="7" fill="url(#gAtomP)"/></g></svg>
+        <div class="en">bioelements</div><div class="rus">биоэлементы</div><div class="def">the units which living things are made of</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><text x="60" y="78" text-anchor="middle" font-family="Fredoka, Nunito" font-weight="600" font-size="56" fill="#fff">Na</text><rect x="20" y="22" width="80" height="80" rx="16" fill="none" stroke="#38e8d2" stroke-width="4"/><text x="60" y="114" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="13" fill="#d6ccff">natrium</text></svg>
+        <div class="en">chemical symbol</div><div class="rus">химический символ</div><div class="def">1–2 letters for an element: Na comes from Latin <i>natrium</i></div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><g fill="url(#gAtomP)"><circle cx="30" cy="84" r="14"/><circle cx="58" cy="84" r="14"/><circle cx="86" cy="84" r="14"/><circle cx="44" cy="60" r="14"/><circle cx="72" cy="60" r="14"/><circle cx="58" cy="36" r="14"/></g></svg>
+        <div class="en">macroelement</div><div class="rus">макроэлемент</div><div class="def">an element needed in large amounts</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><circle cx="60" cy="64" r="8" fill="url(#gAtomO)"/><circle cx="60" cy="64" r="34" fill="none" stroke="#ffb38a" stroke-width="3" stroke-dasharray="4 6"/><path d="M84 40l14-14" stroke="#ffb38a" stroke-width="4" stroke-linecap="round"/></svg>
+        <div class="en">microelement</div><div class="rus">микроэлемент</div><div class="def">an element needed in small (trace) amounts</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><rect x="44" y="14" width="32" height="90" rx="16" fill="none" stroke="#d6ccff" stroke-width="4"/><rect x="50" y="76" width="20" height="22" rx="8" fill="#ff5d6c"/><path d="M20 30l18 18M38 30L20 48" stroke="#ff5d6c" stroke-width="5" stroke-linecap="round"/></svg>
+        <div class="en">deficiency</div><div class="rus">недостаток (дефицит)</div><div class="def">not enough of something the body needs</div></div>
+    </div>
+    <div class="abs" style="left:64px;bottom:96px;font:700 23px/1.3 var(--font);color:var(--ink-soft)">Say it: <b style="color:var(--a5)">“Macro means big amounts. Micro means small amounts.”</b></div>
+  </div>
+  <aside class="notes">
+    <p><b>Vocabulary (4:00–6:30).</b> Choral repetition (English twice), then the Russian. Definitions come from the textbook Key terms (p. 58), simplified.</p>
+    <p><b>Participation 2:</b> gesture game — arms wide = macro, pinch fingers = micro. Say an element (calcium, iron, iodine, oxygen); students show the gesture.</p>
+    <div class="exp">Expected: oxygen, calcium → macro; iron, iodine → micro.</div>
+  </aside>
+</section>
+
+<!-- ================= 4. VOCABULARY 2 ================= -->
+<section class="step" id="vocab2" data-x="-1000" data-y="-650" data-s="1" data-phase="vocab" data-title="Vocabulary 2">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Vocabulary</span><span class="t">ENGLISH · РУССКИЙ · 2 of 2</span></div>
+    <div class="scene-title"><div class="h2">Elements and body words</div></div>
+    <div class="vocab c3" style="top:232px">
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><path d="M30 34a12 12 0 1 1 18-10l26 26a12 12 0 1 1 10 18a12 12 0 1 1-18 10L40 52a12 12 0 1 1-10-18z" fill="url(#gBone)"/><text x="94" y="30" text-anchor="middle" font-family="Fredoka, Nunito" font-weight="600" font-size="22" fill="#ffb38a">Ca</text></svg>
+        <div class="en">calcium (Ca)</div><div class="rus">кальций</div><div class="def">in bones and teeth; muscles; blood clotting</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><rect x="28" y="20" width="64" height="80" rx="18" fill="url(#gBone)"/><text x="60" y="76" text-anchor="middle" font-family="Fredoka, Nunito" font-weight="600" font-size="46" fill="#4b23a8">P</text></svg>
+        <div class="en">phosphorus (P)</div><div class="rus">фосфор</div><div class="def">in bones, teeth and nucleic acids; energy</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><circle cx="30" cy="60" r="16" fill="#b794ff"/><path d="M46 60C70 60 70 40 100 40M46 60C70 60 70 80 100 80M46 60H104" stroke="#ffd9a0" stroke-width="4" fill="none"/><circle cx="76" cy="60" r="6" fill="#38e8d2"/><text x="30" y="104" text-anchor="middle" font-family="Fredoka, Nunito" font-weight="600" font-size="22" fill="#38e8d2">K</text></svg>
+        <div class="en">potassium (K)</div><div class="rus">калий</div><div class="def">main role in the nervous system</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><ellipse cx="60" cy="60" rx="44" ry="40" fill="url(#gRBC)"/><ellipse cx="60" cy="60" rx="20" ry="16" fill="#9b1530" opacity=".55"/><text x="60" y="70" text-anchor="middle" font-family="Fredoka, Nunito" font-weight="600" font-size="28" fill="#fff">Fe</text></svg>
+        <div class="en">iron (Fe)</div><div class="rus">железо</div><div class="def">part of hemoglobin in the blood</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><path d="M60 56C46 30 18 36 22 62c3 20 26 26 38 10c12 16 35 10 38-10c4-26-24-32-38-6z" fill="#ffb38a"/><path d="M60 56v16" stroke="#c8603a" stroke-width="4"/><text x="60" y="110" text-anchor="middle" font-family="Fredoka, Nunito" font-weight="600" font-size="24" fill="#b794ff">I</text></svg>
+        <div class="en">iodine (I)</div><div class="rus">йод</div><div class="def">main part of thyroid hormones</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><g fill="#ff5d6c" opacity=".9"><circle cx="44" cy="46" r="20"/><circle cx="76" cy="46" r="20"/><circle cx="44" cy="76" r="20"/><circle cx="76" cy="76" r="20"/></g><circle cx="60" cy="61" r="10" fill="#ffd9a0"/><g fill="#5aa2ff"><circle cx="100" cy="22" r="8"/><circle cx="110" cy="30" r="8"/></g></svg>
+        <div class="en">hemoglobin</div><div class="rus">гемоглобин</div><div class="def">a protein in the blood that carries oxygen</div></div>
+    </div>
+    <div class="abs" style="left:64px;bottom:96px;font:700 23px/1.3 var(--font);color:var(--ink-soft)">Quick check: the teacher says the <b style="color:var(--a5)">symbol</b> — you say the element name.</div>
+  </div>
+  <aside class="notes">
+    <p><b>Vocabulary (6:30–9:00). Participation 3:</b> symbol quiz — teacher says “Fe!”, class answers “iron / железо”. Repeat with Ca, P, K, I.</p>
+    <p>Russian terms follow the textbook Terminology box (p. 59): calcium — кальций, iron — железо, phosphorus — фосфор, potassium — калий, hemoglobin — гемоглобин.</p>
+  </aside>
+</section>
+
+<!-- ================= 5. COMPOSITION CHART ================= -->
+<section class="step" id="composition" data-x="-1000" data-y="450" data-s="1" data-phase="explore" data-title="What is the body made of?">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">FIGURE 4.2.1 · ELEMENTS IN THE HUMAN BODY</span></div>
+    <div class="scene-title"><div class="h2">What is the body made of?</div><div class="ru">Из чего состоит тело?</div></div>
+    <div class="abs" style="left:64px;top:228px;width:1000px">
+      <div class="bar-row main"><span class="n">Oxygen</span><span class="s">O</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="v">65</span></div>
+      <div class="bar-row main"><span class="n">Carbon</span><span class="s">C</span><span class="track"><span class="fill" style="width:28.46%"></span></span><span class="v">18.5</span></div>
+      <div class="bar-row main"><span class="n">Hydrogen</span><span class="s">H</span><span class="track"><span class="fill" style="width:14.62%"></span></span><span class="v">9.5</span></div>
+      <div class="bar-row main"><span class="n">Nitrogen</span><span class="s">N</span><span class="track"><span class="fill" style="width:5.08%"></span></span><span class="v">3.3</span></div>
+      <div class="bar-row"><span class="n">Calcium</span><span class="s">Ca</span><span class="track"><span class="fill" style="width:2.31%"></span></span><span class="v">1.5</span></div>
+      <div class="bar-row"><span class="n">Phosphorus</span><span class="s">P</span><span class="track"><span class="fill" style="width:1.54%"></span></span><span class="v">1</span></div>
+      <div class="bar-row"><span class="n">Potassium</span><span class="s">K</span><span class="track"><span class="fill" style="width:.62%"></span></span><span class="v">0.4</span></div>
+      <div class="bar-row"><span class="n">Sulfur</span><span class="s">S</span><span class="track"><span class="fill" style="width:.46%"></span></span><span class="v">0.3</span></div>
+      <div class="bar-row"><span class="n">Sodium</span><span class="s">Na</span><span class="track"><span class="fill" style="width:.31%"></span></span><span class="v">0.2</span></div>
+      <div class="bar-row"><span class="n">Chlorine</span><span class="s">Cl</span><span class="track"><span class="fill" style="width:.31%"></span></span><span class="v">0.2</span></div>
+      <div class="bar-row"><span class="n">Magnesium</span><span class="s">Mg</span><span class="track"><span class="fill" style="width:.15%"></span></span><span class="v">0.1</span></div>
+      <div class="bar-row micro"><span class="n">Microelements</span><span class="s" style="font-size:16px">Fe, I…</span><span class="track"><span class="fill" style="width:.1%"></span></span><span class="v">&lt;0.1</span></div>
+      <div style="font:700 18px/1.3 var(--font);color:var(--ink-mute);margin-top:6px">Amount in % of the human body (textbook Figure 4.2.1). Bars use one linear scale.</div>
+    </div>
+    <div class="abs col" style="left:1110px;top:236px;width:430px;gap:16px">
+      <div class="panel" style="padding:22px 24px;text-align:center" data-build="1">
+        <div style="font:600 92px/1 var(--display);color:var(--a1)">96%</div>
+        <div class="body" style="font-size:23px;margin-top:8px"><b>C + H + O + N</b> — the main elements — make up 96% of the organism.</div>
+      </div>
+      <div class="qa qcard" style="padding:18px 22px" data-build="2"><div class="qn">Read the chart</div><div class="q" style="font-size:23px">Which element is the most abundant in our body?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">Oxygen (O) — 65%.</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (9:00–10:30).</b> The chart recreates textbook Figure 4.2.1 with the exact textbook percentages. The bars animate when the scene opens.</p>
+    <p>→ shows the 96% card; → shows the chart question. <b>Expected:</b> oxygen, 65% (textbook Literacy question 3: “What are the most abundant elements in our body?” — O, C, H, N).</p>
+    <div class="warn">Misconception (Unit Planner): “every element is needed in equal quantities.” Point out: the body needs some elements in large amounts and others in tiny amounts — but all are important.</div>
+  </aside>
+</section>
+
+<!-- ================= 6. MAIN ELEMENTS ================= -->
+<section class="step" id="main4" data-x="-2850" data-y="450" data-s="1" data-phase="explore" data-title="The four main elements">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">MAIN ELEMENTS · TEXTBOOK p. 58</span></div>
+    <div class="scene-title"><div class="h2">The four main elements</div><div class="ru">Четыре главных элемента</div></div>
+    <div class="abs" style="left:64px;right:64px;top:236px;display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
+      <div class="elt" style="height:420px" data-build="1"><svg width="110" height="110" viewBox="0 0 110 110" class="anim" style="position:absolute;right:12px;bottom:12px;opacity:.5"><g style="transform-origin:55px 55px;animation:spin 14s linear infinite"><ellipse cx="55" cy="55" rx="48" ry="16" fill="none" stroke="#38e8d2" stroke-width="2"/><circle cx="103" cy="55" r="5" fill="#38e8d2"/></g></svg>
+        <span class="pc">65%</span><div class="sym">O</div><div class="nm">Oxygen</div><div class="rl">A component of <b>water</b> and many other <b>organic compounds</b>.</div><div class="ru small" style="margin-top:8px">кислород</div></div>
+      <div class="elt" style="height:420px" data-build="1"><span class="pc">18.5%</span><div class="sym" style="color:var(--a2)">C</div><div class="nm">Carbon</div><div class="rl">The main <b>backbone</b> of organic substances.</div><div class="ru small" style="margin-top:8px">углерод</div></div>
+      <div class="elt" style="height:420px" data-build="1"><span class="pc">9.5%</span><div class="sym" style="color:var(--a4)">H</div><div class="nm">Hydrogen</div><div class="rl">A component of <b>water</b> and many other <b>organic compounds</b>.</div><div class="ru small" style="margin-top:8px">водород</div></div>
+      <div class="elt" style="height:420px" data-build="1"><span class="pc">3.3%</span><div class="sym" style="color:var(--a3)">N</div><div class="nm">Nitrogen</div><div class="rl">A component of <b>protein</b> and <b>nucleic acids</b>.</div><div class="ru small" style="margin-top:8px">азот</div></div>
+    </div>
+    <div class="abs" style="left:64px;right:64px;top:684px" data-build="2"><div class="frame-box">Water (H₂O) is made of <i>hydrogen</i> and <i>oxygen</i>. Organic compounds are built on <i>carbon</i>.</div></div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (10:30–11:30).</b> All four cards appear together (→). Students read each role aloud. Link back to Lesson 4.1: water contains H and O.</p>
+    <p>Quick check: “Which element is the backbone of organic substances?” <b>Expected:</b> carbon. (Lesson 4.3 builds on this.)</p>
+  </aside>
+</section>
+
+<!-- ================= 7. MACRO vs MICRO SORT ================= -->
+<section class="step" id="sort" data-x="-4700" data-y="450" data-s="1" data-phase="explore" data-title="Macro or micro? Sort it">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">SORT THE ELEMENTS · FIGURE 4.2.1</span></div>
+    <div class="scene-title"><div class="h2">Macro or micro?</div><div class="ru">Макро или микро?</div></div>
+    <div class="match-zone abs" style="left:64px;right:64px;top:226px">
+      <div class="pool" style="margin-bottom:16px;gap:12px">
+        <span class="chip el" data-k="macro">Ca</span><span class="chip el" data-k="micro">Fe</span><span class="chip el" data-k="macro">K</span><span class="chip el" data-k="micro">I</span>
+        <span class="chip el" data-k="macro">Mg</span><span class="chip el" data-k="micro">Zn</span><span class="chip el" data-k="macro">Na</span><span class="chip el" data-k="micro">Cu</span><span class="chip el" data-k="macro">P</span><span class="chip el" data-k="micro">F</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:22px">
+        <div class="bin"><div class="row" style="align-items:center;gap:12px"><span class="badge macro">Macroelements</span><span style="font:700 21px/1.3 var(--font);color:var(--ink-soft)">needed in relatively large amounts</span></div><div class="slot" data-k="macro"></div></div>
+        <div class="bin"><div class="row" style="align-items:center;gap:12px"><span class="badge micro">Microelements</span><span style="font:700 21px/1.3 var(--font);color:var(--ink-soft)">trace amounts · total less than 0.1%</span></div><div class="slot" data-k="micro"></div></div>
+      </div>
+      <div class="row" style="margin-top:16px;align-items:center"><button class="btn" data-check>Check</button><button class="btn ghost" data-reset>Reset</button><span class="score"></span>
+        <span style="margin-left:auto;font:700 20px/1.3 var(--font);color:var(--ink-mute)">Tip: look at the chart in Figure 4.2.1.</span></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain + participation (11:30–13:00).</b> Volunteers drag symbols into the two groups (or click a symbol, then click a box). Press <b>Check</b>.</p>
+    <div class="exp"><b>Answers (textbook p. 58 and Figure 4.2.1):</b> Macro — Ca, K, Mg, Na, P. Micro — Fe, I, Zn, Cu, F.</div>
+    <p>Textbook: main elements C, O, H, N (96%); other macroelements Ca, Na, Cl, S, K, Mg, P; microelements include Fe, Mn, F, Se, Cu (and Cr, Co, Zn, Mo, Si, Sn, V, I in the figure).</p>
+    <p>Next: press → to fly into the <b>body map</b>.</p>
+  </aside>
+</section>
+
+<!-- ================= 8. BODY MAP (frames the giant body) ================= -->
+<section class="step" id="bodymap" data-x="2700" data-y="1000" data-s="3.4" data-nojourney data-phase="explore" data-title="Journey inside the body">
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">JOURNEY INSIDE THE BODY</span></div>
+    <div class="scene-title" style="right:auto;width:520px"><div class="h2" style="font-size:52px">Elements at work</div><div class="ru">Элементы в работе</div></div>
+    <svg class="abs" style="left:0;top:0" width="1600" height="900" viewBox="0 0 1600 900" aria-hidden="true">
+      <g fill="none" stroke="#38e8d2" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round">
+        <path d="M560 392L800 161"/><path d="M560 552L781 264"/><path d="M1040 300L924 346"/><path d="M1040 610L854 643"/>
+      </g>
+      <g fill="#38e8d2"><circle cx="800" cy="161" r="7"/><circle cx="781" cy="264" r="7"/><circle cx="924" cy="346" r="7"/><circle cx="854" cy="643" r="7"/></g>
+    </svg>
+    <div class="callout" style="left:64px;top:340px;width:500px" data-build="1"><div class="k">Thyroid gland · 1</div><span class="e">I</span> iodine — thyroid hormones</div>
+    <div class="callout" style="left:64px;top:500px;width:500px" data-build="1"><div class="k">Blood · 2</div><span class="e">Fe</span> iron — hemoglobin carries oxygen</div>
+    <div class="callout" style="left:1040px;top:240px;width:500px" data-build="1"><div class="k">Muscles &amp; nerves · 3</div><span class="e">Ca</span><span class="e">Mg</span><span class="e">K</span><span class="e">Na</span><span class="e">Cl</span></div>
+    <div class="callout" style="left:1040px;top:560px;width:500px" data-build="1"><div class="k">Bones &amp; teeth · 4</div><span class="e">Ca</span><span class="e">P</span> calcium and phosphorus</div>
+    <div class="abs" style="left:64px;top:700px;width:500px;font:700 21px/1.35 var(--font);color:var(--ink-soft)" data-build="2">Elements are found <b style="color:var(--ink)">all through the body</b>. These are only examples. Next, we zoom in to each place.</div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (13:00–13:30).</b> → shows the four example places. Say: “Elements are not in one organ only. They work everywhere. Let’s zoom in.”</p>
+    <p>Next four scenes zoom into the thyroid, blood, muscles/nerves and bones (glowing points on the body).</p>
+    <div class="warn">Avoid implying that one element lives only in one organ: calcium, for example, appears in bones, teeth, muscles and blood clotting.</div>
+  </aside>
+</section>
+
+<!-- ================= 9. THYROID (nested) ================= -->
+<section class="step" id="thyroid" data-x="2700" data-y="19" data-s=".14" data-nested="hidden" data-phase="explore" data-title="Zoom: thyroid gland · iodine">
+  <div class="scene organ-bg" style="background:radial-gradient(circle at 30% 50%,#4a2393 0%,#1d0d47 55%,#120a2c 100%)">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">ZOOM 1 · NECK · THYROID GLAND</span></div>
+    <svg class="abs anim" style="left:60px;top:150px" width="700" height="680" viewBox="0 0 700 680" aria-label="The thyroid gland in the neck, shaped like a butterfly, in front of the windpipe, takes in iodine">
+      <defs><linearGradient id="gThy" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc9a8"/><stop offset="1" stop-color="#ee7d62"/></linearGradient></defs>
+      <path d="M210 0C200 120 190 220 160 300C120 400 40 450 0 520V680H700V520C660 450 580 400 540 300C510 220 500 120 490 0Z" fill="rgba(183,148,255,.14)" stroke="rgba(214,204,255,.4)" stroke-width="4"/>
+      <image href="../../Assets/art/3d/4.2/thyroid.webp" x="186" y="0" width="328" height="680"/>
+      <text x="404" y="34" fill="rgba(255,255,255,.6)" font-family="Nunito" font-weight="800" font-size="19">windpipe · трахея</text>
+      <g class="anim" font-family="Fredoka, Nunito" font-weight="600" font-size="36" text-anchor="middle">
+        <g style="animation:floaty 3s ease-in-out infinite"><circle cx="90" cy="190" r="38" fill="url(#gAtomP)"/><text x="90" y="203" fill="#fff">I</text></g>
+        <g style="animation:floaty 3.4s ease-in-out infinite .6s"><circle cx="610" cy="200" r="38" fill="url(#gAtomP)"/><text x="610" y="213" fill="#fff">I</text></g>
+        <g style="animation:floaty 3.8s ease-in-out infinite 1s"><circle cx="600" cy="560" r="38" fill="url(#gAtomP)"/><text x="600" y="573" fill="#fff">I</text></g>
+      </g>
+      <g stroke="#b794ff" stroke-width="5" stroke-dasharray="4 10" fill="none"><path d="M125 215Q190 250 222 290M575 225Q520 260 478 290M570 540Q510 500 470 440"/></g>
+      <rect x="150" y="604" width="400" height="44" rx="22" fill="rgba(18,10,44,.75)"/>
+      <text x="350" y="634" text-anchor="middle" fill="#ffd9a0" font-family="Nunito" font-weight="900" font-size="24">thyroid gland · щитовидная железа</text>
+    </svg>
+    <div class="abs" style="left:820px;top:180px;width:720px">
+      <span class="badge micro">Microelement</span>
+      <div class="row" style="margin-top:16px;align-items:center;gap:22px"><svg width="132" height="132" viewBox="0 0 132 132"><circle cx="66" cy="66" r="60" fill="url(#gAtomP)" filter="url(#glow)"/><text x="66" y="92" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="76" fill="#fff">I</text></svg><span class="h2" style="font-size:64px">Iodine</span></div>
+      <div class="lead" style="margin-top:18px">Iodine is the <b class="hl5">main component of the thyroid hormones</b>.</div>
+      <div class="ru" style="margin-top:10px">Йод — главная часть гормонов щитовидной железы.</div>
+      <div class="qa qcard" style="margin-top:26px;padding:18px 22px"><div class="qn">Think</div><div class="q" style="font-size:24px">Which organ is affected if the body lacks iodine?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">The thyroid gland — iodine is the main part of thyroid hormones.</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (13:30–14:30).</b> The camera dives into the neck. Point to the butterfly-shaped thyroid gland.</p>
+    <p>Textbook (p. 59): “Iodine (I) is the main component of the thyroid hormones.”</p>
+    <div class="exp"><b>Think — expected:</b> the thyroid gland.</div>
+  </aside>
+</section>
+
+<!-- ================= 10. BLOOD (nested) ================= -->
+<section class="step" id="blood" data-x="2636" data-y="369" data-s=".14" data-nested="hidden" data-phase="explore" data-title="Zoom: blood · iron">
+  <div class="scene organ-bg" style="background:radial-gradient(circle at 40% 50%,#5a1230 0%,#2a0b2c 55%,#120a2c 100%)">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">ZOOM 2 · BLOOD VESSEL</span></div>
+    <svg class="abs anim" style="left:0;top:150px" width="1600" height="330" viewBox="0 0 1600 330" aria-label="Red blood cells flowing in a blood vessel">
+      <defs><clipPath id="vessel"><rect x="0" y="40" width="1600" height="250" rx="40"/></clipPath></defs>
+      <g clip-path="url(#vessel)"><g class="rbc-flow"><image href="../../Assets/art/3d/4.2/vessel_rbc.jpg" x="0" y="40" width="2179" height="250"/><image href="../../Assets/art/3d/4.2/vessel_rbc.jpg" x="2179" y="40" width="2179" height="250"/></g></g>
+      <text x="64" y="318" fill="#ffc2cb" font-family="Nunito" font-weight="800" font-size="22">red blood cells contain hemoglobin</text>
+    </svg>
+    <!-- hemoglobin model -->
+    <svg class="abs anim" style="left:64px;top:500px" width="420" height="320" viewBox="0 0 420 320" aria-label="Hemoglobin with iron at its centre carrying oxygen">
+      <image href="../../Assets/art/3d/4.2/hemoglobin.webp" x="39" y="16" width="353" height="288"/>
+      <circle cx="200" cy="165" r="0" fill="none"/><text x="176" y="199" text-anchor="middle" font-family="Fredoka, Nunito" font-weight="600" font-size="24" fill="#3d1a06">Fe</text>
+      <g class="anim" style="animation:floaty 2.6s ease-in-out infinite"><text x="376" y="122" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="22" fill="#a8cdff">O₂</text></g>
+    </svg>
+    <div class="abs" style="left:520px;top:500px;width:1020px">
+      <div class="row" style="align-items:center;gap:14px"><span class="badge micro">Microelement</span><span class="big-el"><span class="sym" style="font-size:96px">Fe</span><span class="nm" style="font-size:44px">Iron</span></span></div>
+      <div class="lead" style="margin-top:12px;font-size:29px">Iron is a part of <b class="hl5">hemoglobin</b>. Hemoglobin is a protein in the blood that <b class="hl">transports oxygen</b>.</div>
+      <div class="body small" style="margin-top:10px;color:var(--ink-soft)">Also in blood: <b style="color:var(--a3)">calcium (Ca)</b> acts in blood clotting.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (14:30–15:30).</b> Red blood cells flow through the vessel. The model shows hemoglobin with iron and an oxygen molecule (O₂).</p>
+    <p>Textbook (p. 59): “Iron (Fe) is a part of hemoglobin. Hemoglobin is a protein in the blood that transports oxygen.” Calcium in blood clotting: p. 58.</p>
+    <p>Ask: “If the body has too little iron, what job becomes harder?” <b>Expected:</b> carrying oxygen in the blood.</p>
+    <div class="warn">The hemoglobin picture is a simplified model (four parts, iron in the middle), not an exact structure.</div>
+  </aside>
+</section>
+
+<!-- ================= 11. MUSCLES & NERVES (nested) ================= -->
+<section class="step" id="muscles" data-x="3123" data-y="645" data-s=".14" data-nested="hidden" data-phase="explore" data-title="Zoom: muscles and nerves">
+  <div class="scene organ-bg" style="background:radial-gradient(circle at 35% 50%,#4b2a6e 0%,#221040 55%,#120a2c 100%)">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">ZOOM 3 · ARM · MUSCLES AND NERVES</span></div>
+    <div class="scene-title"><div class="h2" style="font-size:52px">Muscles and nerves</div><div class="ru">Мышцы и нервы</div></div>
+    <svg class="abs anim" style="left:40px;top:230px" width="760" height="580" viewBox="0 0 760 580" aria-label="A muscle with tendons, and a nerve cell sending an impulse to the muscle">
+      <defs>
+        <linearGradient id="gBelly" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc0ae"/><stop offset=".5" stop-color="#ef7a7f"/><stop offset="1" stop-color="#b8435e"/></linearGradient>
+        <linearGradient id="gTendon" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffaf2"/><stop offset="1" stop-color="#d9cdb8"/></linearGradient>
+      </defs>
+      <image href="../../Assets/art/3d/4.2/muscle.webp" x="2" y="94" width="756" height="200"/>
+      <rect x="470" y="12" width="250" height="40" rx="20" fill="rgba(18,10,44,.7)"/>
+      <text x="595" y="40" text-anchor="middle" fill="#ffb3a0" font-family="Nunito" font-weight="900" font-size="23">muscle · мышца</text>
+      <!-- nerve cell -->
+      <image href="../../Assets/art/3d/4.2/neuron.webp" x="-3" y="366" width="199" height="225"/>
+      <path d="M140 478C230 478 300 470 360 430S410 360 420 336" stroke="#ffd9a0" stroke-width="9" fill="none" stroke-linecap="round"/>
+      <g fill="#fff3dc" opacity=".9"><rect x="170" y="470" width="44" height="16" rx="8"/><rect x="232" y="466" width="44" height="16" rx="8" transform="rotate(-6 254 474)"/><rect x="292" y="452" width="44" height="16" rx="8" transform="rotate(-20 314 460)"/><rect x="346" y="420" width="44" height="16" rx="8" transform="rotate(-42 368 428)"/></g>
+      <g stroke="#ffd9a0" stroke-width="5" fill="none" stroke-linecap="round"><path d="M420 336L398 318M420 336L424 312M420 336L446 322"/></g>
+      <circle r="13" fill="#38e8d2" filter="url(#glow)" style="offset-path:path('M140 478C230 478 300 470 360 430S410 360 420 336');animation:impulse 2.2s linear infinite"/>
+      <text x="96" y="566" text-anchor="middle" fill="#c9b2ff" font-family="Nunito" font-weight="900" font-size="22">nerve cell</text>
+      <text x="470" y="520" fill="#ffd9a0" font-family="Nunito" font-weight="900" font-size="23">nerve impulse →</text>
+      <text x="470" y="550" fill="#ffd9a0" font-family="Nunito" font-weight="800" font-size="20" opacity=".85">нервный импульс</text>
+    </svg>
+    <div class="abs col" style="left:830px;top:236px;width:710px;gap:14px">
+      <div class="panel" style="padding:18px 24px" data-build="1"><div class="row" style="gap:10px;align-items:center"><span class="callout" style="position:static;padding:4px 10px"><span class="e" style="margin:0">Na</span></span><span class="callout" style="position:static;padding:4px 10px"><span class="e" style="margin:0">K</span></span><span class="callout" style="position:static;padding:4px 10px"><span class="e" style="margin:0">Cl</span></span><span class="h4" style="font-size:26px">Nerves</span></div>
+        <div class="body small" style="margin-top:8px">Sodium, potassium and chlorine form the <b class="hl">nerve impulses</b>. Potassium has a main role in the <b>nervous system</b>.</div></div>
+      <div class="panel" style="padding:18px 24px" data-build="2"><div class="row" style="gap:10px;align-items:center"><span class="callout" style="position:static;padding:4px 10px"><span class="e" style="margin:0;background:var(--a3)">Ca</span></span><span class="callout" style="position:static;padding:4px 10px"><span class="e" style="margin:0;background:var(--a3)">Mg</span></span><span class="h4" style="font-size:26px">Muscles</span></div>
+        <div class="body small" style="margin-top:8px">Calcium acts in <b class="hl3">muscle contraction</b>. Magnesium plays a role in <b class="hl3">relaxation of muscles</b> and in protein production.</div></div>
+      <div class="frame-box" style="font-size:22px" data-build="3">Muscles <i>contract</i> (сокращаются) and <i>relax</i> (расслабляются).</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (15:30–16:45).</b> Watch the glowing impulse travel along the nerve. → Nerves card, → Muscles card, → language frame.</p>
+    <p>Textbook (p. 58): “Sodium, Potassium, and Chlorine form the nerve impulses.” “Potassium (K) has a main role in the function of the nervous system.” “Calcium (Ca) acts in muscle contraction and blood clotting.” “Magnesium (Mg) catalyzes energy transferring molecules. Plays role in protein production and relaxation of muscles.”</p>
+    <p>Mime it: make a fist (contract) and open the hand (relax).</p>
+  </aside>
+</section>
+
+<!-- ================= 12. BONES & TEETH (nested) ================= -->
+<section class="step" id="bones" data-x="2884" data-y="1657" data-s=".14" data-nested="hidden" data-phase="explore" data-title="Zoom: bones and teeth">
+  <div class="scene organ-bg" style="background:radial-gradient(circle at 30% 50%,#3d2f63 0%,#1d1240 55%,#120a2c 100%)">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">ZOOM 4 · LEG BONE AND TEETH</span></div>
+    <div class="scene-title"><div class="h2" style="font-size:52px">Bones and teeth</div><div class="ru">Кости и зубы</div></div>
+    <svg class="abs anim" style="left:40px;top:220px" width="800" height="600" viewBox="0 0 800 600" aria-label="A long bone with its cross-section, and a tooth, with calcium and phosphorus atoms">
+      <g transform="rotate(-18 260 182)"><image href="../../Assets/art/3d/4.2/bone_long.webp" x="35" y="123" width="451" height="117"/></g>
+      <g stroke="#d6ccff" stroke-width="3" stroke-dasharray="4 8" fill="none"><path d="M300 150L512 110M300 210L512 270"/></g>
+      <circle cx="270" cy="182" r="30" fill="none" stroke="#38e8d2" stroke-width="4"/>
+      <g transform="translate(610 190)">
+        <image href="../../Assets/art/3d/4.2/bone_section.webp" x="-119" y="-114" width="239" height="229"/>
+        <text y="146" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="22" fill="#d6ccff">inside a bone</text>
+      </g>
+      <image href="../../Assets/art/3d/4.2/tooth.webp" x="224" y="340" width="151" height="244"/>
+      <text x="300" y="598" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="22" fill="#d6ccff">tooth · зуб</text>
+      <g class="anim" font-family="Fredoka, Nunito" font-weight="600" text-anchor="middle">
+        <g style="animation:floaty 3s ease-in-out infinite"><circle cx="90" cy="420" r="40" fill="url(#gAtomO)"/><text x="90" y="434" font-size="36" fill="#3d1a06">Ca</text></g>
+        <g style="animation:floaty 3.5s ease-in-out infinite .8s"><circle cx="500" cy="470" r="38" fill="url(#gAtomP)"/><text x="500" y="483" font-size="36" fill="#fff">P</text></g>
+        <g style="animation:floaty 3.2s ease-in-out infinite 1.4s"><circle cx="730" cy="390" r="36" fill="url(#gAtomO)"/><text x="730" y="403" font-size="32" fill="#3d1a06">Ca</text></g>
+      </g>
+    </svg>
+    <div class="abs col" style="left:860px;top:236px;width:680px;gap:14px">
+      <div class="elt" style="padding:16px 20px" data-build="1"><span class="pc">1.5%</span><div class="row" style="align-items:baseline;gap:14px"><span class="sym" style="font-size:60px;color:var(--a3)">Ca</span><span class="nm">Calcium</span></div><div class="rl" style="font-size:22px">Found in <b>bones and teeth</b>. Acts in muscle contraction and blood clotting.</div></div>
+      <div class="elt" style="padding:16px 20px" data-build="2"><span class="pc">1%</span><div class="row" style="align-items:baseline;gap:14px"><span class="sym" style="font-size:60px;color:var(--a2)">P</span><span class="nm">Phosphorus</span></div><div class="rl" style="font-size:22px">Found in <b>bones and teeth</b> and in nucleic acids. Helps in energy transmission.</div></div>
+      <div class="frame-box" style="font-size:22px" data-build="3">Back to the big question: children need more calcium because their <i>bones and teeth are growing</i>.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (16:45–18:00).</b> → calcium, → phosphorus, → return to the big question.</p>
+    <p>Textbook (p. 58): Calcium “acts in muscle contraction and blood clotting. Also found in bones, teeth and cell walls.” Phosphorus “is found in nucleic acids. It helps in the energy transmission. Also found in the bones and teeth.”</p>
+    <div class="warn">The textbook also mentions “cell walls” for calcium; human cells do not have cell walls, so this slide leaves it out. If students ask, explain that plant cells have cell walls.</div>
+  </aside>
+</section>
+
+<!-- ================= 13. MORE ELEMENTS ================= -->
+<section class="step" id="more" data-x="-1000" data-y="1550" data-s="1" data-phase="explore" data-title="More elements at work">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">TEXTBOOK pp. 58–59</span></div>
+    <div class="scene-title"><div class="h2">More elements at work</div><div class="ru">Другие важные элементы</div></div>
+    <div class="abs" style="left:64px;right:64px;top:232px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+      <div class="elt" style="height:300px"><span class="badge macro" style="position:absolute;right:16px;top:16px">macro</span><div class="sym" style="color:var(--a5)">S</div><div class="nm">Sulfur</div><div class="rl">Found in <b>proteins</b> and <b>vitamins</b>.</div></div>
+      <div class="elt" style="height:300px"><span class="badge micro" style="position:absolute;right:16px;top:16px">micro</span><div class="sym" style="color:var(--a4)">Co</div><div class="nm">Cobalt</div><div class="rl">Found in <b>vitamins</b>.</div></div>
+      <div class="elt" style="height:300px"><span class="badge micro" style="position:absolute;right:16px;top:16px">micro</span><div class="sym" style="color:var(--a1)">Zn</div><div class="nm">Zinc</div><div class="rl">Growth of cells, building proteins, healing damaged tissue, a healthy immune system.</div></div>
+    </div>
+    <div class="abs" style="left:64px;right:64px;top:560px;display:grid;grid-template-columns:1.1fr 1fr;gap:20px">
+      <div class="fact"><div class="lab">Fact · textbook p. 59</div><div style="font:700 25px/1.32 var(--font);margin-top:8px">Humans need <b>25 elements</b> to live a healthy life and reproduce, while plants need only <b>17</b>.</div></div>
+      <div class="qa qcard" style="padding:18px 22px"><div class="qn">Literacy · p. 59</div><div class="q" style="font-size:24px">Where does the body get elements from?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">From food and water. Different foods are rich in different elements.</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (wrap-up, ≈18:00).</b> Quick reading of the three cards, then the Literacy question.</p>
+    <div class="exp"><b>Expected:</b> from food (and water). Textbook Research time (p. 59) asks students to list element-rich foods — optional homework.</div>
+    <p>The “25 elements / 17 elements” fact leads to Lesson 4.4 (plants).</p>
+  </aside>
+</section>
+
+<!-- ================= 14. ACTIVITY: ELEMENT → ORGAN ================= -->
+<section class="step" id="activity" data-x="-2850" data-y="1550" data-s="1" data-phase="activity" data-title="Activity: which part of the body?">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a3);color:#3d1a06">Main activity</span><span class="t">TEXTBOOK ACTIVITY p. 59 · PAIRS</span></div>
+    <div class="scene-title"><div class="h2" style="font-size:50px">Which part of the body will be affected?</div><div class="ru">Какая часть тела пострадает при недостатке элемента?</div></div>
+    <div class="match-zone abs" style="left:64px;right:64px;top:228px;display:grid;grid-template-columns:900px 1fr;gap:36px">
+      <div>
+        <div class="mrow"><span class="tile">I</span><span class="nm">iodine</span><div class="slot" data-k="i" data-max="1"></div></div>
+        <div class="mrow"><span class="tile">F</span><span class="nm">fluorine</span><div class="slot" data-k="f" data-max="1"></div></div>
+        <div class="mrow"><span class="tile">Fe</span><span class="nm">iron</span><div class="slot" data-k="fe" data-max="1"></div></div>
+        <div class="mrow"><span class="tile">Ca</span><span class="nm">calcium</span><div class="slot" data-k="ca" data-max="1"></div></div>
+        <div class="mrow"><span class="tile">P</span><span class="nm">phosphorus</span><div class="slot" data-k="p" data-max="1"></div></div>
+        <div class="mrow"><span class="tile">K</span><span class="nm">potassium</span><div class="slot" data-k="k" data-max="1"></div></div>
+        <div class="row" style="margin-top:10px;align-items:center"><button class="btn" data-check>Check</button><button class="btn ghost" data-reset>Reset</button><span class="score"></span></div>
+      </div>
+      <div class="col" style="gap:14px">
+        <div class="pool" style="gap:10px;min-height:150px;align-content:flex-start">
+          <span class="chip org" data-k="i">thyroid gland</span><span class="chip org" data-k="k">nervous system</span><span class="chip org" data-k="p ca">bones and teeth</span>
+          <span class="chip org" data-k="fe">blood (hemoglobin)</span><span class="chip org" data-k="f">teeth</span><span class="chip org" data-k="ca">bones, muscles, blood clotting</span>
+        </div>
+        <div class="frame-box" style="font-size:20px">If the body lacks <i>___</i>, the <i>___</i> will be affected because <i>___</i>.</div>
+        <div class="qa"><button class="reveal-btn" style="margin-top:0">&#128065; Reveal answer</button><span style="font:800 17px/1 var(--font);color:var(--ink-mute);margin-left:10px">help cards</span>
+          <div class="answer" style="font-size:17px;padding:10px 12px;margin-top:10px"><div class="info">
+            <div><b>I</b> thyroid hormones</div><div><b>Fe</b> hemoglobin (blood)</div><div><b>Ca</b> bones, teeth, muscles, clotting</div><div><b>P</b> bones and teeth</div><div><b>K</b> nervous system</div><div><b>F</b> teeth (not in textbook)</div>
+          </div></div></div>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Main activity (18:00–30:00). Pairs.</b> 2 min: model one row (“If the body lacks iodine, the thyroid gland will be affected because iodine is the main part of thyroid hormones”). 6 min: pairs complete the printed worksheet (table + reasons). 4 min: volunteers drag answers here; press <b>Check</b>; discuss reasons.</p>
+    <div class="exp"><b>Answers:</b> iodine — thyroid gland · fluorine — teeth · iron — blood (hemoglobin) · calcium — bones, teeth, muscles, blood clotting · phosphorus — bones and teeth · potassium — nervous system. (“bones and teeth” is also accepted for calcium.)</div>
+    <div class="warn">Fluorine: the textbook lists it as a microelement but does not state its role. The accepted answer “teeth” is general knowledge — tell students this openly. The “Help cards” reveal is a scaffold for students who need it.</div>
+    <p>ATL — critical thinking: reason from a function to the likely affected organ. Formative evidence: element–function matches with reasons (Unit Planner).</p>
+  </aside>
+</section>
+
+<!-- ================= 15. APPLY: CASES ================= -->
+<section class="step" id="apply" data-x="-4700" data-y="1550" data-s="1" data-phase="apply" data-title="Apply: element detectives">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a2);color:#1a0b45">Apply</span><span class="t">ELEMENT DETECTIVES · NEW SITUATIONS</span></div>
+    <div class="scene-title"><div class="h2">Element detectives</div><div class="ru">Детективы элементов</div></div>
+    <div class="qgrid" style="top:228px">
+      <div class="qa qcard" style="height:500px"><div class="qn">Case 1</div><div class="q" style="font-size:26px">A patient’s blood cannot carry enough oxygen. Which element may be missing? Why?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">Iron (Fe). Iron is part of hemoglobin, the blood protein that transports oxygen.</div></div>
+      <div class="qa qcard" style="height:500px"><div class="qn">Case 2</div><div class="q" style="font-size:26px">A 12-year-old is growing fast. Which two elements help build bones and teeth?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">Calcium (Ca) and phosphorus (P) — both are found in bones and teeth.</div></div>
+      <div class="qa qcard" style="height:500px"><div class="qn">Case 3 · challenge</div><div class="q" style="font-size:26px">Nerve signals in a person are weak. Which elements form nerve impulses?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">Sodium (Na), potassium (K) and chlorine (Cl). Potassium has a main role in the nervous system.</div></div>
+    </div>
+    <div class="abs" style="left:64px;right:64px;top:752px;font:700 22px/1.3 var(--font);color:var(--ink-soft)">Use: <b style="color:var(--a5)">“I think ___ is missing because ___ is part of / helps ___.”</b></div>
+  </div>
+  <aside class="notes">
+    <p><b>Apply (30:00–37:00).</b> Pairs choose a case (Cases 1–2 for everyone, Case 3 as challenge), answer orally with the frame, then reveal. This practises Criterion A.ii (apply knowledge in unfamiliar situations).</p>
+    <div class="exp"><b>Expected:</b> Case 1 — iron (hemoglobin). Case 2 — calcium and phosphorus. Case 3 — Na, K, Cl.</div>
+    <p>SoI link: “Interactions among substances within living systems support essential functions” — each element supports a function; a lack affects the system.</p>
+    <div class="warn">These are science reasoning cases, not medical advice. If a student mentions a health problem, refer to the school nurse or parents.</div>
+  </aside>
+</section>
+
+<!-- ================= 16. EXIT TICKET ================= -->
+<section class="step" id="exit" data-x="-2850" data-y="2650" data-s="1" data-phase="exit" data-title="Exit ticket">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a5);color:#3a2a00">Exit ticket</span><span class="t">WORK ALONE · 3 MINUTES</span></div>
+    <div class="scene-title"><div class="h2">Exit ticket</div><div class="ru">Билет на выход: ответь сам</div></div>
+    <div class="qgrid" style="top:230px">
+      <div class="qa qcard" style="height:560px"><div class="qn">1 · Recall</div><div class="q">Name the four main elements that make up 96% of the body.</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">Oxygen (O), carbon (C), hydrogen (H) and nitrogen (N).</div></div>
+      <div class="qa qcard" style="height:560px"><div class="qn">2 · Understanding</div><div class="q">What is the difference between a <b>macroelement</b> and a <b>microelement</b>? Give one example of each.</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">A macroelement is needed in large amounts (e.g. calcium). A microelement is needed in small amounts (e.g. iron).</div></div>
+      <div class="qa qcard" style="height:560px"><div class="qn">3 · Application</div><div class="q">A person’s muscles do not contract well and their blood does not clot normally. Which element could be missing? Explain.</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">Calcium (Ca). Calcium acts in muscle contraction and in blood clotting.</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Exit ticket (37:00–40:00).</b> Printed slips, answered alone. Collect at the door.</p>
+    <div class="exp"><b>Success criteria:</b> Q1 all four elements. Q2 uses “large/small amounts” + correct examples (macro: C, O, H, N, Ca, Na, Cl, S, K, Mg, P; micro: Fe, Mn, F, Se, Cu, Cr, Co, Zn, Mo, Si, Sn, V, I). Q3 names calcium and links it to both functions.</div>
+    <p>Sort into secure / developing / needs reteaching. Revisit macro vs micro at the start of Lesson 4.4.</p>
+  </aside>
+</section>
+
+</div></div>
+</div>
+<script src="../../Assets/engine/prezi.js"></script>
+<script src="../../site/js/back-to-chapter.js"></script>
+</body>
+</html>

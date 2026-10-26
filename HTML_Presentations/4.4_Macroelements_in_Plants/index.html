@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>4.4 Macroelements in Plants · Chapter 4</title>
+<link rel="stylesheet" href="../../Assets/engine/fonts.css">
+<link rel="stylesheet" href="../../Assets/engine/prezi.css">
+<link rel="stylesheet" href="../../Assets/engine/benchmark.css">
+<style>
+:root{
+  --bg:#f1f9e8; --ink:#173224; --ink-soft:#456152; --ink-mute:#7b917f;
+  --a1:#178a4a; --a2:#6aa812; --a3:#e2474f; --a4:#7c4ddb; --a5:#e8a600; --on-a:#ffffff;
+  --panel:#ffffff; --panel-strong:#fbfff6; --panel-line:rgba(23,50,36,.13);
+  --frame-bg:linear-gradient(160deg,#ffffff,#f9fff3);
+  --frame-line:rgba(23,50,36,.10);
+  --hud-bg:rgba(20,48,32,.86); --jp-base:rgba(23,50,36,.2);
+  --n:#e8a600; --p:#7c3a8c; --k:#e2622f; --mg:#2f9e6d;
+}
+.step .frame{box-shadow:0 50px 90px -50px rgba(30,70,30,.4),0 2px 0 rgba(255,255,255,.8) inset}
+.panel,.qcard,.vcard{box-shadow:0 18px 40px -28px rgba(30,70,30,.35)}
+.frame-box{background:#fff6d6;border-left-color:var(--a5)}
+.frame-box i{color:#c2410c}
+.hl5{color:#c2410c}
+.answer{color:var(--ink)}
+.vcard .rus{color:#137a40}
+.kicker{color:#137a40}
+.chip{background:#173224;color:#fff}
+.slot{border-color:rgba(23,50,36,.2)}
+.fact{background:#fff1f1;border-color:#ffc4c4}
+.fact .lab{color:#c8323a}
+.el{display:inline-flex;align-items:center;justify-content:center;min-width:54px;height:44px;padding:0 12px;border-radius:14px;font:600 26px/1 var(--display);color:#fff}
+.el.n{background:var(--n);color:#3a2900}.el.p{background:var(--p)}.el.k{background:var(--k)}.el.mg{background:var(--mg)}
+.sym-card{border-radius:24px;padding:18px 20px;background:#fff;border:2px solid var(--panel-line);box-shadow:0 18px 40px -28px rgba(30,70,30,.35)}
+.sym-card h4{margin:0 0 6px;font:900 18px/1 var(--font);letter-spacing:.12em;text-transform:uppercase}
+.sym-card ul{margin:0;padding-left:24px}
+.sym-card li{font:700 23px/1.36 var(--font);margin:3px 0}
+.drow{display:grid;grid-template-columns:1fr 300px;gap:18px;align-items:center;padding:6px 0}
+.drow .tx{font:700 22px/1.3 var(--font);background:#fff;border:2px solid var(--panel-line);border-radius:18px;padding:12px 16px}
+.drow .slot{min-height:66px}
+.chip.ans{font-size:22px;padding:10px 16px}
+.fert{border-radius:26px;padding:18px 20px;background:#fff;border:2px solid var(--panel-line);box-shadow:0 18px 40px -28px rgba(30,70,30,.35)}
+.fert h3{margin:0;font:600 34px/1.1 var(--display)}
+.tagrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tagrow span{padding:7px 12px;border-radius:12px;background:#f3f9ec;border:2px solid rgba(23,50,36,.08);font:800 20px/1.1 var(--font)}
+.soil-el{position:absolute;height:58px;min-width:66px;font-size:32px;box-shadow:0 10px 24px -8px rgba(0,0,0,.6),0 0 0 3px rgba(255,255,255,.55);animation:floaty 4s ease-in-out infinite}
+@keyframes leafSway{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg)}}
+@keyframes sunSpin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- grass-like leaf, vertical: tip at top (0,-520), base at bottom (0,520) -->
+    <path id="leafPath" d="M0-520C92-380 132-110 126 200C120 380 62 480 0 520C-62 480-120 380-126 200C-132-110-92-380 0-520Z"/>
+    <clipPath id="leafClip"><use href="#leafPath"/></clipPath>
+    <linearGradient id="gHealthy" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1f8a3c"/><stop offset=".5" stop-color="#43b04f"/><stop offset="1" stop-color="#1f8a3c"/></linearGradient>
+    <linearGradient id="gDark" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#14532d"/><stop offset=".5" stop-color="#1f6b3a"/><stop offset="1" stop-color="#14532d"/></linearGradient>
+    <linearGradient id="gPale" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7fb24a"/><stop offset=".5" stop-color="#a6cc5a"/><stop offset="1" stop-color="#7fb24a"/></linearGradient>
+    <g id="veins"><g stroke="#d9f99d" stroke-width="5" opacity=".55" fill="none"><path d="M-40-430C-70-150-80 200-48 470M40-430C70-150 80 200 48 470M-80-300C-104-60-104 260-90 420M80-300C104-60 104 260 90 420"/></g><path d="M0-505V515" stroke="#ecfccb" stroke-width="10"/></g>
+    <!-- 1 healthy -->
+    <!-- leafHealthy: 3D render (Render_Source/leaf_scene.js), textbook Figure 4.4.1 -->
+    <g id="leafHealthy"><image href="../../Assets/art/3d/4.4/leaf_healthy.webp" transform="rotate(-90)" x="-741" y="-185" width="1506" height="440"/></g>
+    <!-- 2 nitrogen: yellowing begins along the midrib (veins), tip brownish-yellow -->
+    <!-- leafN: 3D render (Render_Source/leaf_scene.js), textbook Figure 4.4.1 -->
+    <g id="leafN"><image href="../../Assets/art/3d/4.4/leaf_n.webp" transform="rotate(-90)" x="-741" y="-185" width="1506" height="440"/></g>
+    <!-- 3 phosphorus: dark green, purple / reddish margins and spots -->
+    <!-- leafP: 3D render (Render_Source/leaf_scene.js), textbook Figure 4.4.1 -->
+    <g id="leafP"><image href="../../Assets/art/3d/4.4/leaf_p.webp" transform="rotate(-90)" x="-741" y="-185" width="1506" height="440"/></g>
+    <!-- 4 potassium: yellow then brown along the edges and tip -->
+    <!-- leafK: 3D render (Render_Source/leaf_scene.js), textbook Figure 4.4.1 -->
+    <g id="leafK"><image href="../../Assets/art/3d/4.4/leaf_k.webp" transform="rotate(-90)" x="-741" y="-185" width="1506" height="440"/></g>
+    <!-- 5 magnesium: pale yellow between the veins, veins and margins stay green -->
+    <!-- leafMg: 3D render (Render_Source/leaf_scene.js), textbook Figure 4.4.1 -->
+    <g id="leafMg"><image href="../../Assets/art/3d/4.4/leaf_mg.webp" transform="rotate(-90)" x="-741" y="-185" width="1506" height="440"/></g>
+    <radialGradient id="gSun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff7c2"/><stop offset=".4" stop-color="#ffd54a"/><stop offset="1" stop-color="#ffd54a" stop-opacity="0"/></radialGradient>
+    <linearGradient id="gSoil" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8b5e3c"/><stop offset="1" stop-color="#4a2f1c"/></linearGradient>
+    <linearGradient id="gStem" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2c8a3c"/><stop offset=".5" stop-color="#5cc15a"/><stop offset="1" stop-color="#2c8a3c"/></linearGradient>
+    <linearGradient id="gBroad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7fd66a"/><stop offset="1" stop-color="#1f8a3c"/></linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#1e4620" flood-opacity=".25"/></filter>
+    <filter id="softS" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#1e4620" flood-opacity=".25"/></filter>
+    <!-- broad leaf for the big plant -->
+    <g id="broad"><path d="M0 0C120-140 380-150 520-40C380 90 140 120 0 0Z" fill="url(#gBroad)"/><path d="M0 0C160-40 340-50 520-40" stroke="#d9f99d" stroke-width="8" fill="none" opacity=".8"/><g stroke="#d9f99d" stroke-width="4" opacity=".5" fill="none"><path d="M140-28L200-90M260-38L330-100M380-44L440-90M180-24L240 30M300-36L370 20"/></g></g>
+  </defs>
+</svg>
+
+<div class="prezi" data-lesson="4.4" data-journey data-rho="1.3">
+<div class="viewport"><div class="world">
+
+<!-- ================= WORLD ART: sunny garden, giant plant, leaf gallery ================= -->
+<svg class="world-art" style="left:-7600px;top:-4800px;width:15200px;height:9600px" viewBox="-7600 -4800 15200 9600" aria-hidden="true">
+  <defs>
+    <linearGradient id="wSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6f7ff"/><stop offset=".55" stop-color="#f1fbe6"/><stop offset="1" stop-color="#e3f3cf"/></linearGradient>
+    <radialGradient id="wBlobL" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#c8f08f" stop-opacity=".6"/><stop offset="1" stop-color="#c8f08f" stop-opacity="0"/></radialGradient>
+    <radialGradient id="wBlobP" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#e2d4ff" stop-opacity=".55"/><stop offset="1" stop-color="#e2d4ff" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect x="-7600" y="-4800" width="15200" height="9600" fill="url(#wSky)"/>
+  <circle cx="-3800" cy="900" r="3600" fill="url(#wBlobL)"/>
+  <circle cx="4200" cy="1000" r="3000" fill="url(#wBlobP)"/>
+  <g class="anim"><g style="transform-origin:2600px -700px;animation:sunSpin 60s linear infinite"><circle cx="2600" cy="-700" r="900" fill="url(#gSun)"/><g stroke="#ffd54a" stroke-width="40" stroke-linecap="round" opacity=".55"><path d="M2600-1400V-1600M2600 0V200M1900-700H1700M3300-700H3500M2105-1195L1964-1336M3095-205L3236-64M2105-205L1964-64M3095-1195L3236-1336"/></g></g></g>
+  <circle cx="2600" cy="-700" r="260" fill="#ffe27a"/>
+  <!-- hotspots in the plant -->
+  <g fill="none" stroke="#ffffff" stroke-width="14" class="anim">
+    <circle cx="1100" cy="1830" r="110" style="transform-origin:1100px 1830px;animation:pulse 2.4s infinite"/>
+    <circle cx="575" cy="1176" r="120" style="transform-origin:575px 1176px;animation:pulse 2.4s infinite .6s"/>
+  </g>
+  <!-- leaf gallery board (Figure 4.4.1, recreated as upright leaves) -->
+  <rect x="2470" y="160" width="3060" height="1740" rx="80" fill="#ffffff" opacity=".75"/>
+</svg>
+
+<!-- 3D renders placed in the world as HTML images (own GPU layer: zooming only scales a texture) -->
+<img class="world-img" src="../../Assets/art/3d/4.4/plant_map.webp" alt="" style="left:-961px;top:-180px;width:2880px;height:2675px">
+<img class="world-img" src="../../Assets/art/3d/4.4/leaf_healthy.webp" alt="" style="left:2169px;top:1082px;width:1446px;height:422px;transform-origin:711px 178px;transform:rotate(-90deg)">
+<img class="world-img" src="../../Assets/art/3d/4.4/leaf_n.webp" alt="" style="left:2729px;top:1082px;width:1446px;height:422px;transform-origin:711px 178px;transform:rotate(-90deg)">
+<img class="world-img" src="../../Assets/art/3d/4.4/leaf_p.webp" alt="" style="left:3289px;top:1082px;width:1446px;height:422px;transform-origin:711px 178px;transform:rotate(-90deg)">
+<img class="world-img" src="../../Assets/art/3d/4.4/leaf_k.webp" alt="" style="left:3849px;top:1082px;width:1446px;height:422px;transform-origin:711px 178px;transform:rotate(-90deg)">
+<img class="world-img" src="../../Assets/art/3d/4.4/leaf_mg.webp" alt="" style="left:4409px;top:1082px;width:1446px;height:422px;transform-origin:711px 178px;transform:rotate(-90deg)">
+
+<!-- ================= 1. TITLE / OVERVIEW ================= -->
+<section class="step" id="welcome" data-x="0" data-y="0" data-s="7" data-overview data-noclick data-phase="title" data-title="Welcome · lesson map">
+  <div class="scene">
+    <div class="abs" style="left:66px;top:46px"><div class="row" style="gap:14px;align-items:center">
+      <span class="pill">Chapter 4 · Water and Organic Compounds</span><span class="pill ghost">Lesson 4.4 · Grade 7 · MYP Year 3</span></div></div>
+    <h1 class="h1 abs" style="left:66px;top:96px;font-size:80px;white-space:nowrap">Deficiency of macroelements in plants</h1>
+    <div class="abs" style="left:66px;top:196px;width:1470px">
+      <div class="objective"><span class="tag">You will</span><span>learn the importance of macroelements and fertilizers for plants.</span></div>
+      <div class="meta-row" style="margin-top:10px">
+        <div class="meta"><b>ATL</b> Thinking · critical thinking · communication</div>
+        <div class="meta"><b>Criterion A</b> (formative) · A.iii analyse</div>
+        <div class="meta"><b>Inquiry</b> How do missing elements affect a plant?</div>
+      </div>
+    </div>
+    <div class="logo-plate" style="right:58px;top:30px">
+      <img src="../../Assets/logos/AGIS_logo.png" alt="Astana Garden International School logo">
+      <img class="myp" src="../../Assets/logos/IB_MYP_logo.png" alt="IB Middle Years Programme logo">
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Opening (0:00).</b> Lesson map: left — learning scenes; centre — a giant healthy plant (we zoom into its soil and a leaf); right — the leaf gallery from textbook Figure 4.4.1.</p>
+    <p>Objective quoted from the textbook “You will” box, p. 62. Textbook pp. 62–63.</p>
+    <p><b>ATL (Unit Planner, Lesson 4):</b> critical thinking and scientific communication — diagnose from leaf descriptions and justify the choice.</p>
+    <div class="warn">Print: 4.4 vocabulary sheet, deficiency matching worksheet, exit-ticket slips.</div>
+  </aside>
+</section>
+
+<!-- ================= 2. BIG QUESTION ================= -->
+<section class="step" id="bigq" data-x="-4750" data-y="-650" data-s="1" data-phase="engage" data-title="Big question: is water enough?">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Engage</span><span class="t">THINK · PAIR · SHARE</span></div>
+    <div class="abs" style="left:64px;top:150px;width:720px">
+      <div class="kicker">Big question</div>
+      <div class="h2" style="font-size:56px;margin-top:14px">Why is watering not enough to grow a healthy plant?</div>
+      <div class="ru" style="margin-top:14px">Почему одного полива недостаточно, чтобы вырастить здоровое растение?</div>
+      <div class="frame-box" style="margin-top:26px" data-build="1">A plant also needs <i>…</i> because <i>…</i></div>
+      <div class="qa" data-build="1" style="margin-top:14px"><button class="reveal-btn">&#128065; Reveal answer</button>
+        <div class="answer">Plants also need <b>chemical elements</b> (macroelements such as N, P, K). Without enough of them, the plant has a <b>deficiency</b>.</div></div>
+    </div>
+    <!-- two potted plants that get the same water: 3D renders (Render_Source/plant_scene.js, modes 1 and 2) -->
+    <img class="abs" src="../../Assets/art/3d/4.4/pot_healthy.webp" alt="A healthy potted plant with big green leaves and a flower" style="left:880px;top:212px;width:320px;height:358px">
+    <img class="abs" src="../../Assets/art/3d/4.4/pot_deficiency.webp" alt="A potted plant with small, pale yellow, drooping leaves" style="left:1200px;top:212px;width:320px;height:358px">
+    <svg class="abs anim" style="left:860px;top:130px" width="680" height="690" viewBox="0 0 680 690" aria-label="Two potted plants that both get water: one is healthy, one has yellow leaves">
+      <text x="180" y="490" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="26" fill="#178a4a">healthy</text>
+      <text x="500" y="490" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="26" fill="#c2410c">deficiency</text>
+      <g class="anim" fill="#4fb3e8"><path d="M340 6c0 0-16 22-16 32a16 16 0 0 0 32 0c0-10-16-32-16-32z"><animate attributeName="opacity" values="1;.3;1" dur="2s" repeatCount="indefinite"/></path></g>
+      <text x="340" y="86" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="22" fill="#2a7aa6">same water</text>
+      <g stroke="#4fb3e8" stroke-width="3" stroke-dasharray="3 7" fill="none" stroke-linecap="round"><path d="M318 50Q240 70 200 104M362 50Q440 70 480 104"/></g>
+    </svg>
+  </div>
+  <aside class="notes">
+    <p><b>Engage (0:00–4:00). Participation 1 — Think–Pair–Share.</b> Both plants get the same water. Why is one unhealthy?</p>
+    <div class="exp"><b>Expected ideas:</b> “needs sunlight”, “needs fertilizer”, “needs minerals / elements from soil”. Accept all; steer to elements (textbook p. 62: deficiency, fertilizers). Link to Lesson 4.2: macro- and microelements are as important for plants as for humans.</div>
+  </aside>
+</section>
+
+<!-- ================= 3. VOCABULARY 1 ================= -->
+<section class="step" id="vocab1" data-x="-2850" data-y="-650" data-s="1" data-phase="vocab" data-title="Vocabulary 1">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Vocabulary</span><span class="t">ENGLISH · РУССКИЙ · 1 of 2</span></div>
+    <div class="scene-title"><div class="h2">Words about plant nutrition</div></div>
+    <div class="vocab c3" style="top:232px">
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><g transform="translate(60 64) scale(.11)"><use href="#leafN"/></g><path d="M86 30l18 18M104 30L86 48" stroke="#e2474f" stroke-width="6" stroke-linecap="round"/></svg>
+        <div class="en">deficiency</div><div class="rus">недостаток</div><div class="def">not enough of a needed element</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><path d="M30 30h60l6 76H24z" fill="#e8f3dc" stroke="#178a4a" stroke-width="4"/><text x="60" y="80" text-anchor="middle" font-family="Fredoka" font-size="26" fill="#178a4a">NPK</text></svg>
+        <div class="en">fertilizer</div><div class="rus">удобрение</div><div class="def">a natural or artificial substance added to soil to help plants grow better</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><g font-family="Fredoka" font-size="26" text-anchor="middle"><rect x="10" y="40" width="32" height="40" rx="8" fill="var(--n)"/><text x="26" y="69" fill="#3a2900">N</text><rect x="44" y="40" width="32" height="40" rx="8" fill="var(--p)"/><text x="60" y="69" fill="#fff">P</text><rect x="78" y="40" width="32" height="40" rx="8" fill="var(--k)"/><text x="94" y="69" fill="#fff">K</text></g></svg>
+        <div class="en">macroelement</div><div class="rus">макроэлемент</div><div class="def">an element needed in large amounts (e.g. N, P, K)</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><path d="M20 90c10-30 30-46 60-46" stroke="#8b5e3c" stroke-width="10" fill="none" stroke-linecap="round"/><g fill="#6aa812"><path d="M60 30c10-14 30-14 36 0c-12 8-26 8-36 0z"/><circle cx="40" cy="60" r="10" fill="#c8653a"/><circle cx="70" cy="80" r="10" fill="#e8a600"/></g></svg>
+        <div class="en">organic fertilizer</div><div class="rus">органическое удобрение</div><div class="def">natural: from plant or animal products (manure, compost)</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><path d="M36 22h48l8 80H28z" fill="#ffffff" stroke="#7c4ddb" stroke-width="4"/><g fill="#7c4ddb"><circle cx="50" cy="60" r="6"/><circle cx="68" cy="70" r="6"/><circle cx="58" cy="84" r="6"/></g><path d="M44 36h32" stroke="#7c4ddb" stroke-width="4"/></svg>
+        <div class="en" style="font-size:33px">inorganic fertilizer</div><div class="rus">неорганическое удобрение</div><div class="def">synthetic: made in a factory</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><g fill="#178a4a"><circle cx="34" cy="50" r="12"/><circle cx="60" cy="40" r="12"/><circle cx="86" cy="50" r="12"/></g><path d="M34 62L60 90L86 62M60 52V90" stroke="#173224" stroke-width="4" fill="none"/><rect x="40" y="88" width="40" height="22" rx="8" fill="#7c4ddb"/></svg>
+        <div class="en">synthetic</div><div class="rus">синтетический</div><div class="def">made artificially by combining separate elements</div></div>
+    </div>
+    <div class="abs" style="left:64px;bottom:96px;font:700 23px/1.3 var(--font);color:var(--ink-soft)">Say it: <b style="color:#c2410c">“A deficiency means the plant does not get enough of an element.”</b></div>
+  </div>
+  <aside class="notes">
+    <p><b>Vocabulary (4:00–6:30).</b> Definitions from the textbook Key terms (p. 62): fertilizer — natural or artificial substances added to soil to make plants grow better; synthetic — made artificially by combining separate elements to form a coherent whole. Russian from Terminology (p. 63): deficiency — недостаток, fertilizer — удобрение.</p>
+    <p><b>Participation 2:</b> natural or factory? Teacher names manure, compost, superphosphate; students show “organic” (hands like a heap) or “inorganic” (hands like a box).</p>
+  </aside>
+</section>
+
+<!-- ================= 4. VOCABULARY 2 ================= -->
+<section class="step" id="vocab2" data-x="-2850" data-y="450" data-s="1" data-phase="vocab" data-title="Vocabulary 2: leaf words">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Vocabulary</span><span class="t">ENGLISH · РУССКИЙ · 2 of 2 · LEAF WORDS</span></div>
+    <div class="scene-title"><div class="h2">Words to describe a leaf</div></div>
+    <div class="vocab c3" style="top:232px">
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><g transform="translate(60 60) rotate(90) scale(.1)"><use href="#leafHealthy"/></g><path d="M8 60H112" stroke="#e8a600" stroke-width="4" stroke-dasharray="6 6"/></svg>
+        <div class="en">vein</div><div class="rus">жилка</div><div class="def">a thin line in a leaf that carries water</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><g transform="translate(60 60) rotate(90) scale(.1)"><use href="#leafK"/></g></svg>
+        <div class="en">edge (margin)</div><div class="rus">край листа</div><div class="def">the outside line of a leaf</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><g transform="translate(60 60) rotate(90) scale(.1)"><use href="#leafN"/></g><circle cx="16" cy="60" r="12" fill="none" stroke="#c2410c" stroke-width="4"/></svg>
+        <div class="en">tip</div><div class="rus">кончик листа</div><div class="def">the end of the leaf</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><rect x="20" y="30" width="36" height="60" rx="10" fill="#f4d03f"/><rect x="64" y="30" width="36" height="60" rx="10" fill="#1f6b3a"/></svg>
+        <div class="en">pale / dark</div><div class="rus">бледный / тёмный</div><div class="def">light colour / deep colour</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><g transform="translate(60 60) rotate(90) scale(.1)"><use href="#leafP"/></g></svg>
+        <div class="en">spots</div><div class="rus">пятна</div><div class="def">small marks of a different colour</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><circle cx="60" cy="70" r="30" fill="#e2474f"/><path d="M60 40c-2-10 4-18 12-22" stroke="#6b3d16" stroke-width="5" fill="none"/><path d="M40 70a20 20 0 0 1 20-20" stroke="#fff" stroke-width="5" opacity=".6" fill="none"/></svg>
+        <div class="en">ripen</div><div class="rus">созревать</div><div class="def">a fruit becomes ready to eat</div></div>
+    </div>
+    <div class="abs" style="left:64px;bottom:96px;font:700 23px/1.3 var(--font);color:var(--ink-soft)">Quick check: point to a <b style="color:#c2410c">vein</b>, an <b style="color:#c2410c">edge</b> and the <b style="color:#c2410c">tip</b> on a real leaf.</div>
+  </div>
+  <aside class="notes">
+    <p><b>Vocabulary (6:30–9:00). Participation 3:</b> bring a real leaf (or use the pictures). Students point to vein / edge / tip as you say each word.</p>
+    <p>“Ripe — созревать” is from the textbook Terminology (p. 63). The textbook activity uses “nerves” for large veins — tell students these mean the same here.</p>
+  </aside>
+</section>
+
+<!-- ================= 5. HEALTHY PLANT (frames the giant plant) ================= -->
+<section class="step" id="plant" data-x="300" data-y="950" data-s="2.6" data-nojourney data-phase="explore" data-title="A healthy plant">
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">HEALTHY PLANT</span></div>
+    <div class="scene-title" style="right:auto;width:560px"><div class="h2" style="font-size:52px">A healthy plant</div><div class="ru">Здоровое растение</div></div>
+    <svg class="abs" style="left:0;top:0" width="1600" height="900" viewBox="0 0 1600 900" aria-hidden="true">
+      <g stroke="#178a4a" stroke-width="3" stroke-dasharray="2 8" fill="none" stroke-linecap="round" data-build="1"><path d="M1230 350L945 515M394 580L790 600M1180 690L1100 760"/></g>
+    </svg>
+    <div class="callout" style="left:1230px;top:296px;width:310px;background:#fff" data-build="1"><div class="k" style="color:#137a40">Leaves</div>big, green, many leaves</div>
+    <div class="callout" style="left:64px;top:520px;width:330px;background:#fff" data-build="1"><div class="k" style="color:#137a40">Stem and flowers</div>strong stem, flowers</div>
+    <div class="callout" style="left:1180px;top:620px;width:360px;background:#fff" data-build="1"><div class="k" style="color:#137a40">Soil and roots</div>water <b>and elements</b> from the soil</div>
+    <div class="abs frame-box" style="left:64px;top:240px;width:330px;font-size:21px" data-build="2">Next: zoom into the <i>soil</i>, then into a <i>leaf</i>.</div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (9:00–10:00).</b> → labels, → zoom hint. Ask: “What does a healthy plant look like?” <b>Expected:</b> green leaves, many leaves, strong growth, flowers and fruit.</p>
+    <p>The glowing rings mark the two zooms (soil, leaf).</p>
+  </aside>
+</section>
+
+<!-- ================= 6. SOIL: ESSENTIAL ELEMENTS (nested) ================= -->
+<section class="step" id="soil" data-x="1100" data-y="1830" data-s=".12" data-nested="hidden" data-phase="explore" data-title="Zoom: elements in the soil">
+  <div class="scene" style="border-radius:60px;overflow:hidden;background:linear-gradient(180deg,#7a5234 0%,#5a3a22 100%)">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t" style="color:#f5deb8">ZOOM 1 · INTO THE SOIL</span></div>
+    <div class="scene-title"><div class="h2" style="color:#fff">Plants need elements too</div><div class="ru" style="color:#f5deb8">Растениям тоже нужны элементы</div></div>
+    <!-- soil cross-section with a root and root hairs: 3D render (Render_Source/plant_scene.js, mode 3); elements as labels -->
+    <div class="bx-window" style="left:40px;top:220px;width:760px;height:600px" role="img" aria-label="Close-up of soil around a root with fine root hairs. The elements nitrogen, phosphorus, potassium and magnesium are in the soil.">
+      <img class="bx-layer" src="../../Assets/art/3d/4.4/soil_macro.jpg" alt="">
+      <div class="bx-labels anim">
+        <span class="el n soil-el" style="left:96px;top:150px;animation-delay:0s">N</span>
+        <span class="el p soil-el" style="left:560px;top:120px;animation-delay:.6s">P</span>
+        <span class="el k soil-el" style="left:600px;top:420px;animation-delay:1.2s">K</span>
+        <span class="el mg soil-el" style="left:120px;top:440px;animation-delay:1.8s">Mg</span>
+      </div>
+      <div class="bx-tag" data-label style="left:16px;top:554px"><small>Close-up</small>soil around a plant root</div>
+    </div>
+    <div class="abs col" style="left:830px;top:236px;width:710px;gap:14px">
+      <div class="panel" style="padding:18px 22px"><div class="body small">Macronutrients and micronutrients are <b>just as important</b> for plants as for the human body.</div></div>
+      <div class="panel" style="padding:18px 22px" data-build="1"><div class="body small">When a plant does not have the necessary amount of an element, it has a <b class="hl5">deficiency</b>.</div></div>
+      <div class="panel" style="padding:18px 22px" data-build="2"><div class="row" style="gap:8px;align-items:center"><span class="el n">N</span><span class="el p">P</span><span class="el k">K</span><span class="body small" style="margin-left:6px">are essential for the plant.</span></div>
+        <div class="body small" style="margin-top:10px">Magnesium <span class="el mg" style="height:34px;min-width:44px;font-size:20px">Mg</span> deficiency also changes leaves (Figure 4.4.1).</div></div>
+      <div class="fact" data-build="3"><div class="lab">Fact · textbook p. 59</div><div style="font:700 22px/1.3 var(--font);margin-top:6px">Humans need 25 elements; plants need only 17.</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (10:00–11:00).</b> The camera dives into the soil. → deficiency definition, → essential elements, → fact.</p>
+    <p>Textbook p. 62: “Macronutrients and micronutrients are just as important for the human body as they are for plants. When the body does not have the necessary amount of elements, it causes a ‘deficiency’.” “These three elements are essential for the plant. Gardeners prevent these plant deficiencies by fertilizing the soil with these elements.”</p>
+  </aside>
+</section>
+
+<!-- ================= 7. HEALTHY LEAF (nested in a plant leaf) ================= -->
+<section class="step" id="healthy" data-x="575" data-y="1176" data-s=".14" data-nested="hidden" data-phase="explore" data-title="Zoom: a healthy leaf">
+  <div class="scene" style="border-radius:60px;overflow:hidden;background:radial-gradient(circle at 40% 40%,#effbe2 0%,#d8f2c0 70%,#c4e8a3 100%)">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">ZOOM 2 · A HEALTHY LEAF</span></div>
+    <div class="scene-title"><div class="h2">A healthy leaf</div><div class="ru">Здоровый лист</div></div>
+    <svg class="abs" style="left:40px;top:250px" width="1520" height="300" viewBox="0 0 1520 300" aria-label="A healthy green leaf with veins (textbook Figure 4.4.1)">
+      <g transform="translate(760 150) rotate(90) scale(.9)" ><use href="#leafHealthy"/></g>
+      <g font-family="Nunito" font-weight="900" font-size="24" fill="#137a40"><text x="1250" y="60">tip</text><text x="210" y="60">base</text></g>
+    </svg>
+    <div class="abs" style="left:64px;right:64px;top:590px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px">
+      <div class="sym-card"><h4 style="color:#178a4a">Colour</h4><div class="body small">even green</div></div>
+      <div class="sym-card"><h4 style="color:#178a4a">Veins and edges</h4><div class="body small">veins and edges are green</div></div>
+      <div class="sym-card"><h4 style="color:#178a4a">Size</h4><div class="body small">normal size, many leaves</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (11:00–11:30).</b> This is the “healthy leaf” of textbook Figure 4.4.1. Tell students: “Compare every next leaf with this one.”</p>
+  </aside>
+</section>
+
+<!-- ================= 8–11. DEFICIENCY LEAVES (nested in the gallery leaves) ================= -->
+<section class="step" id="nitrogen" data-x="3440" data-y="1180" data-s=".12" data-nested="hidden" data-phase="explore" data-title="Zoom: nitrogen deficiency">
+  <div class="scene" style="border-radius:60px;overflow:hidden;background:radial-gradient(circle at 40% 30%,#fffbe8 0%,#fdf1c2 70%,#f8e39a 100%)">
+    <div class="phase-tag"><span class="pill" style="background:var(--n);color:#3a2900">Explore &amp; Explain</span><span class="t" style="color:#8a6200">DEFICIENCY 1 · TEXTBOOK p. 62</span></div>
+    <div class="scene-title"><div class="row" style="align-items:center;gap:16px"><span class="el n" style="height:60px;min-width:70px;font-size:36px">N</span><div class="h2">Nitrogen deficiency</div></div><div class="ru">Недостаток азота</div></div>
+    <svg class="abs" style="left:40px;top:250px" width="1520" height="260" viewBox="0 0 1520 260" aria-label="Leaf with nitrogen deficiency: yellowing along the middle vein, brownish-yellow tip">
+      <g transform="translate(900 130) rotate(90) scale(.62)" ><use href="#leafN"/></g>
+      <g transform="translate(150 130) rotate(90) scale(.22)" opacity=".9"><use href="#leafHealthy"/></g><text x="150" y="200" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="20" fill="#456152">healthy</text>
+    </svg>
+    <div class="abs" style="left:64px;right:64px;top:540px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      <div class="sym-card" data-build="1"><h4 style="color:#b07a00">Leaves</h4><ul><li>turn <b>yellow</b>, shrink and grow shorter</li><li>yellowing begins along the veins</li></ul></div>
+      <div class="sym-card" data-build="2"><h4 style="color:#b07a00">Whole plant</h4><ul><li>flowering slows down</li><li>fewer fruits; less protein and carbohydrates in the fruit</li></ul></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (11:30–12:30).</b> Textbook p. 62: “when a plant lacks nitrogen, its leaves turn yellow, shrink, and grow shorter. At the same time, flowering slows down, the number of fruits decreases, amount of protein and carbohydrates in the fruit decrease (Figure 4.4.2).”</p>
+    <p>The leaf picture follows Figure 4.4.1 (yellow along the middle, tip turning brownish-yellow).</p>
+  </aside>
+</section>
+
+<section class="step" id="phosphorus" data-x="4000" data-y="1180" data-s=".12" data-nested="hidden" data-phase="explore" data-title="Zoom: phosphorus deficiency">
+  <div class="scene" style="border-radius:60px;overflow:hidden;background:radial-gradient(circle at 40% 30%,#fbf3ff 0%,#efdcf7 70%,#e2c4ef 100%)">
+    <div class="phase-tag"><span class="pill" style="background:var(--p)">Explore &amp; Explain</span><span class="t" style="color:#6b1f5c">DEFICIENCY 2 · TEXTBOOK p. 62</span></div>
+    <div class="scene-title"><div class="row" style="align-items:center;gap:16px"><span class="el p" style="height:60px;min-width:70px;font-size:36px">P</span><div class="h2">Phosphorus deficiency</div></div><div class="ru">Недостаток фосфора</div></div>
+    <svg class="abs" style="left:40px;top:250px" width="1520" height="260" viewBox="0 0 1520 260" aria-label="Leaf with phosphorus deficiency: dark green with purple edges">
+      <g transform="translate(900 130) rotate(90) scale(.62)" ><use href="#leafP"/></g>
+      <g transform="translate(150 130) rotate(90) scale(.22)" opacity=".9"><use href="#leafHealthy"/></g><text x="150" y="200" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="20" fill="#456152">healthy</text>
+    </svg>
+    <div class="abs" style="left:64px;right:64px;top:540px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      <div class="sym-card" data-build="1"><h4 style="color:#6b1f5c">Leaves</h4><ul><li>leaves are <b>smaller</b> and there are <b>fewer</b> leaves</li><li>old leaves turn <b>dark green</b>; dark purple colour on the edges (Fig. 4.4.1)</li></ul></div>
+      <div class="sym-card" data-build="2"><h4 style="color:#6b1f5c">Whole plant</h4><ul><li>lack of phosphorus <b>stops the ripening</b> of the fruit</li></ul></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (12:30–13:30).</b> Textbook p. 62: “Lack of phosphorus stops the ripening of the fruit, reduces the size of the leaves, leads to a decrease in the number of leaves.” Figure 4.4.1 shows dark green leaves with dark purple edges.</p>
+  </aside>
+</section>
+
+<section class="step" id="potassium" data-x="4560" data-y="1180" data-s=".12" data-nested="hidden" data-phase="explore" data-title="Zoom: potassium deficiency">
+  <div class="scene" style="border-radius:60px;overflow:hidden;background:radial-gradient(circle at 40% 30%,#fff6ef 0%,#ffe2cf 70%,#ffcfb0 100%)">
+    <div class="phase-tag"><span class="pill" style="background:var(--k)">Explore &amp; Explain</span><span class="t" style="color:#9a3412">DEFICIENCY 3 · TEXTBOOK p. 62</span></div>
+    <div class="scene-title"><div class="row" style="align-items:center;gap:16px"><span class="el k" style="height:60px;min-width:70px;font-size:36px">K</span><div class="h2">Potassium deficiency</div></div><div class="ru">Недостаток калия</div></div>
+    <svg class="abs" style="left:40px;top:250px" width="1520" height="260" viewBox="0 0 1520 260" aria-label="Leaf with potassium deficiency: yellow and brown edges and tip">
+      <g transform="translate(900 130) rotate(90) scale(.62)" ><use href="#leafK"/></g>
+      <g transform="translate(150 130) rotate(90) scale(.22)" opacity=".9"><use href="#leafHealthy"/></g><text x="150" y="200" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="20" fill="#456152">healthy</text>
+    </svg>
+    <div class="abs" style="left:64px;right:64px;top:540px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      <div class="sym-card" data-build="1"><h4 style="color:#9a3412">Leaves</h4><ul><li>one side of the leaves <b>darkens</b></li><li>edges turn yellow, then brown (Fig. 4.4.1)</li></ul></div>
+      <div class="sym-card" data-build="2"><h4 style="color:#9a3412">Whole plant</h4><ul><li>poor growth, roots, fruit and seeds</li><li>more sensitive to <b>frost</b> and <b>disease</b></li></ul></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (13:30–14:30).</b> Textbook p. 62: “If plants do not get enough potassium, one side of the leaves will darken, plant growth, root development, fruit and seed formation will be impaired. Additional to it plants become sensitive to frost and disease.” Figure 4.4.1 shows yellow-orange edges.</p>
+  </aside>
+</section>
+
+<section class="step" id="magnesium" data-x="5120" data-y="1180" data-s=".12" data-nested="hidden" data-phase="explore" data-title="Zoom: magnesium deficiency">
+  <div class="scene" style="border-radius:60px;overflow:hidden;background:radial-gradient(circle at 40% 30%,#effff6 0%,#d4f5e3 70%,#b8ebd0 100%)">
+    <div class="phase-tag"><span class="pill" style="background:var(--mg)">Explore &amp; Explain</span><span class="t" style="color:#1f6b4a">DEFICIENCY 4 · FIGURE 4.4.1</span></div>
+    <div class="scene-title"><div class="row" style="align-items:center;gap:16px"><span class="el mg" style="height:60px;min-width:84px;font-size:34px">Mg</span><div class="h2">Magnesium deficiency</div></div><div class="ru">Недостаток магния</div></div>
+    <svg class="abs" style="left:40px;top:250px" width="1520" height="260" viewBox="0 0 1520 260" aria-label="Leaf with magnesium deficiency: pale yellow stripes between green veins">
+      <g transform="translate(900 130) rotate(90) scale(.62)" ><use href="#leafMg"/></g>
+      <g transform="translate(150 130) rotate(90) scale(.22)" opacity=".9"><use href="#leafHealthy"/></g><text x="150" y="200" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="20" fill="#456152">healthy</text>
+    </svg>
+    <div class="abs" style="left:64px;right:64px;top:540px;display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      <div class="sym-card" data-build="1"><h4 style="color:#1f6b4a">Leaves (Figure 4.4.1)</h4><ul><li><b>pale yellow</b> colour <b>between</b> the veins</li><li>the main veins stay <b>green</b></li></ul></div>
+      <div class="sym-card" data-build="2"><h4 style="color:#1f6b4a">Remember</h4><ul><li>the textbook shows magnesium deficiency in Figure 4.4.1 and in the activity on p. 63</li></ul></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (14:30–15:30).</b> The main text of p. 62 does not describe magnesium deficiency; Figure 4.4.1 shows it (yellow stripes between green veins) and the activity description on p. 63 adds details (pale yellow spots between the veins; large veins and margins stay green). Only figure-based features are shown here so that the activity still requires reading.</p>
+  </aside>
+</section>
+
+<!-- ================= 12. COMPARE (frames the gallery) ================= -->
+<section class="step" id="compare" data-x="4000" data-y="1000" data-s="2.0" data-nojourney data-phase="explore" data-title="Compare the leaves">
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">FIGURE 4.4.1 · NUTRIENT DEFICIENCY IN PLANTS</span></div>
+    <div class="scene-title"><div class="h2" style="font-size:50px">Compare the leaves</div><div class="ru">Сравни листья</div></div>
+    <div data-build="1">
+      <span class="abs pill" style="left:178px;top:266px;background:#178a4a">healthy</span>
+      <span class="abs el n" style="left:494px;top:262px">N</span>
+      <span class="abs el p" style="left:774px;top:262px">P</span>
+      <span class="abs el k" style="left:1054px;top:262px">K</span>
+      <span class="abs el mg" style="left:1326px;top:262px">Mg</span>
+    </div>
+    <div class="abs panel" data-build="2" style="left:1060px;top:90px;width:480px;padding:14px 18px"><div style="font:800 20px/1.35 var(--font)">Signs can look alike. Look carefully: <b>where</b> does the colour change start — veins, edges or between the veins? Which leaves — <b>old</b> or new?</div></div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (15:30–17:00).</b> The board recreates textbook Figure 4.4.1 (healthy, nitrogen, phosphorus, potassium, magnesium). → labels each leaf, → caution note.</p>
+    <p>Quick quiz: cover the labels (press ← to hide) and ask “Which leaf has yellow between the veins?” <b>Expected:</b> magnesium.</p>
+    <div class="warn">Leaf signs are clues, not perfect proof: different problems can look similar. Keep explanations within the textbook (pp. 62–63).</div>
+  </aside>
+</section>
+
+<!-- ================= 13. FERTILIZERS 1 ================= -->
+<section class="step" id="fert1" data-x="-4750" data-y="450" data-s="1" data-phase="explore" data-title="Fertilizers: organic and inorganic">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">TEXTBOOK p. 63</span></div>
+    <div class="scene-title"><div class="h2">Fertilizers</div><div class="ru">Удобрения</div></div>
+    <div class="abs" style="left:64px;width:1472px;top:226px">
+      <div class="panel" style="padding:14px 22px"><div class="body small"><b>Fertilizer</b> — natural or artificial substances added to soil to make plants grow better. Gardeners use fertilizers to <b>prevent deficiencies</b>.</div></div>
+    </div>
+    <div class="abs" style="left:64px;right:64px;top:350px;display:grid;grid-template-columns:1fr 1fr;gap:22px">
+      <div class="fert" data-build="1">
+        <img src="../../Assets/art/3d/4.4/fert_organic_compost.webp" alt="A heap of compost" style="float:right;width:190px;height:101px;margin:-4px 0 0 10px">
+        <h3 style="color:#178a4a">Organic</h3><div class="ru small">органические</div>
+        <div class="body small" style="margin-top:8px">natural substances: plant or animal excretion products</div>
+        <div class="tagrow"><span>manure · навоз</span><span>compost · компост</span><span>guano</span></div>
+      </div>
+      <div class="fert" data-build="2">
+        <img src="../../Assets/art/3d/4.4/fert_inorganic_granules.webp" alt="A pile of mineral fertilizer granules" style="float:right;width:190px;height:100px;margin:-4px 0 0 10px">
+        <h3 style="color:#7c4ddb">Inorganic</h3><div class="ru small">неорганические</div>
+        <div class="body small" style="margin-top:8px"><b>synthetic</b> fertilizers; contain one or more nutrients</div>
+        <div class="tagrow"><span>one-nutrient</span><span>multi-nutrient</span></div>
+      </div>
+    </div>
+    <div class="abs qa qcard" style="left:64px;width:1472px;top:640px;padding:14px 22px" data-build="3"><div class="row" style="align-items:center;gap:16px;flex-wrap:wrap"><span class="qn" style="margin:0">Quick check</span><span class="q" style="font-size:23px">Is compost organic or inorganic?</span><button class="reveal-btn" style="margin:0">&#128065; Reveal answer</button><div class="answer" style="margin:0;padding:8px 16px;font-size:21px">Organic — it is made from natural plant material.</div></div></div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (17:00–17:40).</b> Textbook p. 63: “Fertilizers are divided into organic and inorganic. Inorganic fertilizers are synthetic fertilizers, and organic fertilizers are natural substances, such as various plant or animal excretion products.” “Organic fertilizers include manure, compost, stock, guano.”</p>
+    <div class="warn">The textbook list includes “stock”; its meaning is unclear in this context, so it is not shown. See the Source Discrepancy Log.</div>
+  </aside>
+</section>
+
+<!-- ================= 14. FERTILIZERS 2 ================= -->
+<section class="step" id="fert2" data-x="-4750" data-y="1550" data-s="1" data-phase="explore" data-title="Inorganic fertilizers">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">TEXTBOOK p. 63</span></div>
+    <div class="scene-title"><div class="h2">Inorganic fertilizers</div><div class="ru">Неорганические удобрения</div></div>
+    <div class="abs" style="left:64px;top:226px;width:920px">
+      <div class="fert">
+        <h3 style="font-size:30px">One-nutrient fertilizers</h3><div class="body small" style="margin-top:4px">contain only one type of element</div>
+        <div class="col" style="gap:10px;margin-top:12px">
+          <div class="row" style="align-items:center;gap:12px"><span class="el n">N</span><span class="tagrow" style="margin:0"><span>ammonium sulfate</span><span>urea</span><span>nitrate</span></span></div>
+          <div class="row" style="align-items:center;gap:12px"><span class="el k">K</span><span class="tagrow" style="margin:0"><span>potassium chloride</span></span></div>
+          <div class="row" style="align-items:center;gap:12px"><span class="el p">P</span><span class="tagrow" style="margin:0"><span>superphosphate</span></span></div>
+        </div>
+      </div>
+      <div class="fert" style="margin-top:16px" data-build="1">
+        <h3 style="font-size:30px">Multi-nutrient fertilizers</h3>
+        <div class="body small" style="margin-top:6px">contain several nutrients: <b>nitrogen, potassium, phosphorus</b>, and also trace elements such as <b>boron</b> and <b>manganese</b></div>
+      </div>
+    </div>
+    <div class="abs col" style="left:1020px;top:226px;width:520px;gap:14px">
+      <div class="fact" data-build="2"><div class="lab">Fact · textbook p. 62</div><div style="font:700 22px/1.32 var(--font);margin-top:6px">The first fertilizer factory was set up by Sir John Lawes in Britain in 1843. He made <b>superphosphate</b> by dissolving bones in acid.</div></div>
+      <div class="qa qcard" style="padding:14px 20px" data-build="3"><div class="qn">Think</div><div class="q" style="font-size:22px">A plant lacks phosphorus. Which one-nutrient fertilizer could help?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:20px">Superphosphate (a phosphorus fertilizer).</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (17:40–18:00).</b> Textbook p. 63: “Inorganic fertilizers contain one or more nutrients. One nutrient fertilizer contains only one type of element. For example, nitrogen fertilizers (ammonium sulfate, urine, nitrate), potassium fertilizers (potassium chloride), phosphorus fertilizers (superphosphate). Multi-nutrient fertilizers contain trace elements such as nitrogen, potassium, phosphorus, as well as boron and manganese.”</p>
+    <div class="warn">Two textbook wording issues are corrected on the slide and logged: “urine” in a list of synthetic nitrogen fertilizers is read as <b>urea</b>; nitrogen, potassium and phosphorus are macroelements, not trace elements — only boron and manganese are called trace elements here.</div>
+  </aside>
+</section>
+
+<!-- ================= 15. ACTIVITY: MATCHING ================= -->
+<section class="step" id="activity" data-x="-2850" data-y="1550" data-s="1" data-phase="activity" data-title="Activity: match the leaf to the element">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a3)">Main activity</span><span class="t">TEXTBOOK ACTIVITY p. 63 · PAIRS</span></div>
+    <div class="scene-title"><div class="h2" style="font-size:50px">Leaf detectives: match the description</div><div class="ru">Сопоставь описание листьев с элементом</div></div>
+    <div class="match-zone abs" style="left:64px;right:64px;top:222px">
+      <div class="pool" style="gap:10px;margin-bottom:10px">
+        <span class="chip ans" data-k="p">A · Phosphorus deficiency</span><span class="chip ans" data-k="mg">B · Magnesium deficiency</span><span class="chip ans" data-k="n">C · Nitrogen deficiency</span><span class="chip ans" data-k="k">D · Potassium deficiency</span>
+      </div>
+      <div class="drow"><div class="tx">1. The old leaves turn brownish-yellow and gradually disappear. Yellowing of the leaves begins with the leaf veins.</div><div class="slot" data-k="n" data-max="1"></div></div>
+      <div class="drow"><div class="tx">2. The colour of the old leaves turns dark green. Brown and pink spots appear on the leaves and then turn into holes.</div><div class="slot" data-k="p" data-max="1"></div></div>
+      <div class="drow"><div class="tx">3. The leaves turn yellow and later dry out at the tips and edges. Brown spots appear on the edges.</div><div class="slot" data-k="k" data-max="1"></div></div>
+      <div class="drow"><div class="tx">4. Pale yellow spots appear between the veins. Large nerves and leaf margins are green. The edge of the leaf is bent and the leaf shape is domed.</div><div class="slot" data-k="mg" data-max="1"></div></div>
+      <div class="row" style="margin-top:6px;align-items:center"><button class="btn" data-check>Check</button><button class="btn ghost" data-reset>Reset</button><span class="score" style="color:#c2410c"></span>
+        <span class="frame-box" style="margin-left:auto;font-size:20px;padding:10px 16px">I chose <i>___</i> because the description says <i>___</i>.</span></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Main activity (18:00–30:00). Pairs.</b> 2 min: model description 1 aloud (underline the key words). 6 min: pairs complete the printed matching sheet with a reason for each match. 4 min: volunteers drag the letters here, press <b>Check</b>, and justify.</p>
+    <div class="exp"><b>Answers:</b> 1 — C Nitrogen · 2 — A Phosphorus · 3 — D Potassium · 4 — B Magnesium. Key words: 1 “yellowing … begins with the leaf veins” (N); 2 “dark green … pink spots” (P); 3 “tips and edges” (K); 4 “between the veins … large nerves green” (Mg).</div>
+    <p>“Nerves” in description 4 means large veins (textbook wording). ATL — critical thinking: justify each classification with evidence from the description.</p>
+  </aside>
+</section>
+
+<!-- ================= 16. APPLY ================= -->
+<section class="step" id="apply" data-x="-2850" data-y="2650" data-s="1" data-phase="apply" data-title="Apply: plant doctor and responsible use">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a2)">Apply</span><span class="t">PLANT DOCTOR · RESPONSIBLE USE</span></div>
+    <div class="scene-title"><div class="h2">Plant doctor</div><div class="ru">Доктор растений</div></div>
+    <div class="qgrid" style="top:226px">
+      <div class="qa qcard" style="height:420px"><div class="qn">Case 1</div><div class="q" style="font-size:24px">A tomato plant has few, small leaves, and its fruits do not ripen. Which element is missing? Which fertilizer could help?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:20px">Phosphorus. A phosphorus fertilizer, e.g. superphosphate (or a multi-nutrient fertilizer).</div></div>
+      <div class="qa qcard" style="height:420px"><div class="qn">Case 2</div><div class="q" style="font-size:24px">A plant has yellow leaves that shrink. It flowers slowly and has few fruits. What is your diagnosis?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:20px">Nitrogen deficiency. A nitrogen fertilizer (e.g. ammonium sulfate, nitrate) or an organic fertilizer such as manure or compost.</div></div>
+      <div class="qa qcard" style="height:420px;border-color:rgba(226,71,79,.45)"><div class="qn" style="color:#c8323a">Discuss · literacy p. 63</div><div class="q" style="font-size:24px">What are the problems with overuse of fertilizers? Is “more fertilizer” always better?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:20px">No. Too much can harm plants and soil and wash into water. Use the right amount at the right time.</div></div>
+    </div>
+    <div class="abs frame-box" style="left:64px;right:64px;top:670px;font-size:22px">Debatable: <i>To what extent can people meet plants’ needs while using fertilizers responsibly?</i> I think <i>…</i> because <i>…</i>.</div>
+  </div>
+  <aside class="notes">
+    <p><b>Apply (30:00–37:00).</b> Cases 1–2 (4 min, pairs): unfamiliar plant cases — Criterion A.ii/A.iii practice (apply and justify). Discussion (3 min): textbook Literacy question 2 and the unit Debatable question (global context: globalization and sustainability).</p>
+    <div class="exp"><b>Expected:</b> Case 1 — phosphorus (fruit does not ripen, smaller and fewer leaves) → superphosphate. Case 2 — nitrogen (yellow, shrinking leaves, slow flowering, fewer fruits) → nitrogen or organic fertilizer.</div>
+    <div class="warn">The overuse question is asked in the textbook but not answered there. Accept reasoned ideas (e.g. harm to plants, soil or water; wasted money). Misconception (Unit Planner): “fertilizer always improves growth regardless of dose”. Literacy Q1 (“What time of year is fertilizer applied?”) can be homework — answers will vary by crop and climate.</div>
+  </aside>
+</section>
+
+<!-- ================= 17. EXIT TICKET ================= -->
+<section class="step" id="exit" data-x="-4750" data-y="2650" data-s="1" data-phase="exit" data-title="Exit ticket">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a5);color:#3a2900">Exit ticket</span><span class="t">WORK ALONE · 3 MINUTES</span></div>
+    <div class="scene-title"><div class="h2">Exit ticket</div><div class="ru">Билет на выход: ответь сам</div></div>
+    <div class="qgrid" style="top:230px">
+      <div class="qa qcard" style="height:560px"><div class="qn">1 · Recall</div><div class="q">Name <b>two organic</b> fertilizers.</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">Any two of: manure, compost, guano.</div></div>
+      <div class="qa qcard" style="height:560px"><div class="qn">2 · Understanding</div><div class="q">Why is watering not enough to grow a healthy plant?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">Plants also need elements such as N, P and K. Without enough of them, the plant has a deficiency: leaves change and growth, fruits or seeds are affected.</div></div>
+      <div class="qa qcard" style="height:560px"><div class="qn">3 · Application</div><div class="q">A plant’s leaf edges turn yellow, then brown, and the plant is damaged by frost. Which element is missing? Explain.</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">Potassium (K): edges (and tips) turn yellow and brown, and plants become sensitive to frost and disease.</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Exit ticket (37:00–40:00).</b> Printed slips, alone. Collect at the door.</p>
+    <div class="exp"><b>Success criteria:</b> Q1 two correct organic fertilizers. Q2 names elements/deficiency (not only “sunlight”). Q3 potassium with two pieces of evidence.</div>
+    <p>After the four teaching lessons, the Unit Planner proposes two assessment periods (Criterion A and C tasks, subject to department approval).</p>
+  </aside>
+</section>
+
+</div></div>
+</div>
+<script src="../../Assets/engine/prezi.js"></script>
+<script src="../../site/js/back-to-chapter.js"></script>
+</body>
+</html>

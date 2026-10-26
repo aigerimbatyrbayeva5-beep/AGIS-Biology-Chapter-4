@@ -1,0 +1,729 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>4.3 Organic Compounds · Chapter 4</title>
+<link rel="stylesheet" href="../../Assets/engine/fonts.css">
+<link rel="stylesheet" href="../../Assets/engine/prezi.css">
+<link rel="stylesheet" href="../../Assets/engine/benchmark.css">
+<style>
+:root{
+  --bg:#fff6ea; --ink:#2b2140; --ink-soft:#574b6e; --ink-mute:#8a7f9e;
+  --a1:#0fa597; --a2:#3a9d55; --a3:#f05252; --a4:#8b6cf0; --a5:#f5b301; --on-a:#ffffff;
+  --panel:#ffffff; --panel-strong:#fffaf3; --panel-line:rgba(43,33,64,.13);
+  --frame-bg:linear-gradient(160deg,#ffffff,#fffbf5);
+  --frame-line:rgba(43,33,64,.10);
+  --hud-bg:rgba(43,33,64,.86); --jp-base:rgba(43,33,64,.18);
+  --carb:#f5a700; --prot:#f05252; --lip:#8b6cf0; --vit:#3a9d55;
+}
+.step .frame{box-shadow:0 50px 90px -50px rgba(90,60,30,.45),0 2px 0 rgba(255,255,255,.8) inset}
+.panel{box-shadow:0 18px 40px -26px rgba(90,60,30,.35)}
+.qcard{box-shadow:0 18px 40px -28px rgba(90,60,30,.35)}
+.frame-box{background:#fff4d6;border-left-color:var(--a5)}
+.frame-box i{color:#d9480f}
+.hl5{color:#d9480f}
+.pill{color:#fff}
+.answer{color:var(--ink)}
+.vcard{box-shadow:0 18px 40px -30px rgba(90,60,30,.35)}
+.vcard .rus{color:#0b8478}
+.kicker{color:#0b8478}
+.chip{background:#2b2140;color:#fff}
+.slot{border-color:rgba(43,33,64,.2)}
+.fact{background:#fff0ef;border-color:#ffc2c2}
+.fact .lab{color:#d63939}
+.grp{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;font:900 18px/1 var(--font);color:#fff}
+.grp.c{background:var(--carb);color:#3b2600}.grp.p{background:var(--prot)}.grp.l{background:var(--lip)}.grp.v{background:var(--vit)}
+.food-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.food-list span{padding:8px 14px;border-radius:14px;background:#fff7e8;border:2px solid rgba(43,33,64,.08);font:800 21px/1.1 var(--font)}
+.bin{border-radius:26px;padding:14px 16px;background:#fff;border:2px solid var(--panel-line);min-height:330px;box-shadow:0 18px 40px -30px rgba(90,60,30,.35)}
+.bin .slot{min-height:250px;align-content:flex-start;border:none;padding:4px}
+.chip.food{font-size:22px;padding:10px 16px}
+.labbtn{display:inline-flex;align-items:center;gap:10px;border:0;border-radius:18px;padding:14px 22px;font:900 22px/1 var(--font);cursor:pointer;
+  background:#2b2140;color:#fff;box-shadow:0 12px 26px -14px rgba(43,33,64,.7)}
+.labbtn.alt{background:#fff;color:#2b2140;border:2px solid rgba(43,33,64,.18);box-shadow:none}
+.labbtn:disabled{opacity:.4;cursor:default}
+.legend{display:flex;align-items:center;gap:14px;border-radius:20px;padding:14px 18px;background:#fff;border:2px solid var(--panel-line);font:800 22px/1.3 var(--font)}
+.sw{width:44px;height:44px;border-radius:50%;flex:none;box-shadow:inset 0 -6px 10px rgba(0,0,0,.18)}
+.otable{border-collapse:separate;border-spacing:0;width:100%;background:#fff;border-radius:20px;overflow:hidden;border:2px solid var(--panel-line)}
+.otable th{font:900 18px/1.2 var(--font);letter-spacing:.04em;text-transform:uppercase;color:#fff;background:#2b2140;padding:12px 12px;text-align:left}
+.otable td{font:700 21px/1.25 var(--font);padding:12px 12px;border-top:2px solid var(--panel-line);vertical-align:top}
+.otable td.blank{color:#b7aec6}
+.otable .exp{display:none;color:#0b6f5f;font-weight:800}
+.otable.showexp .exp{display:block}
+.otable.showexp .blank-t{display:none}
+.safety{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.safety div{display:flex;gap:12px;align-items:center;border-radius:18px;padding:12px 14px;background:#fff;border:2px solid var(--panel-line);font:800 20px/1.25 var(--font)}
+.safety svg{flex:none;width:48px;height:48px}
+@keyframes drip{0%{transform:translateY(0);opacity:1}90%{transform:translateY(var(--fall,180px));opacity:1}100%{transform:translateY(var(--fall,180px));opacity:0}}
+@keyframes steamUp{0%{transform:translateY(0);opacity:0}30%{opacity:.6}100%{transform:translateY(-60px);opacity:0}}
+.drop-anim{animation:drip .7s ease-in forwards}
+.reduced .drop-anim{animation-duration:.01s}
+.stain{transition:fill 1.4s ease, opacity 1.6s ease}
+.reduced .stain{transition:none}
+.lab-state{opacity:0;transition:opacity .7s var(--ease)}
+.lab-state.on{opacity:1}
+.reduced .lab-state{transition:none}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gBread" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6c06a"/><stop offset=".55" stop-color="#d98a32"/><stop offset="1" stop-color="#a95f1e"/></linearGradient>
+    <radialGradient id="gPotato" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#e9c48f"/><stop offset=".7" stop-color="#c18f55"/><stop offset="1" stop-color="#93653a"/></radialGradient>
+    <radialGradient id="gPotIn" cx=".45" cy=".4" r=".7"><stop offset="0" stop-color="#fff6cf"/><stop offset="1" stop-color="#f0d98f"/></radialGradient>
+    <radialGradient id="gApple" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#ff8a80"/><stop offset=".55" stop-color="#e2303a"/><stop offset="1" stop-color="#9c1323"/></radialGradient>
+    <radialGradient id="gAppIn" cx=".5" cy=".45" r=".7"><stop offset="0" stop-color="#fffbe6"/><stop offset="1" stop-color="#f4e5b0"/></radialGradient>
+    <radialGradient id="gEgg" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#f7ead6"/><stop offset="1" stop-color="#d9c2a0"/></radialGradient>
+    <radialGradient id="gYolk" cx=".38" cy=".32" r=".8"><stop offset="0" stop-color="#ffe680"/><stop offset=".6" stop-color="#ffb300"/><stop offset="1" stop-color="#e08600"/></radialGradient>
+    <linearGradient id="gCheese" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe680"/><stop offset="1" stop-color="#f5b301"/></linearGradient>
+    <linearGradient id="gOil" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#9a8a12"/><stop offset=".35" stop-color="#d9c636"/><stop offset=".6" stop-color="#f3e57a"/><stop offset="1" stop-color="#8f7e10"/></linearGradient>
+    <radialGradient id="gOlive" cx=".35" cy=".3" r=".85"><stop offset="0" stop-color="#c8d96b"/><stop offset=".6" stop-color="#7f9a2a"/><stop offset="1" stop-color="#4d6413"/></radialGradient>
+    <linearGradient id="gFish" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9d6e6"/><stop offset=".55" stop-color="#7fa9c2"/><stop offset="1" stop-color="#e9f2f7"/></linearGradient>
+    <radialGradient id="gPlate" cx=".5" cy=".42" r=".6"><stop offset="0" stop-color="#ffffff"/><stop offset=".85" stop-color="#f6efe6"/><stop offset="1" stop-color="#e8dccd"/></radialGradient>
+    <linearGradient id="gGlass" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity=".7"/><stop offset=".5" stop-color="#ffffff" stop-opacity=".15"/><stop offset="1" stop-color="#ffffff" stop-opacity=".6"/></linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="16" stdDeviation="16" flood-color="#7a4b1e" flood-opacity=".28"/></filter>
+    <filter id="softS" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#7a4b1e" flood-opacity=".25"/></filter>
+    <!-- reusable foods (each drawn around 0,0) -->
+    <g id="fBread"><image href="../../Assets/art/3d/4.3/bread.webp" x="-207" y="-108" width="448" height="199"/></g>
+    <g id="fPotato"><image href="../../Assets/art/3d/4.3/potato.webp" x="-124" y="-73" width="306" height="162"/></g>
+    <g id="fApple"><image href="../../Assets/art/3d/4.3/apple.webp" x="-101" y="-126" width="290" height="253"/></g>
+    <g id="fEgg"><image href="../../Assets/art/3d/4.3/egg.webp" x="-101" y="-75" width="269" height="172"/></g>
+    <g id="fHalfEgg"><image href="../../Assets/art/3d/4.3/egg_half.webp" x="-116" y="-25" width="297" height="143"/></g>
+    <g id="fCheese"><image href="../../Assets/art/3d/4.3/cheese.webp" x="-106" y="-114" width="284" height="193"/></g>
+    <g id="fFish"><image href="../../Assets/art/3d/4.3/fish.webp" x="-175" y="-61" width="414" height="122"/></g>
+    <g id="fMilk"><image href="../../Assets/art/3d/4.3/milk.webp" x="-74" y="-80" width="299" height="257"/></g>
+    <g id="fOil"><image href="../../Assets/art/3d/4.3/oil.webp" x="-86" y="-258" width="355" height="507"/></g>
+    <g id="fOlive"><image href="../../Assets/art/3d/4.3/olive.webp" x="-49" y="-37" width="128" height="83"/></g>
+    <g id="fRice"><image href="../../Assets/art/3d/4.3/rice.webp" x="-138" y="-64" width="353" height="201"/></g>
+    <g id="fCake"><image href="../../Assets/art/3d/4.3/cake.webp" x="-113" y="-93" width="273" height="251"/></g>
+    <g id="fCorn"><image href="../../Assets/art/3d/4.3/corn.webp" x="-42" y="-182" width="90" height="335"/></g>
+  </defs>
+</svg>
+
+<div class="prezi" data-lesson="4.3" data-journey data-rho="1.3">
+<div class="viewport"><div class="world">
+
+<!-- ================= WORLD ART: tablecloth + giant plate of food ================= -->
+<svg class="world-art" style="left:-7600px;top:-4800px;width:15200px;height:9600px" viewBox="-7600 -4800 15200 9600" aria-hidden="true">
+  <defs>
+    <pattern id="cloth" width="600" height="600" patternUnits="userSpaceOnUse"><rect width="600" height="600" fill="#fff6ea"/><rect width="300" height="300" fill="#ffe9d1" opacity=".55"/><rect x="300" y="300" width="300" height="300" fill="#ffe9d1" opacity=".55"/></pattern>
+    <radialGradient id="blobC" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffd166" stop-opacity=".5"/><stop offset="1" stop-color="#ffd166" stop-opacity="0"/></radialGradient>
+    <radialGradient id="blobM" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#8fe3b0" stop-opacity=".45"/><stop offset="1" stop-color="#8fe3b0" stop-opacity="0"/></radialGradient>
+    <radialGradient id="blobL" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#c7b5ff" stop-opacity=".5"/><stop offset="1" stop-color="#c7b5ff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="blobR" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ff9e9e" stop-opacity=".4"/><stop offset="1" stop-color="#ff9e9e" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect x="-7600" y="-4800" width="15200" height="9600" fill="url(#cloth)"/>
+  <circle cx="-3600" cy="-200" r="3600" fill="url(#blobM)"/>
+  <circle cx="-2000" cy="2600" r="3000" fill="url(#blobL)"/>
+  <circle cx="3200" cy="900" r="3800" fill="url(#blobC)"/>
+  <circle cx="5200" cy="-2800" r="2200" fill="url(#blobR)"/>
+  <!-- hotspots -->
+  <g fill="none" stroke="#ffffff" stroke-width="16" class="anim" opacity=".9">
+    <circle cx="1850" cy="650" r="150" style="transform-origin:1850px 650px;animation:pulse 2.4s infinite"/>
+    <circle cx="3700" cy="1500" r="150" style="transform-origin:3700px 1500px;animation:pulse 2.4s infinite .6s"/>
+    <circle cx="4750" cy="1000" r="150" style="transform-origin:4750px 1000px;animation:pulse 2.4s infinite 1.2s"/>
+  </g>
+  <!-- lab bench strip (bottom-left) -->
+  <g opacity=".5"><rect x="-6200" y="900" width="6400" height="40" rx="20" fill="#d8c3a8"/><rect x="-6200" y="2000" width="6400" height="40" rx="20" fill="#d8c3a8"/></g>
+</svg>
+
+<!-- the plate of foods (Figure 4.3.1): one 3D render (Render_Source/food_scene.js, item 99), placed as an HTML image in the world -->
+<img class="world-img" src="../../Assets/art/3d/4.3/plate_map.webp" alt="" style="left:565px;top:-430px;width:4870px;height:2760px">
+
+<!-- ================= 1. TITLE / OVERVIEW ================= -->
+<section class="step" id="welcome" data-x="-1000" data-y="0" data-s="8" data-overview data-noclick data-phase="title" data-title="Welcome · lesson map">
+  <div class="scene">
+    <div class="abs" style="left:66px;top:46px"><div class="row" style="gap:14px;align-items:center">
+      <span class="pill">Chapter 4 · Water and Organic Compounds</span><span class="pill ghost">Lesson 4.3 · Grade 7 · MYP Year 3</span></div></div>
+    <div class="abs" style="left:66px;top:94px;display:flex;align-items:baseline;gap:24px"><h1 class="h1" style="font-size:100px">Organic compounds</h1><span class="ru" style="font-size:36px">Органические соединения</span></div>
+    <div class="abs" style="left:66px;top:206px;width:1470px">
+      <div class="objective"><span class="tag">You will</span><span>determine the presence of carbohydrates, proteins, and lipids in foodstuffs.</span></div>
+      <div class="meta-row" style="margin-top:10px">
+        <div class="meta"><b>ATL</b> Research · Thinking</div>
+        <div class="meta"><b>Criteria</b> B, C (formative practice)</div>
+        <div class="meta"><b>Inquiry</b> How do indicator substances interact with food?</div>
+      </div>
+    </div>
+    <div class="logo-plate" style="right:58px;top:30px">
+      <img src="../../Assets/logos/AGIS_logo.png" alt="Astana Garden International School logo">
+      <img class="myp" src="../../Assets/logos/IB_MYP_logo.png" alt="IB Middle Years Programme logo">
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Opening (0:00).</b> Lesson map: left — learning and lab scenes; right — a giant plate of food. The camera will zoom into bread, egg and oil to meet carbohydrates, proteins and lipids.</p>
+    <p>Objective quoted from the textbook “You will” box, p. 60. Textbook pp. 60–61, Laboratory Work No. 3.</p>
+    <div class="warn"><b>Lab preparation (school-approved procedure):</b> potato, apple, olives, sunflower oil, raw egg white, water, test tubes + rack, pipettes, white paper, iodine solution, Biuret reagent, gloves, eye protection, paper towels, labelled waste container. Check allergies (egg, olives). Teacher dispenses reagents. No tasting. Full checklist: 4.3 Teacher Guide.</div>
+  </aside>
+</section>
+
+<!-- ================= 2. BIG QUESTION ================= -->
+<section class="step" id="bigq" data-x="-4750" data-y="-650" data-s="1" data-phase="engage" data-title="Big question: sweet food">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Engage</span><span class="t">THINK · PAIR · SHARE</span></div>
+    <div class="abs" style="left:64px;top:150px;width:760px">
+      <div class="kicker">Big question</div>
+      <div class="h2" style="font-size:54px;margin-top:14px">Why should you not eat sweet food if you want to lose weight?</div>
+      <div class="ru" style="margin-top:14px">Почему не стоит есть сладкое, если хочешь похудеть?</div>
+      <div class="frame-box" style="margin-top:26px" data-build="1">I think sweet food <i>…</i> because <i>…</i></div>
+      <div class="qa" data-build="1" style="margin-top:14px"><button class="reveal-btn">&#128065; Reveal answer</button>
+        <div class="answer">Cakes, cookies and candy contain <b>high amounts of simple carbohydrates</b>, which lead to weight gain if eaten too often (textbook Facts, p. 60).</div></div>
+    </div>
+    <svg class="abs anim" style="left:860px;top:150px" width="680" height="640" viewBox="0 0 680 640" aria-label="Cake, candy and cookies">
+      <circle cx="340" cy="330" r="290" fill="#ffe9c7"/>
+      <g>
+        <image href="../../Assets/art/3d/4.3/cake.webp" x="123" y="53" width="549" height="504"/>
+        <image href="../../Assets/art/3d/4.3/cookie.webp" x="54" y="425" width="198" height="100"/>
+        <image href="../../Assets/art/3d/4.3/candy.webp" x="400" y="437" width="284" height="93"/>
+      </g>
+      <g data-build="2"><rect x="200" y="560" width="280" height="56" rx="28" fill="#2b2140"/><text x="340" y="597" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="26" fill="#ffd166">simple carbohydrates</text></g>
+    </svg>
+  </div>
+  <aside class="notes">
+    <p><b>Engage (0:00–4:00). Participation 1 — Think–Pair–Share.</b> Then reveal (→ shows the frame and answer button; → again shows the label on the picture).</p>
+    <div class="exp"><b>Expected ideas:</b> “sugar”, “too much energy”, “it makes you fat”. Textbook (Facts, p. 60): “Cakes, cookies, and candy contain high amounts of simple carbohydrates, which lead to weight gain if eaten too often.”</div>
+    <div class="warn">Keep the message neutral: no food is “bad”; the body needs carbohydrates for energy. Avoid comments about any student’s body.</div>
+  </aside>
+</section>
+
+<!-- ================= 3. VOCABULARY 1 ================= -->
+<section class="step" id="vocab1" data-x="-2850" data-y="-650" data-s="1" data-phase="vocab" data-title="Vocabulary 1">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Vocabulary</span><span class="t">ENGLISH · РУССКИЙ · 1 of 2</span></div>
+    <div class="scene-title"><div class="h2">Words about food molecules</div></div>
+    <div class="vocab c3" style="top:232px">
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><circle cx="60" cy="60" r="18" fill="#2b2140"/><text x="60" y="68" text-anchor="middle" font-family="Fredoka" font-size="22" fill="#fff">C</text><g fill="#fff" stroke="#2b2140" stroke-width="3"><circle cx="24" cy="40" r="12"/><circle cx="96" cy="40" r="12"/><circle cx="60" cy="104" r="12"/></g><g stroke="#2b2140" stroke-width="4"><path d="M44 52L34 46M76 52L86 46M60 78V92"/></g><text x="24" y="45" text-anchor="middle" font-family="Fredoka" font-size="14">H</text><text x="96" y="45" text-anchor="middle" font-family="Fredoka" font-size="14">H</text><text x="60" y="109" text-anchor="middle" font-family="Fredoka" font-size="14">H</text></svg>
+        <div class="en" style="font-size:33px">organic compound</div><div class="rus">органическое соединение</div><div class="def">a compound that contains carbon (and hydrogen)</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><use href="#fBread" transform="translate(60 66) scale(.27)"/><circle cx="96" cy="26" r="16" fill="var(--carb)"/><text x="96" y="33" text-anchor="middle" font-family="Fredoka" font-size="20" fill="#3b2600">C</text></svg>
+        <div class="en">carbohydrate</div><div class="rus">углевод</div><div class="def">organic compound with C, H, O (sugars); main energy source</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><use href="#fEgg" transform="translate(56 64) scale(.42)"/><circle cx="96" cy="26" r="16" fill="var(--prot)"/><text x="96" y="33" text-anchor="middle" font-family="Fredoka" font-size="20" fill="#fff">P</text></svg>
+        <div class="en">protein</div><div class="rus">белок</div><div class="def">basic building compound of the body (C, H, O, N, S)</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><use href="#fOil" transform="translate(54 68) scale(.2)"/><circle cx="96" cy="26" r="16" fill="var(--lip)"/><text x="96" y="33" text-anchor="middle" font-family="Fredoka" font-size="20" fill="#fff">L</text></svg>
+        <div class="en">lipid (fat)</div><div class="rus">липид (жир)</div><div class="def">stores the most energy; does not dissolve in water</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><path d="M60 14L74 46H106L80 66L90 100L60 80L30 100L40 66L14 46H46Z" fill="#ffd166"/><path d="M60 36L66 52H82L69 62L74 78L60 68L46 78L51 62L38 52H54Z" fill="#f5a700"/></svg>
+        <div class="en">energy</div><div class="rus">энергия</div><div class="def">what living things need to move, grow and work</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><path d="M24 30h72l-8 74H32z" fill="#e8f6ff" stroke="#8fb7cc" stroke-width="4"/><path d="M28 60h64l-5 42H33z" fill="#9fd8f0"/><g fill="#f5d33d"><ellipse cx="50" cy="56" rx="14" ry="5"/><ellipse cx="74" cy="54" rx="10" ry="4"/></g></svg>
+        <div class="en">insoluble</div><div class="rus">нерастворимый</div><div class="def">does not dissolve in water (oil stays on top)</div></div>
+    </div>
+    <div class="abs" style="left:64px;bottom:96px;font:700 23px/1.3 var(--font);color:var(--ink-soft)">Say it: <b style="color:#d9480f">“Carbohydrates give energy. Proteins build the body. Lipids store energy.”</b></div>
+  </div>
+  <aside class="notes">
+    <p><b>Vocabulary (4:00–6:30).</b> Choral repetition; definitions simplified from the textbook Key terms (p. 60). Russian from the textbook Terminology (p. 61): carbohydrate — углевод, lipid — жир, organic compounds — органические соединения; protein — белок (p. 59).</p>
+    <p><b>Participation 2:</b> students hold up a coloured card or point: yellow = carbohydrate, red = protein, purple = lipid, when you name a food.</p>
+  </aside>
+</section>
+
+<!-- ================= 4. VOCABULARY 2 (lab words) ================= -->
+<section class="step" id="vocab2" data-x="-950" data-y="-650" data-s="1" data-phase="vocab" data-title="Vocabulary 2: lab words">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Vocabulary</span><span class="t">ENGLISH · РУССКИЙ · 2 of 2 · LAB WORDS</span></div>
+    <div class="scene-title"><div class="h2">Words for the laboratory</div></div>
+    <div class="vocab c3" style="top:232px">
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><path d="M44 14h32v20l22 60c4 12-4 20-16 20H38c-12 0-20-8-16-20l22-60z" fill="#fff" stroke="#8a7f9e" stroke-width="4"/><path d="M34 76h52l8 18c3 8-2 14-10 14H36c-8 0-13-6-10-14z" fill="#8a5a2b"/></svg>
+        <div class="en" style="font-size:33px">iodine solution</div><div class="rus">йодный раствор</div><div class="def">brown liquid; turns blue-black with starch</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><path d="M44 14h32v20l22 60c4 12-4 20-16 20H38c-12 0-20-8-16-20l22-60z" fill="#fff" stroke="#8a7f9e" stroke-width="4"/><path d="M34 76h52l8 18c3 8-2 14-10 14H36c-8 0-13-6-10-14z" fill="#3f7fe0"/></svg>
+        <div class="en" style="font-size:33px">Biuret reagent</div><div class="rus">биуретовый реактив</div><div class="def">blue liquid; turns purple with protein</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><rect x="44" y="10" width="32" height="96" rx="16" fill="#fff" stroke="#8a7f9e" stroke-width="4"/><rect x="48" y="62" width="24" height="40" rx="12" fill="#b9a6ff"/></svg>
+        <div class="en">test tube</div><div class="rus">пробирка</div><div class="def">a small glass tube for experiments</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><rect x="50" y="8" width="20" height="30" rx="10" fill="#f05252"/><path d="M54 38h12l-2 60-4 12-4-12z" fill="#fff" stroke="#8a7f9e" stroke-width="3"/><circle cx="60" cy="116" r="4" fill="#8a5a2b"/></svg>
+        <div class="en">pipette</div><div class="rus">пипетка</div><div class="def">a tool that adds a few drops</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><rect x="16" y="20" width="88" height="80" rx="8" fill="#fff" stroke="#d8cfc4" stroke-width="4"/><circle cx="60" cy="60" r="24" fill="#fff4c2" opacity=".9"/><circle cx="60" cy="60" r="24" fill="none" stroke="#e8c84a" stroke-width="3" stroke-dasharray="4 4"/></svg>
+        <div class="en" style="font-size:33px">transparent spot</div><div class="rus">прозрачное пятно</div><div class="def">a mark on paper that lets light through</div></div>
+      <div class="vcard"><svg class="ic" viewBox="0 0 120 120"><circle cx="34" cy="60" r="22" fill="#3f7fe0"/><path d="M60 60h16" stroke="#2b2140" stroke-width="5" stroke-linecap="round"/><path d="M72 50l10 10-10 10" stroke="#2b2140" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="98" cy="60" r="18" fill="#7b3fb8"/></svg>
+        <div class="en">colour change</div><div class="rus">изменение цвета</div><div class="def">the colour becomes different: a sign of a reaction</div></div>
+    </div>
+    <div class="abs" style="left:64px;bottom:96px;font:700 23px/1.3 var(--font);color:var(--ink-soft)">Quick check: teacher shows a picture — you say the <b style="color:#d9480f">English word</b>.</div>
+  </div>
+  <aside class="notes">
+    <p><b>Vocabulary (6:30–9:00). Participation 3:</b> “Show me” — teacher holds up real lab equipment (test tube, pipette); students name it in English, then Russian.</p>
+    <p>Terminology (textbook p. 61): iodine solution — йодный раствор. Other Russian terms are standard school translations.</p>
+  </aside>
+</section>
+
+<!-- ================= 5. WHAT ARE ORGANIC COMPOUNDS ================= -->
+<section class="step" id="organic" data-x="-950" data-y="450" data-s="1" data-phase="explore" data-title="What are organic compounds?">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">TEXTBOOK p. 60</span></div>
+    <div class="scene-title"><div class="h2">From elements to compounds</div><div class="ru">От элементов к соединениям</div></div>
+    <svg class="abs" style="left:64px;top:236px" width="700" height="420" viewBox="0 0 700 420" aria-label="Oxygen molecule O2 and carbon dioxide molecule CO2">
+      <rect width="700" height="420" rx="30" fill="#fff" stroke="rgba(43,33,64,.12)" stroke-width="2"/>
+      <image href="../../Assets/art/3d/shared/mol_o2.webp" x="65" y="96" width="230" height="137"/>
+      <text x="180" y="290" text-anchor="middle" font-family="Fredoka" font-weight="600" font-size="40" fill="#2b2140">O₂</text>
+      <text x="180" y="326" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="21" fill="#574b6e">we breathe in</text>
+      <image href="../../Assets/art/3d/shared/mol_co2.webp" x="350" y="98" width="300" height="134"/>
+      <text x="500" y="290" text-anchor="middle" font-family="Fredoka" font-weight="600" font-size="40" fill="#2b2140">CO₂</text>
+      <text x="500" y="326" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="21" fill="#574b6e">we breathe out</text>
+      <text x="350" y="390" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="21" fill="#8a7f9e">A molecule has at least two atoms (O₂: two O atoms).</text>
+    </svg>
+    <div class="abs col" style="left:800px;top:236px;width:740px;gap:14px">
+      <div class="panel" style="padding:20px 24px" data-build="1"><div class="h4" style="color:#0b8478">Molecules → compounds</div><div class="body small" style="margin-top:6px">Molecules combine to form a <b>compound</b>.</div></div>
+      <div class="panel" style="padding:20px 24px" data-build="2"><div class="h4" style="color:#0b8478">Organic compounds</div><div class="body small" style="margin-top:6px">Compounds that contain <b>carbon and hydrogen</b> are organic compounds.</div></div>
+      <div class="panel" style="padding:20px 24px" data-build="3"><div class="h4" style="color:#0b8478">Important in the human body</div>
+        <div class="row" style="gap:10px;margin-top:10px;flex-wrap:wrap"><span class="grp c">carbohydrates</span><span class="grp p">proteins</span><span class="grp l">fats (lipids)</span><span class="grp v">vitamins</span></div>
+        <div class="body small" style="margin-top:10px">Humans get these molecules <b>from food</b>.</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (9:00–10:30).</b> → three times. Link to Lesson 4.2: carbon is the backbone of organic substances.</p>
+    <p>Textbook p. 60: “Any molecule consists of at least two elements” — the O₂ example has two atoms of one element, so this slide says “at least two atoms” to stay accurate. CO₂ has two elements.</p>
+    <div class="warn">The textbook also says organic substances are “synthesized only in the body of a living organism”. This is a historical idea — today many organic compounds are made in laboratories — so it is not shown on the slide. See the Source Discrepancy Log.</div>
+  </aside>
+</section>
+
+<!-- ================= 6. PLATE (frames the giant plate) ================= -->
+<section class="step" id="plate" data-x="3000" data-y="1000" data-s="3.6" data-nojourney data-phase="explore" data-title="Food to molecules: the plate">
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">FIGURE 4.3.1 · FOODS</span></div>
+    <div class="scene-title" style="right:auto;width:560px"><div class="h2" style="font-size:52px">What is in our food?</div><div class="ru">Что в нашей еде?</div></div>
+    <div class="abs" data-build="1" style="left:66px;top:236px;width:250px">
+      <div class="panel" style="padding:16px 18px"><div class="col" style="gap:10px"><span class="grp c">C · carbohydrates</span><span class="grp p">P · proteins</span><span class="grp l">L · lipids</span></div>
+        <div style="font:700 18px/1.3 var(--font);color:var(--ink-soft);margin-top:10px">Groups from textbook Figure 4.3.1</div></div>
+    </div>
+    <!-- tags placed over the foods (design coords) -->
+    <div data-build="1">
+      <span class="grp c abs" style="left:440px;top:268px">bread</span>
+      <span class="grp c abs" style="left:300px;top:456px">corn</span>
+      <span class="grp c abs" style="left:540px;top:556px">potato</span>
+      <span class="grp c abs" style="left:800px;top:612px">rice</span>
+      <span class="grp p abs" style="left:800px;top:350px">cheese</span>
+      <span class="grp p abs" style="left:1100px;top:258px">fish</span>
+      <span class="grp p abs" style="left:1040px;top:520px">egg</span>
+      <span class="grp p abs" style="left:1030px;top:96px">milk</span>
+      <span class="grp l abs" style="left:1340px;top:330px">oil</span>
+      <span class="grp l abs" style="left:610px;top:690px">cake</span>
+    </div>
+    <div class="abs panel" data-build="2" style="left:1120px;top:120px;width:420px;padding:14px 18px"><div style="font:800 20px/1.3 var(--font)">Many foods contain <b>more than one</b> compound. A cake has lipids <i style="font-style:normal;color:#d9480f">and</i> simple carbohydrates.</div></div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (10:30–11:30).</b> The plate recreates the food groups of textbook Figure 4.3.1 (carbohydrates, proteins, lipids). → shows coloured tags; → shows the “more than one compound” note.</p>
+    <div class="warn">Misconception (Unit Planner): “all foods contain only one compound.” The cake example is textbook-supported: cake appears in the lipids column of Fig. 4.3.1, and the Facts box says cakes contain simple carbohydrates.</div>
+    <p>The apple is on the plate because it is a Lab 3 sample; Figure 4.3.1 shows fruit in the vitamins column. The glowing rings mark the three zooms: bread, egg, oil.</p>
+  </aside>
+</section>
+
+<!-- ================= 7. CARBOHYDRATES (nested in bread) ================= -->
+<section class="step" id="carbs" data-x="1850" data-y="650" data-s=".13" data-nested="hidden" data-phase="explore" data-title="Zoom: carbohydrates">
+  <div class="scene organ-bg" style="position:absolute;inset:0;border-radius:60px;overflow:hidden;background:radial-gradient(circle at 30% 40%,#fff3d1 0%,#ffe2a6 60%,#ffd27a 100%)">
+    <div class="phase-tag"><span class="pill" style="background:var(--carb);color:#3b2600">Explore &amp; Explain</span><span class="t" style="color:#8a5a00">ZOOM 1 · INSIDE BREAD</span></div>
+    <div class="scene-title"><div class="h2">Carbohydrates</div><div class="ru">Углеводы</div></div>
+    <svg class="abs anim" style="left:40px;top:250px" width="760" height="380" viewBox="0 0 760 380" aria-label="Simple model: a chain of sugar rings">
+      <g class="anim"><g style="animation:floaty 6s ease-in-out infinite"><image href="../../Assets/art/3d/shared/mol_sugar_chain.webp" x="20" y="87" width="720" height="146"/></g></g>
+      <g font-family="Nunito" font-weight="800" font-size="17" fill="#8a5a00"><circle cx="250" cy="262" r="9" fill="#1b1b1d"/><text x="264" y="268">C</text><circle cx="320" cy="262" r="9" fill="#c8241c"/><text x="334" y="268">O</text><circle cx="390" cy="262" r="7" fill="#f2f2f4" stroke="#bbb"/><text x="402" y="268">H</text></g>
+      <text x="380" y="300" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="26" fill="#8a5a00">simple model: sugar units in a chain</text>
+      <text x="380" y="336" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="22" fill="#a2741a">contains C, H, O</text>
+    </svg>
+    <div class="abs col" style="left:830px;top:236px;width:710px;gap:14px">
+      <div class="panel" style="padding:18px 22px"><div class="body small"><b>Carbohydrates</b> are organic compounds that contain <b>C, H, O</b> (sugars).</div></div>
+      <div class="panel" style="padding:18px 22px" data-build="1"><div class="body small">They are an essential part of cells and the <b class="hl5">main source of energy</b> for living organisms.</div></div>
+      <div class="panel" style="padding:18px 22px" data-build="2"><div class="h4" style="font-size:24px">Foods (Figure 4.3.1)</div><div class="food-list"><span>flour</span><span>bread</span><span>corn</span><span>potatoes</span><span>rice</span></div></div>
+    </div>
+    <div class="abs fact" style="left:64px;top:660px;width:720px" data-build="3"><div class="lab">Fact · textbook p. 60</div><div style="font:700 22px/1.3 var(--font);margin-top:6px">Cakes, cookies and candy contain high amounts of <b>simple carbohydrates</b>, which lead to weight gain if eaten too often.</div></div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (11:30–12:45).</b> Zoomed into the bread. The hexagons are a simple model of sugar units — not real chemical structures.</p>
+    <p>Textbook p. 60: “Carbohydrates are essential part of cells and the main source of energy for living organisms.” Key term: “Carbohydrate — organic compounds contain C, H, O (sugars).”</p>
+    <p>Link to the big question: simple carbohydrates → weight gain if eaten too often.</p>
+  </aside>
+</section>
+
+<!-- ================= 8. PROTEINS (nested in egg) ================= -->
+<section class="step" id="proteins" data-x="3700" data-y="1500" data-s=".13" data-nested="hidden" data-phase="explore" data-title="Zoom: proteins">
+  <div class="scene" style="border-radius:60px;overflow:hidden;background:radial-gradient(circle at 30% 40%,#fff1ef 0%,#ffd6d2 60%,#ffb8b0 100%)">
+    <div class="phase-tag"><span class="pill" style="background:var(--prot)">Explore &amp; Explain</span><span class="t" style="color:#a12c2c">ZOOM 2 · INSIDE AN EGG</span></div>
+    <div class="scene-title"><div class="h2">Proteins</div><div class="ru">Белки</div></div>
+    <svg class="abs anim" style="left:40px;top:240px" width="760" height="400" viewBox="0 0 760 400" aria-label="Simple model: a protein as a folded chain of beads">
+      <g class="anim"><g style="animation:floaty 7s ease-in-out infinite"><image href="../../Assets/art/3d/shared/mol_protein_chain.webp" x="20" y="42" width="700" height="277"/></g></g>
+      <text x="380" y="380" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="25" fill="#a12c2c">simple model: a long folded chain · contains C, H, O, N, S</text>
+    </svg>
+    <div class="abs col" style="left:830px;top:236px;width:710px;gap:12px">
+      <div class="panel" style="padding:16px 22px"><div class="body small"><b>Protein</b> — a basic building organic compound of the body. A <b>key component</b> of the body.</div></div>
+      <div class="panel" style="padding:16px 22px" data-build="1"><div class="h4" style="font-size:24px">Proteins have many functions</div>
+        <div class="body small" style="margin-top:6px">oxygen transport · muscle contraction · protection against bacteria and viruses · hair, skin and eye colour</div></div>
+      <div class="panel" style="padding:16px 22px" data-build="2"><div class="h4" style="font-size:24px">Foods (Figure 4.3.1)</div><div class="food-list"><span>milk</span><span>chicken</span><span>fish</span><span>cheese</span><span>eggs</span></div></div>
+    </div>
+    <div class="abs frame-box" style="left:64px;top:690px;width:720px;font-size:22px" data-build="3">Remember Lesson 4.2: <i>hemoglobin</i> is a protein that transports oxygen.</div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (12:45–14:00).</b> Zoomed into the egg. The bead chain is a simple model of a protein.</p>
+    <p>Textbook p. 60: “Proteins are a key component of the body. Protein has a variety of functions. For example, oxygen transport, muscle contraction, protection against bacteria and viruses, formation of hair, skin and eye colour, etc.” Key term: “Protein — basic building organic compound of the body which contains C, H, O, N and S.”</p>
+  </aside>
+</section>
+
+<!-- ================= 9. LIPIDS (nested in oil) ================= -->
+<section class="step" id="lipids" data-x="4750" data-y="1000" data-s=".13" data-nested="hidden" data-phase="explore" data-title="Zoom: lipids">
+  <div class="scene" style="border-radius:60px;overflow:hidden;background:radial-gradient(circle at 30% 40%,#f6f1ff 0%,#e3d8ff 60%,#cdbbff 100%)">
+    <div class="phase-tag"><span class="pill" style="background:var(--lip)">Explore &amp; Explain</span><span class="t" style="color:#5b3fc4">ZOOM 3 · INSIDE OIL</span></div>
+    <div class="scene-title"><div class="h2">Lipids (fats)</div><div class="ru">Липиды (жиры)</div></div>
+    <svg class="abs anim" style="left:40px;top:236px" width="760" height="430" viewBox="0 0 760 430" aria-label="Oil does not mix with water; oil floats on top">
+      <image href="../../Assets/art/3d/4.3/lab_beaker_oil_water.webp" x="159" y="-8" width="441" height="441"/>
+      <g font-family="Nunito" font-weight="900" font-size="24"><text x="580" y="168" fill="#8a6d00">oil</text><text x="580" y="300" fill="#2a7aa6">water</text></g>
+      <text x="380" y="428" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="24" fill="#5b3fc4">lipids are insoluble in water</text>
+    </svg>
+    <div class="abs col" style="left:830px;top:236px;width:710px;gap:14px">
+      <div class="panel" style="padding:18px 22px"><div class="body small"><b>Lipid</b> — an organic compound which <b>stores the most energy</b> and is <b>insoluble in water</b>.</div></div>
+      <div class="panel" style="padding:18px 22px" data-build="1"><div class="body small">Lipids are also present in the cell. They serve as <b class="hl5">protection</b> and <b class="hl5">heat storage</b>.</div></div>
+      <div class="panel" style="padding:18px 22px" data-build="2"><div class="h4" style="font-size:24px">Foods (Figure 4.3.1)</div><div class="food-list"><span>oil</span><span>ice cream</span><span>cake</span><span>cream</span><span>sweets</span></div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain (14:00–15:00).</b> Zoomed into the oil bottle. Quick demo option: a few drops of oil in a cup of water — oil floats and does not mix.</p>
+    <p>Textbook p. 60: “Lipids are also present in the cell. They serve as protection and heat storage.” Key term: “Lipid — organic compound which stores the most energy and insoluble in water.”</p>
+  </aside>
+</section>
+
+<!-- ================= 10. CLASSIFY FOODS ================= -->
+<section class="step" id="classify" data-x="-2850" data-y="450" data-s="1" data-phase="explore" data-title="Sort the foods">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill">Explore &amp; Explain</span><span class="t">SORT · FIGURE 4.3.1</span></div>
+    <div class="scene-title"><div class="h2">Sort the foods</div><div class="ru">Распредели продукты по группам</div></div>
+    <div class="match-zone abs" style="left:64px;right:64px;top:226px">
+      <div class="pool" style="gap:10px;margin-bottom:16px">
+        <span class="chip food" data-k="c">bread</span><span class="chip food" data-k="p">fish</span><span class="chip food" data-k="l">oil</span><span class="chip food" data-k="c">rice</span>
+        <span class="chip food" data-k="p">cheese</span><span class="chip food" data-k="c">potatoes</span><span class="chip food" data-k="l">ice cream</span><span class="chip food" data-k="p">eggs</span>
+        <span class="chip food" data-k="c">flour</span><span class="chip food" data-k="p">milk</span><span class="chip food" data-k="l c">cake</span><span class="chip food" data-k="p">chicken</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+        <div class="bin"><span class="grp c">Carbohydrates</span><div class="slot" data-k="c"></div></div>
+        <div class="bin"><span class="grp p">Proteins</span><div class="slot" data-k="p"></div></div>
+        <div class="bin"><span class="grp l">Lipids</span><div class="slot" data-k="l"></div></div>
+      </div>
+      <div class="row" style="margin-top:14px;align-items:center"><button class="btn" data-check>Check</button><button class="btn ghost" data-reset>Reset</button><span class="score" style="color:#d9480f"></span></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Explain + participation (15:00–17:00).</b> Volunteers sort the foods (drag, or click a food then click a group). Press <b>Check</b>.</p>
+    <div class="exp"><b>Answers (Figure 4.3.1):</b> Carbohydrates — bread, rice, potatoes, flour. Proteins — fish, cheese, eggs, milk, chicken. Lipids — oil, ice cream, cake (cake is also accepted under carbohydrates).</div>
+    <p>Ask: “Can a food belong to two groups?” <b>Expected:</b> yes — e.g. cake.</p>
+  </aside>
+</section>
+
+<!-- ================= 11. LAB 3: SETUP + SAFETY ================= -->
+<section class="step" id="labsetup" data-x="-4750" data-y="450" data-s="1" data-phase="activity" data-title="Laboratory work No. 3: safety and plan">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a3)">Main activity</span><span class="t">LABORATORY WORK No. 3 · GROUPS</span></div>
+    <div class="scene-title"><div class="h2" style="font-size:52px">Testing for organic molecules in food</div><div class="ru">Обнаружение органических веществ в продуктах</div></div>
+    <div class="abs safety" style="left:64px;right:64px;top:226px">
+      <div><svg viewBox="0 0 48 48"><path d="M12 22V10a4 4 0 0 1 8 0v10M20 18V8a4 4 0 0 1 8 0v12M28 20V12a4 4 0 0 1 8 0v18c0 8-6 14-14 14s-12-6-14-12l-4-8a3 3 0 0 1 5-3l3 4" fill="#e6f7f5" stroke="#0fa597" stroke-width="3" stroke-linecap="round"/></svg>Wear gloves (and eye protection)</div>
+      <div><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="#ffeaea" stroke="#f05252" stroke-width="3"/><path d="M14 30c4-6 16-6 20 0" stroke="#f05252" stroke-width="3" fill="none"/><path d="M10 10l28 28" stroke="#f05252" stroke-width="4"/></svg>Never taste the food samples</div>
+      <div><svg viewBox="0 0 48 48"><path d="M18 6h12v10l10 24c2 4-1 8-6 8H14c-5 0-8-4-6-8l10-24z" fill="#fff4d6" stroke="#f5b301" stroke-width="3"/><path d="M24 22v10M24 36v2" stroke="#d9480f" stroke-width="4" stroke-linecap="round"/></svg>Only the teacher pours reagents</div>
+      <div><svg viewBox="0 0 48 48"><path d="M10 40h28M24 8v24M14 22l10 10 10-10" stroke="#8b6cf0" stroke-width="4" fill="none" stroke-linecap="round"/></svg>Tell the teacher about spills at once</div>
+      <div><svg viewBox="0 0 48 48"><path d="M8 34c6-4 10-4 16 0s10 4 16 0" stroke="#0fa597" stroke-width="3" fill="none"/><path d="M20 8h8v14a6 6 0 1 1-8 0z" fill="#e6f7f5" stroke="#0fa597" stroke-width="3"/></svg>Wash hands after the lab</div>
+      <div><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="#f3efff" stroke="#8b6cf0" stroke-width="3"/><text x="24" y="31" text-anchor="middle" font-family="Fredoka" font-size="20" fill="#5b3fc4">!</text></svg>Allergic to egg or olives? Tell the teacher</div>
+    </div>
+    <div class="abs" style="left:64px;right:64px;top:430px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px">
+      <div class="panel" style="padding:16px 20px;border-top:8px solid var(--carb)"><div class="h4" style="font-size:24px">1 · Iodine test</div><div class="body" style="font-size:21px;margin-top:6px">potato + apple · add a few drops of iodine solution</div><div class="body" style="font-size:21px;margin-top:6px;color:#8a5a00"><b>carbohydrate (starch)</b></div></div>
+      <div class="panel" style="padding:16px 20px;border-top:8px solid var(--lip)"><div class="h4" style="font-size:24px">2 · Paper test</div><div class="body" style="font-size:21px;margin-top:6px">potato, olive, apple · rub on white paper · dry 10–15 min</div><div class="body" style="font-size:21px;margin-top:6px;color:#5b3fc4"><b>lipid (fat)</b></div></div>
+      <div class="panel" style="padding:16px 20px;border-top:8px solid var(--prot)"><div class="h4" style="font-size:24px">3 · Biuret test</div><div class="body" style="font-size:21px;margin-top:6px">2 ml raw egg white + 2 ml Biuret reagent · mix</div><div class="body" style="font-size:21px;margin-top:6px;color:#a12c2c"><b>protein</b></div></div>
+    </div>
+    <div class="abs" style="left:64px;right:64px;top:650px;display:grid;grid-template-columns:1.3fr 1fr;gap:18px">
+      <div class="qcard" style="padding:16px 20px"><div class="qn">Pre-lab · textbook p. 61</div><div class="q" style="font-size:22px">1. Why do we need carbohydrates? 2. What is the role of proteins? 3. What is the importance of fats?</div></div>
+      <div class="frame-box" style="font-size:21px">Prediction: I think <i>___</i> contains <i>___</i> because <i>___</i>.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Main activity (18:00–30:00).</b> 2 min: safety and pre-lab questions (orally). 1 min: students write predictions on the Lab 3 sheet. 7 min: stations or teacher demonstration of the three tests. 2 min: record observations.</p>
+    <div class="warn"><b>Safety (follow school-approved procedures and the reagent safety data sheets):</b> Iodine solution stains skin and clothes and is an irritant. Biuret reagent contains copper sulfate and sodium hydroxide — irritant/corrosive: eye protection and gloves, teacher dispenses. Raw egg white: hygiene and hand washing. Check egg/olive allergies. No tasting — food is used only for testing (textbook safety precautions, p. 61). Dispose of waste as the school directs.</div>
+    <p>If time is short, run the virtual tests on the next three scenes as a teacher demonstration, and do the real practical in the proposed extra period (Unit Planner notes preparation/cleanup may need an additional period).</p>
+    <p>ATL — Research (information literacy): collect and record observations accurately.</p>
+  </aside>
+</section>
+
+<!-- ================= 12. IODINE TEST (virtual) ================= -->
+<section class="step" id="iodine" data-x="-4750" data-y="1550" data-s="1" data-phase="activity" data-title="Test 1: iodine test">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a3)">Main activity</span><span class="t">TEST 1 · CARBOHYDRATES · VIRTUAL DEMO</span></div>
+    <div class="scene-title"><div class="h2">Iodine test</div><div class="ru">Проба с йодом</div></div>
+    <svg class="abs" style="left:40px;top:200px" width="980" height="620" viewBox="0 0 980 620" aria-label="Virtual iodine test on a cut potato and a cut apple" data-interactive>
+      <rect x="20" y="380" width="940" height="200" rx="30" fill="#efe6da"/>
+      <!-- cut potato and apple: 3D renders for each result state (Render_Source/lab_scene.js) -->
+      <image href="../../Assets/art/3d/4.3/lab_potato_plain.webp" x="-49" y="274" width="619" height="385"/>
+      <image id="iStainP" class="lab-state" href="../../Assets/art/3d/4.3/lab_potato_iodine_brown.webp" x="-49" y="274" width="619" height="385"/>
+      <image id="iBlueP" class="lab-state" href="../../Assets/art/3d/4.3/lab_potato_iodine_blueblack.webp" x="-49" y="274" width="619" height="385"/>
+      <image href="../../Assets/art/3d/4.3/lab_apple_plain.webp" x="393" y="251" width="612" height="380"/>
+      <image id="iStainA" class="lab-state" href="../../Assets/art/3d/4.3/lab_apple_iodine_brown.webp" x="393" y="251" width="612" height="380"/>
+      <g id="iQ" opacity="0" style="transition:opacity .6s"><circle cx="830" cy="318" r="34" fill="#2b2140"/><text x="830" y="330" text-anchor="middle" font-family="Fredoka" font-size="40" fill="#ffd166">?</text></g>
+      <g id="pipP" transform="translate(260 40)"><image href="../../Assets/art/3d/4.3/lab_dropper.webp" x="-37" y="-18" width="74" height="223"/></g>
+      <g id="pipA" transform="translate(700 40)"><image href="../../Assets/art/3d/4.3/lab_dropper.webp" x="-37" y="-18" width="74" height="223"/></g>
+      <g id="dropsI"></g>
+      <g font-family="Nunito" font-weight="900" font-size="28" text-anchor="middle" fill="#2b2140"><text x="260" y="600">potato</text><text x="700" y="600">apple</text></g>
+    </svg>
+    <div class="abs col" style="left:1060px;top:236px;width:480px;gap:14px">
+      <button class="labbtn" id="iAdd">&#128167; Add iodine (a few drops)</button>
+      <button class="labbtn alt" id="iReset">&#8634; Start again</button>
+      <div class="legend"><span class="sw" style="background:#9a5a1c"></span><span>brown</span><span style="font-size:28px">→</span><span class="sw" style="background:#1d1a3a"></span><span>blue-black</span></div>
+      <div class="panel" style="padding:16px 20px"><div class="body small"><b>Result rule:</b> when iodine solution reacts with carbohydrates (starch), the colour changes from <b>brown to blue or black</b>.</div></div>
+      <div class="frame-box" style="font-size:21px" id="iNote">Observe your real samples. Write the colour you see.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Test 1 (≈21:00–23:00).</b> Real samples first if possible. Click <b>Add iodine</b> to model the procedure: (a) cut potato and apple in half, (b) add a few drops of iodine solution, (c) write down the colours.</p>
+    <div class="exp"><b>Expected (textbook result rule):</b> potato turns blue-black → contains carbohydrate (starch). Apple: <b>record the real observation</b>. Ripe apples often show little or no blue-black colour because their carbohydrates are mostly sugars, not starch; unripe apples can show more. The virtual apple therefore shows a “?”.</div>
+    <div class="warn">Precision: the iodine test detects <b>starch</b>, one kind of carbohydrate. The textbook says “carbohydrates” — say “carbohydrate (starch)”.</div>
+  </aside>
+</section>
+
+<!-- ================= 13. PAPER TEST (virtual) ================= -->
+<section class="step" id="paper" data-x="-2850" data-y="1550" data-s="1" data-phase="activity" data-title="Test 2: paper test for lipids">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a3)">Main activity</span><span class="t">TEST 2 · LIPIDS · VIRTUAL DEMO</span></div>
+    <div class="scene-title"><div class="h2">Paper test</div><div class="ru">Проба на бумаге</div></div>
+    <svg class="abs" style="left:40px;top:220px" width="980" height="600" viewBox="0 0 980 600" aria-label="Virtual paper test: potato, olive and apple rubbed on white paper, then dried" data-interactive>
+      <defs><filter id="wet" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="26"/><feGaussianBlur stdDeviation="5"/></filter><radialGradient id="pLight" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#fff7c2"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient></defs>
+      <image href="../../Assets/art/3d/4.3/lab_paper.webp" x="8" y="10" width="963" height="535"/>
+      <g id="pSpots">
+        <circle class="stain" id="pS1" cx="210" cy="260" r="100" fill="#d8cdbb" opacity="0" filter="url(#wet)"/>
+        <circle class="stain" id="pS2" cx="490" cy="260" r="100" fill="#d8cdbb" opacity="0" filter="url(#wet)"/>
+        <circle class="stain" id="pS3" cx="770" cy="260" r="100" fill="#d8cdbb" opacity="0" filter="url(#wet)"/>
+      </g>
+      <circle id="pGlow" cx="490" cy="260" r="110" fill="url(#pLight)" opacity="0" style="transition:opacity 1s"/>
+      <g font-family="Nunito" font-weight="900" font-size="28" text-anchor="middle" fill="#2b2140"><text x="210" y="420">potato</text><text x="490" y="420">olive</text><text x="770" y="420">apple</text></g>
+      <g transform="translate(210 470) scale(.5)"><use href="#fPotato"/></g>
+      <g transform="translate(490 470) scale(.9)"><use href="#fOlive"/></g>
+      <g transform="translate(770 476) scale(.38)"><use href="#fApple"/></g>
+      <g id="pClock" opacity="0" style="transition:opacity .4s"><circle cx="880" cy="100" r="44" fill="#2b2140"/><path id="pHand" d="M880 100V70" stroke="#ffd166" stroke-width="6" stroke-linecap="round" style="transform-origin:880px 100px"/><text x="880" y="172" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="22" fill="#2b2140">10–15 min</text></g>
+    </svg>
+    <div class="abs col" style="left:1060px;top:236px;width:480px;gap:14px">
+      <button class="labbtn" id="pRub">&#9995; Squeeze food on the paper</button>
+      <button class="labbtn" id="pDry" disabled>&#9201; Clean and dry 10–15 min</button>
+      <button class="labbtn alt" id="pReset">&#8634; Start again</button>
+      <div class="panel" style="padding:16px 20px"><div class="body small"><b>Result rule:</b> if the food contains fat, the traces will be <b>transparent</b> (light passes through).</div></div>
+      <div class="frame-box" style="font-size:21px">Which trace is transparent? Hold your real paper up to the light.</div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Test 2 (≈23:00–25:00).</b> Procedure (textbook p. 61): squeeze and knead potato, olive and apple separately on white paper until wet; clean off food residue; dry 10–15 minutes; compare traces — which one is transparent?</p>
+    <p>Virtual demo: <b>Squeeze</b> makes three wet spots; <b>Dry</b> speeds up the drying. Water from potato and apple evaporates; the olive’s oil stays.</p>
+    <div class="exp"><b>Expected:</b> olive leaves a transparent (greasy) spot → contains lipid. Potato and apple spots disappear when dry. Students record their real result.</div>
+    <div class="warn">Start the real paper test <b>first</b> (before the iodine and Biuret tests) so it has 10–15 minutes to dry.</div>
+  </aside>
+</section>
+
+<!-- ================= 14. BIURET TEST (virtual) ================= -->
+<section class="step" id="biuret" data-x="-950" data-y="1550" data-s="1" data-phase="activity" data-title="Test 3: Biuret test for protein">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a3)">Main activity</span><span class="t">TEST 3 · PROTEINS · VIRTUAL DEMO</span></div>
+    <div class="scene-title"><div class="h2">Biuret test</div><div class="ru">Биуретовая проба</div></div>
+    <svg class="abs" style="left:60px;top:210px" width="940" height="610" viewBox="0 0 940 610" aria-label="Virtual Biuret test: egg white and water in test tubes" data-interactive>
+      <!-- rack and test tubes: 3D renders for each state (Render_Source/lab_scene.js) -->
+      <image href="../../Assets/art/3d/4.3/lab_rack.webp" x="42" y="378" width="856" height="224"/>
+      <g id="tubeA" transform="translate(320 60)">
+        <image href="../../Assets/art/3d/4.3/lab_tube_eggwhite.webp" x="-68" y="-8" width="135" height="450"/>
+        <image id="liqA" class="lab-state" href="../../Assets/art/3d/4.3/lab_tube_blue.webp" x="-68" y="-8" width="135" height="450"/>
+        <image id="liqAp" class="lab-state" href="../../Assets/art/3d/4.3/lab_tube_purple.webp" x="-68" y="-8" width="135" height="450"/>
+      </g>
+      <g id="tubeB" transform="translate(620 60)">
+        <image href="../../Assets/art/3d/4.3/lab_tube_water.webp" x="-68" y="-8" width="135" height="450"/>
+        <image id="liqB" class="lab-state" href="../../Assets/art/3d/4.3/lab_tube_blue.webp" x="-68" y="-8" width="135" height="450"/>
+      </g>
+      <g font-family="Nunito" font-weight="900" font-size="26" text-anchor="middle" fill="#2b2140"><text x="320" y="600">A · egg white</text><text x="620" y="600">B · water (control)</text></g>
+      <g id="bLevel" opacity="0" style="transition:opacity .6s" font-family="Nunito" font-weight="800" font-size="20" fill="#574b6e"><text x="420" y="200">+ 2 ml Biuret</text><text x="720" y="200">+ 2 ml Biuret</text></g>
+    </svg>
+    <div class="abs col" style="left:1060px;top:236px;width:480px;gap:14px">
+      <button class="labbtn" id="bAdd">&#129514; Add 2 ml Biuret reagent</button>
+      <button class="labbtn" id="bMix" disabled>&#128260; Mix and observe</button>
+      <button class="labbtn alt" id="bReset">&#8634; Start again</button>
+      <div class="legend"><span class="sw" style="background:#3f7fe0"></span><span>blue</span><span style="font-size:28px">→</span><span class="sw" style="background:#7b3fb8"></span><span>purple</span></div>
+      <div class="panel" style="padding:16px 20px"><div class="body small"><b>Result rule:</b> when Biuret reagent reacts with protein, the colour changes from <b>blue to purple</b>.</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Test 3 (≈25:00–27:00).</b> Procedure (textbook p. 61): put 2 ml raw egg white in a test tube, add 2 ml Biuret reagent and mix, write the result. Tube B (water) is an added <b>control</b> — water is in the textbook materials list — so students can compare.</p>
+    <div class="exp"><b>Expected:</b> A turns purple → protein present. B stays blue → no protein.</div>
+    <div class="warn">Biuret reagent is irritant/corrosive. Teacher dispenses; eye protection on; wipe spills immediately.</div>
+  </aside>
+</section>
+
+<!-- ================= 15. RESULTS + INTERPRETATION ================= -->
+<section class="step" id="results" data-x="-950" data-y="2650" data-s="1" data-phase="activity" data-title="Results and interpretation">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a3)">Main activity</span><span class="t">RECORD · INTERPRET · TEXTBOOK p. 61</span></div>
+    <div class="scene-title"><div class="h2">What did we find?</div><div class="ru">Что мы обнаружили?</div></div>
+    <div class="abs" style="left:64px;top:226px;width:920px">
+      <table class="otable" id="otable">
+        <tr><th>Test</th><th>Food</th><th>Colour / trace we saw</th><th>Compound present?</th></tr>
+        <tr><td>Iodine</td><td>potato</td><td class="blank"><span class="blank-t">…</span><span class="exp">blue-black</span></td><td class="blank"><span class="blank-t">…</span><span class="exp">carbohydrate (starch)</span></td></tr>
+        <tr><td>Iodine</td><td>apple</td><td class="blank"><span class="blank-t">…</span><span class="exp">record what you saw</span></td><td class="blank"><span class="blank-t">…</span><span class="exp">depends on result</span></td></tr>
+        <tr><td>Paper</td><td>olive</td><td class="blank"><span class="blank-t">…</span><span class="exp">transparent spot</span></td><td class="blank"><span class="blank-t">…</span><span class="exp">lipid</span></td></tr>
+        <tr><td>Paper</td><td>potato, apple</td><td class="blank"><span class="blank-t">…</span><span class="exp">no transparent spot</span></td><td class="blank"><span class="blank-t">…</span><span class="exp">no lipid detected</span></td></tr>
+        <tr><td>Biuret</td><td>egg white</td><td class="blank"><span class="blank-t">…</span><span class="exp">blue → purple</span></td><td class="blank"><span class="blank-t">…</span><span class="exp">protein</span></td></tr>
+      </table>
+      <div class="row" style="margin-top:12px;align-items:center;gap:14px"><button class="btn" id="expBtn">Show expected results</button><span style="font:700 18px/1.3 var(--font);color:var(--ink-mute)">Show only after students record their own observations.</span></div>
+    </div>
+    <div class="abs col" style="left:1020px;top:226px;width:520px;gap:14px">
+      <div class="frame-box" style="font-size:21px">I observed <i>___</i>. This suggests <i>___</i> because <i>___</i>.</div>
+      <div class="qa qcard" style="padding:16px 20px"><div class="qn">Method check</div><div class="q" style="font-size:22px">Which result was hard to see? How could we make the test fairer?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:20px">e.g. use the same number of drops for each food; compare with a control (water); look in good light; repeat the test.</div></div>
+      <div class="panel" style="padding:14px 20px"><div style="font:800 19px/1.35 var(--font);color:var(--ink-soft)">Keep this sheet. Your own observations are evidence for later lab reports.</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Results (27:00–28:30).</b> Students complete the observation table on their Lab 3 sheet with <b>their own</b> observations. Then press <b>Show expected results</b> to compare and discuss differences.</p>
+    <div class="exp">Frame from the Unit Planner: “I observed … This suggests … because …”. Method check prepares Criterion C thinking (validity, improvements) — formative only.</div>
+  </aside>
+</section>
+
+<!-- ================= 15b. POST-LAB QUESTIONS ================= -->
+<section class="step" id="postlab" data-x="-2830" data-y="2650" data-s="1" data-phase="activity" data-title="Post-lab questions">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a3)">Main activity</span><span class="t">POST-LAB QUESTIONS · TEXTBOOK p. 61</span></div>
+    <div class="scene-title"><div class="h2">Post-lab questions</div><div class="ru">Вопросы после лабораторной работы</div></div>
+    <div class="qgrid" style="top:230px">
+      <div class="qa qcard" style="height:540px"><div class="qn"><span class="grp c" style="font-size:15px">C</span> Question 1</div><div class="q">What foods contain carbohydrates?</div><div class="frame-box" style="margin-top:16px;font-size:21px"><i>___</i> contains carbohydrates because <i>___</i> turned blue-black.</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:21px">Potato (iodine turned blue-black). Also flour, bread, rice and corn (Figure 4.3.1).</div></div>
+      <div class="qa qcard" style="height:540px"><div class="qn"><span class="grp p" style="font-size:15px">P</span> Question 2</div><div class="q">What foods are rich in protein?</div><div class="frame-box" style="margin-top:16px;font-size:21px"><i>___</i> is rich in protein because Biuret turned <i>___</i>.</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:21px">Egg white (Biuret turned purple). Also milk, chicken, fish and cheese.</div></div>
+      <div class="qa qcard" style="height:540px"><div class="qn"><span class="grp l" style="font-size:15px">L</span> Question 3</div><div class="q">From what foods do we get fat?</div><div class="frame-box" style="margin-top:16px;font-size:21px">We get fat from <i>___</i> because <i>___</i>.</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:21px">Olives and sunflower oil (transparent spot on paper). Also ice cream, cake and cream.</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Post-lab (28:30–30:00).</b> Students answer on the Lab 3 sheet using their evidence, then reveal and self-correct.</p>
+    <div class="exp">Answers combine the class results with textbook Figure 4.3.1.</div>
+  </aside>
+</section>
+<!-- ================= 16. APPLY: EAT OR NOT TO EAT ================= -->
+<section class="step" id="apply" data-x="-4710" data-y="2650" data-s="1" data-phase="apply" data-title="Apply: eat or not to eat">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a2)">Apply</span><span class="t">RESEARCH TIME · TEXTBOOK p. 61</span></div>
+    <div class="scene-title"><div class="h2">Eat or not to eat?</div><div class="ru">Есть или не есть?</div></div>
+    <svg class="abs" style="left:40px;top:220px" width="640" height="580" viewBox="0 0 640 580" aria-label="A burger: bun, lettuce, tomato, cheese and meat patty">
+      <image href="../../Assets/art/3d/4.3/burger.webp" x="64" y="85" width="650" height="447"/>
+      <g font-family="Nunito" font-weight="900" font-size="22">
+        <g data-build="1"><rect x="430" y="100" width="190" height="40" rx="20" fill="var(--carb)"/><text x="525" y="128" text-anchor="middle" fill="#3b2600">bun · carb</text></g>
+        <g data-build="1"><rect x="0" y="420" width="190" height="40" rx="20" fill="var(--prot)"/><text x="95" y="448" text-anchor="middle" fill="#fff">meat · protein</text></g>
+        <g data-build="1"><rect x="420" y="276" width="210" height="40" rx="20" fill="var(--prot)"/><text x="525" y="304" text-anchor="middle" fill="#fff">cheese · protein</text></g>
+        <g data-build="1"><rect x="230" y="520" width="190" height="40" rx="20" fill="var(--carb)"/><text x="325" y="548" text-anchor="middle" fill="#3b2600">bun · carb</text></g>
+      </g>
+    </svg>
+    <div class="abs col" style="left:720px;top:212px;width:820px;gap:10px">
+      <div class="panel" style="padding:14px 22px"><div class="body small" style="font-size:22px">“If you want to be slimmer you need to eat <b>fewer</b> carbohydrates and lipids, but you cannot <b>totally neglect</b> them.”</div></div>
+      <div class="qa qcard" style="padding:14px 22px"><div class="qn">Question 1</div><div class="q" style="font-size:24px">Why do you need fewer carbohydrates and lipids?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:20px">Too many simple carbohydrates (and fats), eaten too often, can lead to weight gain.</div></div>
+      <div class="qa qcard" style="padding:14px 22px"><div class="qn">Question 2</div><div class="q" style="font-size:24px">Why can you not totally neglect them?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:20px">Carbohydrates are the main energy source. Lipids store energy and give protection and heat storage.</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Apply (30:00–37:00).</b> → labels the burger parts. Pairs discuss Questions 1–2 using lesson evidence, then share. This is the textbook Research time “Eat or not to eat” (p. 61).</p>
+    <div class="exp"><b>Expected:</b> Q1 — too much → weight gain (Facts box p. 60). Q2 — carbohydrates: main energy source; lipids: energy store, protection, heat storage.</div>
+    <p>SoI link: interactions between substances (indicators and food) give evidence; understanding food compounds helps us make responsible choices.</p>
+    <div class="warn">Keep discussion about food science, not about anyone’s body or diet.</div>
+  </aside>
+</section>
+
+<!-- ================= 17. EXIT TICKET ================= -->
+<section class="step" id="exit" data-x="-6590" data-y="2650" data-s="1" data-phase="exit" data-title="Exit ticket">
+  <div class="frame"></div>
+  <div class="scene">
+    <div class="phase-tag"><span class="pill" style="background:var(--a5);color:#3b2600">Exit ticket</span><span class="t">WORK ALONE · 3 MINUTES</span></div>
+    <div class="scene-title"><div class="h2">Exit ticket</div><div class="ru">Билет на выход: ответь сам</div></div>
+    <div class="qgrid" style="top:230px">
+      <div class="qa qcard" style="height:560px"><div class="qn">1 · Recall</div><div class="q">Which reagent tests for <b>protein</b>, and what colour change shows protein?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">Biuret reagent: the colour changes from blue to purple.</div></div>
+      <div class="qa qcard" style="height:560px"><div class="qn">2 · Understanding</div><div class="q">Why does an olive leave a transparent spot on paper, but a potato does not?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">The olive contains lipid (fat). Fat does not dry away, so the trace stays transparent. The potato’s trace is water, which dries.</div></div>
+      <div class="qa qcard" style="height:560px"><div class="qn">3 · Application</div><div class="q">A student adds iodine solution to bread. It turns blue-black. What does this show? Which group is bread in?</div><button class="reveal-btn">&#128065; Reveal answer</button><div class="answer" style="font-size:22px">The bread contains carbohydrate (starch). Bread is in the carbohydrates group.</div></div>
+    </div>
+  </div>
+  <aside class="notes">
+    <p><b>Exit ticket (37:00–40:00).</b> Printed slips, alone. Collect.</p>
+    <div class="exp"><b>Success criteria:</b> Q1 names Biuret + blue → purple. Q2 links transparent trace to lipid; water evaporates. Q3 interprets the colour change as evidence of carbohydrate/starch.</div>
+    <p>These results prepare the proposed Criterion C task (Lesson 6, subject to approval): students should keep their Lab 3 sheet.</p>
+  </aside>
+</section>
+
+</div></div>
+</div>
+<script src="../../Assets/engine/prezi.js"></script>
+<script>
+/* ---------- virtual lab: shared helpers ---------- */
+(function () {
+  var NS = 'http://www.w3.org/2000/svg';
+  function $(id) { return document.getElementById(id); }
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, Prezi.reduced ? 1 : ms); }); }
+  function drop(group, x, y0, fall, color) {
+    var d = document.createElementNS(NS, 'path');
+    d.setAttribute('d', 'M' + x + ' ' + y0 + 'c0 0-10 14-10 20a10 10 0 0 0 20 0c0-6-10-20-10-20z');
+    d.setAttribute('fill', color); d.setAttribute('class', 'drop-anim');
+    d.style.setProperty('--fall', fall + 'px');
+    group.appendChild(d); setTimeout(function () { d.remove(); }, Prezi.reduced ? 50 : 800);
+  }
+
+  /* Iodine test */
+  var busyI = false;
+  $('iAdd').addEventListener('click', function () {
+    if (busyI) return; busyI = true; $('iAdd').disabled = true;
+    var g = $('dropsI');
+    drop(g, 260, 232, 150, '#9a5a1c'); drop(g, 700, 232, 150, '#9a5a1c');
+    wait(650).then(function () {
+      $('iStainP').classList.add('on'); $('iStainA').classList.add('on');
+      return wait(900);
+    }).then(function () {
+      $('iBlueP').classList.add('on');                       // potato: brown -> blue-black (textbook result)
+      $('iQ').setAttribute('opacity', '1');                    // apple: students record their own result
+      $('iNote').innerHTML = 'Potato: <i>blue-black</i> → carbohydrate (starch). Apple: record <i>your</i> real result.';
+    });
+  });
+  function resetI() {
+    busyI = false; $('iAdd').disabled = false;
+    $('iStainP').classList.remove('on'); $('iBlueP').classList.remove('on');
+    $('iStainA').classList.remove('on'); $('iQ').setAttribute('opacity', '0');
+    $('iNote').textContent = 'Observe your real samples. Write the colour you see.';
+  }
+  $('iReset').addEventListener('click', resetI); Prezi.onReset('iodine', resetI);
+
+  /* Paper test */
+  $('pRub').addEventListener('click', function () {
+    ['pS1', 'pS2', 'pS3'].forEach(function (id) { $(id).setAttribute('fill', '#d8cdbb'); $(id).setAttribute('opacity', '.85'); });
+    $('pRub').disabled = true; $('pDry').disabled = false;
+  });
+  $('pDry').addEventListener('click', function () {
+    $('pDry').disabled = true; $('pClock').setAttribute('opacity', '1');
+    var hand = $('pHand'); hand.style.transition = Prezi.reduced ? 'none' : 'transform 2.2s linear'; hand.style.transform = 'rotate(540deg)';
+    wait(2300).then(function () {
+      $('pS1').setAttribute('opacity', '0'); $('pS3').setAttribute('opacity', '0');   // water evaporates
+      $('pS2').setAttribute('fill', '#f3e7a8'); $('pS2').setAttribute('opacity', '.75'); // greasy translucent trace stays
+      $('pGlow').setAttribute('opacity', '1');
+    });
+  });
+  function resetP() {
+    ['pS1', 'pS2', 'pS3'].forEach(function (id) { $(id).setAttribute('opacity', '0'); $(id).setAttribute('fill', '#d8cdbb'); });
+    $('pGlow').setAttribute('opacity', '0'); $('pClock').setAttribute('opacity', '0');
+    var hand = $('pHand'); hand.style.transition = 'none'; hand.style.transform = 'rotate(0deg)';
+    $('pRub').disabled = false; $('pDry').disabled = true;
+  }
+  $('pReset').addEventListener('click', resetP); Prezi.onReset('paper', resetP);
+
+  /* Biuret test */
+  $('bAdd').addEventListener('click', function () {
+    $('bAdd').disabled = true; $('bLevel').setAttribute('opacity', '1');
+    $('liqA').classList.add('on'); $('liqB').classList.add('on');                    // + 2 ml Biuret reagent: both blue
+    $('bMix').disabled = false;
+  });
+  $('bMix').addEventListener('click', function () {
+    $('bMix').disabled = true;
+    var t = $('tubeA');
+    if (!Prezi.reduced) { t.animate([{ transform: 'translate(320px,60px) rotate(0deg)' }, { transform: 'translate(320px,60px) rotate(8deg)' }, { transform: 'translate(320px,60px) rotate(-8deg)' }, { transform: 'translate(320px,60px) rotate(0deg)' }], { duration: 700, iterations: 2 }); }
+    wait(1300).then(function () { $('liqAp').classList.add('on'); });   // protein: blue -> purple (textbook result)
+  });
+  function resetB() {
+    $('bAdd').disabled = false; $('bMix').disabled = true; $('bLevel').setAttribute('opacity', '0');
+    ['liqA', 'liqAp', 'liqB'].forEach(function (id) { $(id).classList.remove('on'); });
+  }
+  $('bReset').addEventListener('click', resetB); Prezi.onReset('biuret', resetB);
+
+  /* Results table: expected results only on teacher request */
+  $('expBtn').addEventListener('click', function () {
+    var on = $('otable').classList.toggle('showexp');
+    $('expBtn').textContent = on ? 'Hide expected results' : 'Show expected results';
+  });
+  Prezi.onReset('results', function () { $('otable').classList.remove('showexp'); $('expBtn').textContent = 'Show expected results'; });
+})();
+</script>
+<script src="../../site/js/back-to-chapter.js"></script>
+</body>
+</html>
